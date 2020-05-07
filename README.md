@@ -36,7 +36,11 @@ $ npm install @form8ion/github-actions-node-ci --save-prod
 ### Example
 
 ```javascript
-import githubActionsNodeCi from '@form8ion/github-actions-node-ci';
+import {scaffold} from '@form8ion/github-actions-node-ci';
+
+(async () => {
+  await scaffold();
+})();
 ```
 
 ## Contributing
