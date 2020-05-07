@@ -13,6 +13,8 @@ CI scaffolder for JavaScript projects on [GitHub Actions](https://github.com/fea
 * [Usage](#usage)
   * [Installation](#installation)
   * [Example](#example)
+    * [Import](#import)
+    * [Execute](#execute)
 * [Contributing](#contributing)
   * [Dependencies](#dependencies)
   * [Verification](#verification)
@@ -35,11 +37,17 @@ $ npm install @form8ion/github-actions-node-ci --save-prod
 
 ### Example
 
+#### Import
+
 ```javascript
 import {scaffold} from '@form8ion/github-actions-node-ci';
+```
 
+#### Execute
+
+```javascript
 (async () => {
-  await scaffold();
+  await scaffold({projectRoot: process.cwd()});
 })();
 ```
 
