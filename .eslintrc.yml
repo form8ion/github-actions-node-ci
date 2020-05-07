@@ -1,0 +1,3 @@
+extends:
+  - '@form8ion'
+  - '@form8ion/mocha'

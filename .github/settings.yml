@@ -1,0 +1,6 @@
+_extends: .github
+repository:
+  name: github-actions-node-ci
+  description: CI scaffolder for JavaScript projects on GitHub Actions
+  homepage: 'https://npm.im/@form8ion/github-actions-node-ci'
+  private: false
