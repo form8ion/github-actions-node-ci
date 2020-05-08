@@ -23,9 +23,11 @@ suite('scaffolder', () => {
     assert.deepEqual(await scaffold({projectRoot, vcs: {owner: vcsOwner, name: vcsName}}), {
       badges: {
         status: {
-          text: 'Node CI Workflow Status',
-          img: `https://github.com/${vcsOwner}/${vcsName}/workflows/Node.js%20CI/badge.svg`,
-          link: `https://github.com/${vcsOwner}/${vcsName}/actions?query=workflow%3A%22Node.js+CI%22`
+          ci: {
+            text: 'Node CI Workflow Status',
+            img: `https://github.com/${vcsOwner}/${vcsName}/workflows/Node.js%20CI/badge.svg`,
+            link: `https://github.com/${vcsOwner}/${vcsName}/actions?query=workflow%3A%22Node.js+CI%22`
+          }
         }
       }
     });
