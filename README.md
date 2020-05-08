@@ -47,7 +47,13 @@ import {scaffold} from '@form8ion/github-actions-node-ci';
 
 ```javascript
 (async () => {
-  await scaffold({projectRoot: process.cwd()});
+  await scaffold({
+    projectRoot: process.cwd(),
+    vcs: {
+      owner: 'repo-owner',
+      name: 'repo-name'
+    }
+  });
 })();
 ```
 
