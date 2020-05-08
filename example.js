@@ -1,3 +1,19 @@
+// #### Import
 // remark-usage-ignore-next
-/* eslint-disable-next-line no-unused-vars */
-import githubActionsNodeCi from './lib/index.cjs';
+import stubbedFs from 'mock-fs';
+import {scaffold} from './lib/index.cjs';
+
+// remark-usage-ignore-next
+stubbedFs();
+
+// #### Execute
+
+(async () => {
+  await scaffold({
+    projectRoot: process.cwd(),
+    vcs: {
+      owner: 'repo-owner',
+      name: 'repo-name'
+    }
+  });
+})();
