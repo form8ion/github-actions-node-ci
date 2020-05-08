@@ -17,8 +17,17 @@ suite('scaffolder', () => {
 
   test('that the ci config is generated for a node project', async () => {
     const projectRoot = any.string();
+    const vcsOwner = any.word();
+    const vcsName = any.word();
 
-    assert.deepEqual(await scaffold({projectRoot}), {});
+    assert.deepEqual(await scaffold({projectRoot, vcs: {owner: vcsOwner, name: vcsName}}), {
+      badges: {
+        status: {
+          text: 'Node CI Workflow Status',
+          img: `https://github.com/${vcsOwner}/${vcsName}/workflows/Node.js%20CI/badge.svg`
+        }
+      }
+    });
 
     assert.calledWith(configScaffolder.default, {projectRoot});
   });
