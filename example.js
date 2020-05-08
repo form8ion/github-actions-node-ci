@@ -10,6 +10,4 @@ stubbedFs();
 
 (async () => {
   await scaffold({projectRoot: process.cwd()});
-  // remark-usage-ignore-next
-  stubbedFs.restore();
 })();
