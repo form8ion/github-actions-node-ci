@@ -45,7 +45,7 @@ suite('config scaffolder', () => {
                 uses: 'actions/setup-node@v1',
                 with: {'node-version': '12.x'}
               },
-              {run: 'npm clean-install'},
+              {uses: 'bahmutov/npm-install@v1'},
               {
                 run: 'npm test',
                 env: {CI: true}
