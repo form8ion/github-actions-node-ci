@@ -48,7 +48,7 @@
     "@travi/any": "2.0.8",
     "ban-sensitive-files": "1.9.7",
     "chai": "4.2.0",
-    "codecov": "3.6.5",
+    "codecov": "3.7.0",
     "cz-conventional-changelog": "3.2.0",
     "husky": "4.2.5",
     "lockfile-lint": "4.3.6",
