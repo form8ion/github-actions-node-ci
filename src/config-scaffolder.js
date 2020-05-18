@@ -21,10 +21,7 @@ export default async function ({projectRoot}) {
               with: {'node-version': '12.x'}
             },
             {uses: 'bahmutov/npm-install@v1'},
-            {
-              run: 'npm test',
-              env: {CI: true}
-            }
+            {run: 'npm test'}
           ]
         }
       }
