@@ -53,4 +53,90 @@ suite('config scaffolder', () => {
       }
     );
   });
+
+  test('that publishing is enabled for packages', async () => {
+    const projectRoot = any.string();
+    const pathToCreatedWorkflowsDirectory = any.string();
+    mkdir.default.withArgs(`${projectRoot}/.github/workflows`).resolves(pathToCreatedWorkflowsDirectory);
+
+    await scaffoldConfig({projectRoot, projectType: 'Package'});
+
+    assert.calledWith(
+      yamlWriter.default,
+      `${pathToCreatedWorkflowsDirectory}/node-ci.yml`,
+      {
+        name: 'Node.js CI',
+        on: {
+          push: {branches: ['master']},
+          pull_request: {branches: ['master']}
+        },
+        jobs: {
+          build: {
+            'runs-on': 'ubuntu-latest',
+            steps: [
+              {uses: 'actions/checkout@v2'},
+              {
+                name: 'Setup node',
+                uses: 'actions/setup-node@v1',
+                with: {'node-version': '12.x'}
+              },
+              {uses: 'bahmutov/npm-install@v1'},
+              {run: 'npm test'},
+              {
+                name: 'semantic-release',
+                uses: 'cycjimmy/semantic-release-action@v2',
+                env: {
+                  GITHUB_TOKEN: '${{ secrets.GH_TOKEN }}',            // eslint-disable-line no-template-curly-in-string
+                  NPM_TOKEN: '${{ secrets.NPM_PUBLISH_TOKEN }'        // eslint-disable-line no-template-curly-in-string
+                }
+              }
+            ]
+          }
+        }
+      }
+    );
+  });
+
+  test('that publishing is enabled for CLI packages', async () => {
+    const projectRoot = any.string();
+    const pathToCreatedWorkflowsDirectory = any.string();
+    mkdir.default.withArgs(`${projectRoot}/.github/workflows`).resolves(pathToCreatedWorkflowsDirectory);
+
+    await scaffoldConfig({projectRoot, projectType: 'CLI'});
+
+    assert.calledWith(
+      yamlWriter.default,
+      `${pathToCreatedWorkflowsDirectory}/node-ci.yml`,
+      {
+        name: 'Node.js CI',
+        on: {
+          push: {branches: ['master']},
+          pull_request: {branches: ['master']}
+        },
+        jobs: {
+          build: {
+            'runs-on': 'ubuntu-latest',
+            steps: [
+              {uses: 'actions/checkout@v2'},
+              {
+                name: 'Setup node',
+                uses: 'actions/setup-node@v1',
+                with: {'node-version': '12.x'}
+              },
+              {uses: 'bahmutov/npm-install@v1'},
+              {run: 'npm test'},
+              {
+                name: 'semantic-release',
+                uses: 'cycjimmy/semantic-release-action@v2',
+                env: {
+                  GITHUB_TOKEN: '${{ secrets.GH_TOKEN }}',            // eslint-disable-line no-template-curly-in-string
+                  NPM_TOKEN: '${{ secrets.NPM_PUBLISH_TOKEN }'        // eslint-disable-line no-template-curly-in-string
+                }
+              }
+            ]
+          }
+        }
+      }
+    );
+  });
 });

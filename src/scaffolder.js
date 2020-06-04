@@ -1,7 +1,7 @@
 import scaffoldConfig from './config-scaffolder';
 
-export default async function ({projectRoot, vcs}) {
-  await scaffoldConfig({projectRoot});
+export default async function ({projectRoot, projectType, vcs}) {
+  await scaffoldConfig({projectRoot, projectType});
 
   return {
     badges: {

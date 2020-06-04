@@ -1,7 +1,11 @@
 import mkdir from '../thirdparty-wrappers/make-dir';
 import writeYaml from '../thirdparty-wrappers/write-yaml';
 
-export default async function ({projectRoot}) {
+function shouldBePublished(projectType) {
+  return 'Package' === projectType || 'CLI' === projectType;
+}
+
+export default async function ({projectRoot, projectType}) {
   return writeYaml(
     `${await mkdir(`${projectRoot}/.github/workflows`)}/node-ci.yml`,
     {
@@ -21,7 +25,17 @@ export default async function ({projectRoot}) {
               with: {'node-version': '12.x'}
             },
             {uses: 'bahmutov/npm-install@v1'},
-            {run: 'npm test'}
+            {run: 'npm test'},
+            ...shouldBePublished(projectType)
+              ? [{
+                name: 'semantic-release',
+                uses: 'cycjimmy/semantic-release-action@v2',
+                env: {
+                  GITHUB_TOKEN: '${{ secrets.GH_TOKEN }}',            // eslint-disable-line no-template-curly-in-string
+                  NPM_TOKEN: '${{ secrets.NPM_PUBLISH_TOKEN }'        // eslint-disable-line no-template-curly-in-string
+                }
+              }]
+              : []
           ]
         }
       }
