@@ -30,7 +30,8 @@ suite('scaffolder', () => {
             link: `https://github.com/${vcsOwner}/${vcsName}/actions?query=workflow%3A%22Node.js+CI%22`
           }
         }
-      }
+      },
+      nextSteps: [{summary: 'Enable building branches in GitHub Actions for the chosen dependency updater'}]
     });
 
     assert.calledWith(configScaffolder.default, {projectRoot, projectType});
