@@ -33,7 +33,7 @@ suite('config scaffolder', () => {
         name: 'Node.js CI',
         on: {
           push: {branches: ['master']},
-          pull_request: {branches: ['master']}
+          pull_request: {types: ['opened', 'synchronize']}
         },
         jobs: {
           build: {
@@ -68,7 +68,7 @@ suite('config scaffolder', () => {
         name: 'Node.js CI',
         on: {
           push: {branches: ['master']},
-          pull_request: {branches: ['master']}
+          pull_request: {types: ['opened', 'synchronize']}
         },
         jobs: {
           build: {
@@ -111,7 +111,7 @@ suite('config scaffolder', () => {
         name: 'Node.js CI',
         on: {
           push: {branches: ['master']},
-          pull_request: {branches: ['master']}
+          pull_request: {types: ['opened', 'synchronize']}
         },
         jobs: {
           build: {

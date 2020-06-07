@@ -12,7 +12,7 @@ export default async function ({projectRoot, projectType}) {
       name: 'Node.js CI',
       on: {
         push: {branches: ['master']},
-        pull_request: {branches: ['master']}
+        pull_request: {types: ['opened', 'synchronize']}
       },
       jobs: {
         build: {
