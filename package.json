@@ -44,7 +44,7 @@
     "@form8ion/commitlint-config": "1.0.9",
     "@form8ion/eslint-config": "1.6.20",
     "@form8ion/eslint-config-mocha": "1.2.8",
-    "@form8ion/remark-lint-preset": "1.0.6",
+    "@form8ion/remark-lint-preset": "1.0.7",
     "@travi/any": "2.0.9",
     "@travi/travis-lint": "1.0.1",
     "ban-sensitive-files": "1.9.7",
