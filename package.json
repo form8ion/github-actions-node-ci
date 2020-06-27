@@ -42,7 +42,7 @@
     "@babel/register": "7.10.3",
     "@form8ion/babel-preset": "1.6.25",
     "@form8ion/commitlint-config": "1.0.10",
-    "@form8ion/eslint-config": "1.6.22",
+    "@form8ion/eslint-config": "1.6.23",
     "@form8ion/eslint-config-mocha": "1.2.8",
     "@form8ion/remark-lint-preset": "1.0.8",
     "@travi/any": "2.0.9",
