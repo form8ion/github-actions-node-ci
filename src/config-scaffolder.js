@@ -11,7 +11,7 @@ export default async function ({projectRoot, projectType}) {
     {
       name: 'Node.js CI',
       on: {
-        push: {branches: ['master']},
+        push: {branches: ['master', ...shouldBePublished(projectType) ? ['alpha', 'beta'] : []]},
         pull_request: {types: ['opened', 'synchronize']}
       },
       env: {
