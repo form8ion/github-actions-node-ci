@@ -35,6 +35,10 @@ suite('config scaffolder', () => {
           push: {branches: ['master']},
           pull_request: {types: ['opened', 'synchronize']}
         },
+        env: {
+          FORCE_COLOR: 1,
+          NPM_CONFIG_COLOR: 'always'
+        },
         jobs: {
           build: {
             'runs-on': 'ubuntu-latest',
@@ -69,6 +73,10 @@ suite('config scaffolder', () => {
         on: {
           push: {branches: ['master']},
           pull_request: {types: ['opened', 'synchronize']}
+        },
+        env: {
+          FORCE_COLOR: 1,
+          NPM_CONFIG_COLOR: 'always'
         },
         jobs: {
           build: {
@@ -112,6 +120,10 @@ suite('config scaffolder', () => {
         on: {
           push: {branches: ['master']},
           pull_request: {types: ['opened', 'synchronize']}
+        },
+        env: {
+          FORCE_COLOR: 1,
+          NPM_CONFIG_COLOR: 'always'
         },
         jobs: {
           build: {
