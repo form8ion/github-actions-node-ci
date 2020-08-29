@@ -1,3 +1,4 @@
+import {projectTypes} from '@form8ion/javascript-core';
 import {promises as fs} from 'fs';
 import sinon from 'sinon';
 import any from '@travi/any';
@@ -63,7 +64,7 @@ suite('config scaffolder', () => {
     const pathToCreatedWorkflowsDirectory = any.string();
     mkdir.default.withArgs(`${projectRoot}/.github/workflows`).resolves(pathToCreatedWorkflowsDirectory);
 
-    await scaffoldConfig({projectRoot, projectType: 'Package'});
+    await scaffoldConfig({projectRoot, projectType: projectTypes.PACKAGE});
 
     assert.calledWith(
       yamlWriter.default,
@@ -110,7 +111,7 @@ suite('config scaffolder', () => {
     const pathToCreatedWorkflowsDirectory = any.string();
     mkdir.default.withArgs(`${projectRoot}/.github/workflows`).resolves(pathToCreatedWorkflowsDirectory);
 
-    await scaffoldConfig({projectRoot, projectType: 'CLI'});
+    await scaffoldConfig({projectRoot, projectType: projectTypes.CLI});
 
     assert.calledWith(
       yamlWriter.default,

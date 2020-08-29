@@ -1,8 +1,9 @@
+import {projectTypes} from '@form8ion/javascript-core';
 import mkdir from '../thirdparty-wrappers/make-dir';
 import writeYaml from '../thirdparty-wrappers/write-yaml';
 
 function shouldBePublished(projectType) {
-  return 'Package' === projectType || 'CLI' === projectType;
+  return projectTypes.PACKAGE === projectType || projectTypes.CLI === projectType;
 }
 
 export default async function ({projectRoot, projectType}) {

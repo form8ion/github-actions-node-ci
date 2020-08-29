@@ -40,6 +40,7 @@ $ npm install @form8ion/github-actions-node-ci --save-prod
 #### Import
 
 ```javascript
+import {projectTypes} from '@form8ion/javascript-core';
 import {scaffold} from '@form8ion/github-actions-node-ci';
 ```
 
@@ -49,7 +50,7 @@ import {scaffold} from '@form8ion/github-actions-node-ci';
 (async () => {
   await scaffold({
     projectRoot: process.cwd(),
-    projectType: 'Package',
+    projectType: projectTypes.PACKAGE,
     vcs: {
       owner: 'repo-owner',
       name: 'repo-name'
