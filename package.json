@@ -66,7 +66,7 @@
     "sinon": "9.0.3"
   },
   "dependencies": {
-    "@form8ion/javascript-core": "^2.3.0",
+    "@form8ion/javascript-core": "^2.4.0",
     "make-dir": "^3.1.0",
     "write-yaml": "^1.0.0"
   }

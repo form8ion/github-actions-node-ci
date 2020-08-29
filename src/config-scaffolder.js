@@ -1,10 +1,6 @@
-import {projectTypes} from '@form8ion/javascript-core';
+import {projectTypeShouldBePublished} from '@form8ion/javascript-core';
 import mkdir from '../thirdparty-wrappers/make-dir';
 import writeYaml from '../thirdparty-wrappers/write-yaml';
-
-function shouldBePublished(projectType) {
-  return projectTypes.PACKAGE === projectType || projectTypes.CLI === projectType;
-}
 
 export default async function ({projectRoot, projectType}) {
   return writeYaml(
@@ -12,7 +8,7 @@ export default async function ({projectRoot, projectType}) {
     {
       name: 'Node.js CI',
       on: {
-        push: {branches: ['master', ...shouldBePublished(projectType) ? ['alpha', 'beta'] : []]},
+        push: {branches: ['master', ...projectTypeShouldBePublished(projectType) ? ['alpha', 'beta'] : []]},
         pull_request: {types: ['opened', 'synchronize']}
       },
       env: {
@@ -31,7 +27,7 @@ export default async function ({projectRoot, projectType}) {
             },
             {uses: 'bahmutov/npm-install@v1'},
             {run: 'npm test'},
-            ...shouldBePublished(projectType)
+            ...projectTypeShouldBePublished(projectType)
               ? [{
                 name: 'semantic-release',
                 uses: 'cycjimmy/semantic-release-action@v2',
