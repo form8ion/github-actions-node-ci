@@ -59,7 +59,7 @@
     "nyc": "15.1.0",
     "remark-cli": "9.0.0",
     "remark-toc": "7.0.0",
-    "remark-usage": "8.0.0",
+    "remark-usage": "9.0.0",
     "rimraf": "3.0.2",
     "rollup": "2.29.0",
     "rollup-plugin-auto-external": "2.0.0",
