@@ -39,7 +39,7 @@
     "lint:peer": "npm ls >/dev/null"
   },
   "devDependencies": {
-    "@babel/register": "7.11.5",
+    "@babel/register": "7.12.1",
     "@form8ion/babel-preset": "1.6.33",
     "@form8ion/commitlint-config": "1.0.14",
     "@form8ion/eslint-config": "1.6.33",
