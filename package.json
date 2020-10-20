@@ -26,7 +26,7 @@
     "generate:md": "remark . --output",
     "pregenerate:md": "npm run build",
     "lint:sensitive": "ban",
-    "lint:travis": "travis-lint .travis.yml",
+    "disabled:lint:travis": "travis-lint .travis.yml",
     "clean": "rimraf ./lib",
     "prebuild": "run-s clean",
     "build": "npm-run-all --print-label --parallel build:*",
