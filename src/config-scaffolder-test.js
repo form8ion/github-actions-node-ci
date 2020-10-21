@@ -10,6 +10,8 @@ import scaffoldConfig from './config-scaffolder';
 suite('config scaffolder', () => {
   let sandbox;
   const projectType = any.word();
+  const tests = any.simpleObject();
+  const visibility = any.word();
 
   setup(() => {
     sandbox = sinon.createSandbox();
@@ -18,6 +20,7 @@ suite('config scaffolder', () => {
     sandbox.stub(yamlWriter, 'default');
     sandbox.stub(fs, 'writeFile');
     sandbox.stub(jsCore, 'projectTypeShouldBePublished');
+    sandbox.stub(jsCore, 'coverageShouldBeReported');
   });
 
   teardown(() => sandbox.restore());
@@ -26,7 +29,8 @@ suite('config scaffolder', () => {
     const projectRoot = any.string();
     const pathToCreatedWorkflowsDirectory = any.string();
     mkdir.default.withArgs(`${projectRoot}/.github/workflows`).resolves(pathToCreatedWorkflowsDirectory);
-    jsCore.projectTypeShouldBePublished.withArgs(projectType).returns(false);
+    jsCore.projectTypeShouldBePublished.returns(false);
+    jsCore.coverageShouldBeReported.returns(false);
 
     await scaffoldConfig({projectRoot, projectType});
 
@@ -62,11 +66,12 @@ suite('config scaffolder', () => {
     );
   });
 
-  test('that publishing for appropriate project types', async () => {
+  test('that package publishing happens for appropriate project types', async () => {
     const projectRoot = any.string();
     const pathToCreatedWorkflowsDirectory = any.string();
     mkdir.default.withArgs(`${projectRoot}/.github/workflows`).resolves(pathToCreatedWorkflowsDirectory);
     jsCore.projectTypeShouldBePublished.withArgs(projectType).returns(true);
+    jsCore.coverageShouldBeReported.returns(false);
 
     await scaffoldConfig({projectRoot, projectType});
 
@@ -102,6 +107,51 @@ suite('config scaffolder', () => {
                   GITHUB_TOKEN: '${{ secrets.GH_TOKEN }}',            // eslint-disable-line no-template-curly-in-string
                   NPM_TOKEN: '${{ secrets.NPM_PUBLISH_TOKEN }}'       // eslint-disable-line no-template-curly-in-string
                 }
+              }
+            ]
+          }
+        }
+      }
+    );
+  });
+
+  test('that coverage is reported when appropriate', async () => {
+    const projectRoot = any.string();
+    const pathToCreatedWorkflowsDirectory = any.string();
+    mkdir.default.withArgs(`${projectRoot}/.github/workflows`).resolves(pathToCreatedWorkflowsDirectory);
+    jsCore.projectTypeShouldBePublished.returns(false);
+    jsCore.coverageShouldBeReported.withArgs(visibility, tests).returns(true);
+
+    await scaffoldConfig({projectRoot, projectType, tests, visibility});
+
+    assert.calledWith(
+      yamlWriter.default,
+      `${pathToCreatedWorkflowsDirectory}/node-ci.yml`,
+      {
+        name: 'Node.js CI',
+        on: {
+          push: {branches: ['master']},
+          pull_request: {types: ['opened', 'synchronize']}
+        },
+        env: {
+          FORCE_COLOR: 1,
+          NPM_CONFIG_COLOR: 'always'
+        },
+        jobs: {
+          build: {
+            'runs-on': 'ubuntu-latest',
+            steps: [
+              {uses: 'actions/checkout@v2'},
+              {
+                name: 'Setup node',
+                uses: 'actions/setup-node@v1',
+                with: {'node-version': '12.x'}
+              },
+              {uses: 'bahmutov/npm-install@v1'},
+              {run: 'npm test'},
+              {
+                name: 'Upload coverage data to Codecov',
+                run: 'npm run coverage:report'
               }
             ]
           }

@@ -1,8 +1,8 @@
-import {projectTypeShouldBePublished} from '@form8ion/javascript-core';
+import {coverageShouldBeReported, projectTypeShouldBePublished} from '@form8ion/javascript-core';
 import mkdir from '../thirdparty-wrappers/make-dir';
 import writeYaml from '../thirdparty-wrappers/write-yaml';
 
-export default async function ({projectRoot, projectType}) {
+export default async function ({projectRoot, projectType, tests, visibility}) {
   return writeYaml(
     `${await mkdir(`${projectRoot}/.github/workflows`)}/node-ci.yml`,
     {
@@ -36,7 +36,12 @@ export default async function ({projectRoot, projectType}) {
                   NPM_TOKEN: '${{ secrets.NPM_PUBLISH_TOKEN }}'       // eslint-disable-line no-template-curly-in-string
                 }
               }]
-              : []
+              : [],
+            ...coverageShouldBeReported(visibility, tests)
+              ? [{
+                name: 'Upload coverage data to Codecov',
+                run: 'npm run coverage:report'
+              }] : []
           ]
         }
       }
