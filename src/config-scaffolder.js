@@ -32,7 +32,7 @@ export default async function ({projectRoot, projectType, tests, visibility}) {
                 name: 'semantic-release',
                 uses: 'cycjimmy/semantic-release-action@v2',
                 env: {
-                  GITHUB_TOKEN: '${{ secrets.GH_TOKEN }}',            // eslint-disable-line no-template-curly-in-string
+                  GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}',        // eslint-disable-line no-template-curly-in-string
                   NPM_TOKEN: '${{ secrets.NPM_PUBLISH_TOKEN }}'       // eslint-disable-line no-template-curly-in-string
                 }
               }]
