@@ -53,9 +53,16 @@ suite('config scaffolder', () => {
             steps: [
               {uses: 'actions/checkout@v2'},
               {
+                name: 'Read .nvmrc',
+                run: 'echo ::set-output name=NVMRC::$(cat .nvmrc)',
+                id: 'nvm'
+              },
+              {
                 name: 'Setup node',
                 uses: 'actions/setup-node@v1',
-                with: {'node-version': '12.x'}
+                with: {
+                  'node-version': '${{ steps.nvm.outputs.NVMRC }}'    // eslint-disable-line no-template-curly-in-string
+                }
               },
               {uses: 'bahmutov/npm-install@v1'},
               {run: 'npm test'}
@@ -94,9 +101,16 @@ suite('config scaffolder', () => {
             steps: [
               {uses: 'actions/checkout@v2'},
               {
+                name: 'Read .nvmrc',
+                run: 'echo ::set-output name=NVMRC::$(cat .nvmrc)',
+                id: 'nvm'
+              },
+              {
                 name: 'Setup node',
                 uses: 'actions/setup-node@v1',
-                with: {'node-version': '12.x'}
+                with: {
+                  'node-version': '${{ steps.nvm.outputs.NVMRC }}'    // eslint-disable-line no-template-curly-in-string
+                }
               },
               {uses: 'bahmutov/npm-install@v1'},
               {run: 'npm test'},
@@ -143,9 +157,16 @@ suite('config scaffolder', () => {
             steps: [
               {uses: 'actions/checkout@v2'},
               {
+                name: 'Read .nvmrc',
+                run: 'echo ::set-output name=NVMRC::$(cat .nvmrc)',
+                id: 'nvm'
+              },
+              {
                 name: 'Setup node',
                 uses: 'actions/setup-node@v1',
-                with: {'node-version': '12.x'}
+                with: {
+                  'node-version': '${{ steps.nvm.outputs.NVMRC }}'    // eslint-disable-line no-template-curly-in-string
+                }
               },
               {uses: 'bahmutov/npm-install@v1'},
               {run: 'npm test'},
