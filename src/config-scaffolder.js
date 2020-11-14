@@ -62,7 +62,7 @@ export default async function ({projectRoot, projectType, tests, visibility}) {
               {uses: 'bahmutov/npm-install@v1'},
               {
                 name: 'semantic-release',
-                uses: 'npx semantic-release',
+                run: 'npx semantic-release',
                 env: {
                   GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}',        // eslint-disable-line no-template-curly-in-string
                   NPM_TOKEN: '${{ secrets.NPM_PUBLISH_TOKEN }}'       // eslint-disable-line no-template-curly-in-string
