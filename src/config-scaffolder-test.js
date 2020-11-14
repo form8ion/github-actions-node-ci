@@ -48,7 +48,7 @@ suite('config scaffolder', () => {
           NPM_CONFIG_COLOR: 'always'
         },
         jobs: {
-          build: {
+          verify: {
             'runs-on': 'ubuntu-latest',
             steps: [
               {uses: 'actions/checkout@v2'},
@@ -96,7 +96,7 @@ suite('config scaffolder', () => {
           NPM_CONFIG_COLOR: 'always'
         },
         jobs: {
-          build: {
+          verify: {
             'runs-on': 'ubuntu-latest',
             steps: [
               {uses: 'actions/checkout@v2'},
@@ -152,7 +152,7 @@ suite('config scaffolder', () => {
           NPM_CONFIG_COLOR: 'always'
         },
         jobs: {
-          build: {
+          verify: {
             'runs-on': 'ubuntu-latest',
             steps: [
               {uses: 'actions/checkout@v2'},

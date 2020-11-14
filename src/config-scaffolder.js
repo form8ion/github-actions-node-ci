@@ -16,7 +16,7 @@ export default async function ({projectRoot, projectType, tests, visibility}) {
         NPM_CONFIG_COLOR: 'always'
       },
       jobs: {
-        build: {
+        verify: {
           'runs-on': 'ubuntu-latest',
           steps: [
             {uses: 'actions/checkout@v2'},
