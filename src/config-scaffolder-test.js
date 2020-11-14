@@ -113,10 +113,30 @@ suite('config scaffolder', () => {
                 }
               },
               {uses: 'bahmutov/npm-install@v1'},
-              {run: 'npm test'},
+              {run: 'npm test'}
+            ]
+          },
+          release: {
+            needs: 'verify',
+            'runs-on': 'ubuntu-latest',
+            steps: [
+              {uses: 'actions/checkout@v2'},
+              {
+                name: 'Read .nvmrc',
+                run: 'echo ::set-output name=NVMRC::$(cat .nvmrc)',
+                id: 'nvm'
+              },
+              {
+                name: 'Setup node',
+                uses: 'actions/setup-node@v1',
+                with: {
+                  'node-version': '${{ steps.nvm.outputs.NVMRC }}'    // eslint-disable-line no-template-curly-in-string
+                }
+              },
+              {uses: 'bahmutov/npm-install@v1'},
               {
                 name: 'semantic-release',
-                uses: 'cycjimmy/semantic-release-action@v2',
+                uses: 'npx semantic-release',
                 env: {
                   GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}',        // eslint-disable-line no-template-curly-in-string
                   NPM_TOKEN: '${{ secrets.NPM_PUBLISH_TOKEN }}'       // eslint-disable-line no-template-curly-in-string
