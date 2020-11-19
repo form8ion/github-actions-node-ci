@@ -45,7 +45,7 @@
     "@form8ion/eslint-config": "1.7.0",
     "@form8ion/eslint-config-mocha": "1.2.9",
     "@form8ion/remark-lint-preset": "1.0.11",
-    "@travi/any": "2.0.13",
+    "@travi/any": "2.0.15",
     "@travi/travis-lint": "1.0.1",
     "ban-sensitive-files": "1.9.13",
     "chai": "4.2.0",
