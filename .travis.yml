@@ -1,7 +1,0 @@
-version: ~> 1.0
-notifications:
-  email: false
-import:
-  - source: 'form8ion/.travis-ci:node.yml'
-  - source: 'form8ion/.travis-ci:authenticated-semantic-release.yml'
-after_success: 'npm run coverage:report'
