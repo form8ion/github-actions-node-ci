@@ -59,7 +59,7 @@ suite('config scaffolder', () => {
               },
               {
                 name: 'Setup node',
-                uses: 'actions/setup-node@v1',
+                uses: 'actions/setup-node@v2',
                 with: {
                   'node-version': '${{ steps.nvm.outputs.NVMRC }}'    // eslint-disable-line no-template-curly-in-string
                 }
@@ -107,7 +107,7 @@ suite('config scaffolder', () => {
               },
               {
                 name: 'Setup node',
-                uses: 'actions/setup-node@v1',
+                uses: 'actions/setup-node@v2',
                 with: {
                   'node-version': '${{ steps.nvm.outputs.NVMRC }}'    // eslint-disable-line no-template-curly-in-string
                 }
@@ -128,7 +128,7 @@ suite('config scaffolder', () => {
               },
               {
                 name: 'Setup node',
-                uses: 'actions/setup-node@v1',
+                uses: 'actions/setup-node@v2',
                 with: {
                   'node-version': '${{ steps.nvm.outputs.NVMRC }}'    // eslint-disable-line no-template-curly-in-string
                 }
@@ -183,7 +183,7 @@ suite('config scaffolder', () => {
               },
               {
                 name: 'Setup node',
-                uses: 'actions/setup-node@v1',
+                uses: 'actions/setup-node@v2',
                 with: {
                   'node-version': '${{ steps.nvm.outputs.NVMRC }}'    // eslint-disable-line no-template-curly-in-string
                 }

@@ -27,7 +27,7 @@ export default async function ({projectRoot, projectType, tests, visibility}) {
             },
             {
               name: 'Setup node',
-              uses: 'actions/setup-node@v1',
+              uses: 'actions/setup-node@v2',
               with: {
                 'node-version': '${{ steps.nvm.outputs.NVMRC }}'      // eslint-disable-line no-template-curly-in-string
               }
@@ -54,7 +54,7 @@ export default async function ({projectRoot, projectType, tests, visibility}) {
               },
               {
                 name: 'Setup node',
-                uses: 'actions/setup-node@v1',
+                uses: 'actions/setup-node@v2',
                 with: {
                   'node-version': '${{ steps.nvm.outputs.NVMRC }}'    // eslint-disable-line no-template-curly-in-string
                 }
