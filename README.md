@@ -41,7 +41,7 @@ $ npm install @form8ion/github-actions-node-ci --save-prod
 
 ```javascript
 import {projectTypes} from '@form8ion/javascript-core';
-import {scaffold, lift} from '@form8ion/github-actions-node-ci';
+import {scaffold, lift, test} from '@form8ion/github-actions-node-ci';
 ```
 
 #### Execute
@@ -56,6 +56,8 @@ import {scaffold, lift} from '@form8ion/github-actions-node-ci';
       name: 'repo-name'
     }
   });
+
+  await test({projectRoot: process.cwd()});
 
   await lift({projectRoot: process.cwd(), branchesToVerify: ['foo', 'bar']});
 })();

@@ -1,10 +1,9 @@
 import {resolve} from 'path';
 import {After, Before, When} from '@cucumber/cucumber';
 import stubbedFs from 'mock-fs';
-import {safeDump} from 'js-yaml';
 import any from '@travi/any';
 // eslint-disable-next-line import/no-extraneous-dependencies,import/no-unresolved
-import {lift} from '@form8ion/github-actions-node-ci';
+import {lift, test} from '@form8ion/github-actions-node-ci';
 
 const stubbedNodeModules = stubbedFs.load(resolve(__dirname, '..', '..', '..', '..', 'node_modules'));
 
@@ -12,12 +11,7 @@ Before(async function () {
   this.existingBranches = any.listOf(any.word);
 
   stubbedFs({
-    node_modules: stubbedNodeModules,
-    '.github': {
-      workflows: {
-        'node-ci.yml': safeDump({on: {push: {branches: this.existingBranches}}})
-      }
-    }
+    node_modules: stubbedNodeModules
   });
 });
 
@@ -26,5 +20,9 @@ After(function () {
 });
 
 When('the project is lifted', async function () {
-  await lift({projectRoot: process.cwd(), branchesToVerify: this.additionalBranches});
+  const projectRoot = process.cwd();
+
+  if (await test({projectRoot})) {
+    await lift({projectRoot, branchesToVerify: this.additionalBranches});
+  }
 });
