@@ -1,6 +1,6 @@
 import {coverageShouldBeReported, projectTypeShouldBePublished} from '@form8ion/javascript-core';
-import mkdir from '../thirdparty-wrappers/make-dir';
-import writeYaml from '../thirdparty-wrappers/write-yaml';
+import mkdir from '../../thirdparty-wrappers/make-dir';
+import writeYaml from '../../thirdparty-wrappers/write-yaml';
 
 export default async function ({projectRoot, projectType, tests, visibility}) {
   return writeYaml(

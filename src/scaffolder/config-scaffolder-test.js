@@ -3,8 +3,8 @@ import {promises as fs} from 'fs';
 import sinon from 'sinon';
 import any from '@travi/any';
 import {assert} from 'chai';
-import * as mkdir from '../thirdparty-wrappers/make-dir';
-import * as yamlWriter from '../thirdparty-wrappers/write-yaml';
+import * as mkdir from '../../thirdparty-wrappers/make-dir';
+import * as yamlWriter from '../../thirdparty-wrappers/write-yaml';
 import scaffoldConfig from './config-scaffolder';
 
 suite('config scaffolder', () => {
