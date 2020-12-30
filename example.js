@@ -2,7 +2,7 @@
 // remark-usage-ignore-next
 import stubbedFs from 'mock-fs';
 import {projectTypes} from '@form8ion/javascript-core';
-import {scaffold} from './lib/index.cjs';
+import {scaffold, lift} from './lib/index.cjs';
 
 // remark-usage-ignore-next
 stubbedFs();
@@ -18,4 +18,6 @@ stubbedFs();
       name: 'repo-name'
     }
   });
+
+  await lift({projectRoot: process.cwd(), branchesToVerify: ['foo', 'bar']});
 })();

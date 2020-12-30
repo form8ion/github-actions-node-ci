@@ -38,6 +38,7 @@
     "lint:peer": "npm ls >/dev/null",
     "lint:gherkin": "gherkin-lint",
     "test:integration": "run-s 'test:integration:base -- --profile noWip'",
+    "pretest:integration:base": "preview",
     "test:integration:base": "NODE_OPTIONS=--enable-source-maps DEBUG=any cucumber-js test/integration --profile base",
     "test:integration:debug": "DEBUG=test run-s test:integration",
     "test:integration:wip": "run-s 'test:integration:base -- --profile wip'",
@@ -53,6 +54,7 @@
     "@form8ion/eslint-config-cucumber": "1.4.0",
     "@form8ion/eslint-config-mocha": "1.2.9",
     "@form8ion/remark-lint-preset": "1.0.11",
+    "@rollup/plugin-node-resolve": "11.0.1",
     "@travi/any": "2.0.15",
     "ban-sensitive-files": "1.9.14",
     "chai": "4.2.0",
@@ -65,6 +67,7 @@
     "mock-fs": "4.13.0",
     "npm-run-all": "4.1.5",
     "nyc": "15.1.0",
+    "package-preview": "3.0.0",
     "remark-cli": "9.0.0",
     "remark-toc": "7.0.0",
     "remark-usage": "9.0.0",
@@ -75,6 +78,7 @@
   },
   "dependencies": {
     "@form8ion/javascript-core": "^2.7.2",
+    "js-yaml": "^3.14.1",
     "make-dir": "^3.1.0",
     "write-yaml": "^1.0.0"
   }
