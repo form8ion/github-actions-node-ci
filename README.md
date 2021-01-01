@@ -59,7 +59,7 @@ import {scaffold, lift, test} from '@form8ion/github-actions-node-ci';
 
   await test({projectRoot: process.cwd()});
 
-  await lift({projectRoot: process.cwd(), branchesToVerify: ['foo', 'bar']});
+  await lift({projectRoot: process.cwd(), results: {branchesToVerify: ['foo', 'bar']}});
 })();
 ```
 

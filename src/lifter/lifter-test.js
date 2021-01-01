@@ -23,7 +23,7 @@ suite('lifter', () => {
   teardown(() => sandbox.restore());
 
   test('that the config is not updated when no additional branches are provided', async () => {
-    await lift({projectRoot});
+    await lift({projectRoot, results: any.simpleObject()});
 
     assert.notCalled(fs.readFile);
     assert.notCalled(jsYaml.safeLoad);
@@ -43,7 +43,7 @@ suite('lifter', () => {
       .withArgs({...existingConfig, on: {push: {branches: mergedBranches}}})
       .returns(dumpedConfig);
 
-    await lift({projectRoot, branchesToVerify});
+    await lift({projectRoot, results: {...any.simpleObject(), branchesToVerify}});
 
     assert.calledWith(fs.writeFile, `${projectRoot}/.github/workflows/node-ci.yml`, dumpedConfig);
   });

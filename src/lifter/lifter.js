@@ -2,7 +2,7 @@ import {promises as fs} from 'fs';
 import {safeDump, safeLoad} from 'js-yaml';
 import mergeBranches from './merge-branches';
 
-export default async function ({projectRoot, branchesToVerify}) {
+export default async function ({projectRoot, results: {branchesToVerify}}) {
   if (branchesToVerify) {
     const pathToConfig = `${projectRoot}/.github/workflows/node-ci.yml`;
     const existingConfig = safeLoad(await fs.readFile(pathToConfig, 'utf-8'));

@@ -23,6 +23,6 @@ When('the project is lifted', async function () {
   const projectRoot = process.cwd();
 
   if (await test({projectRoot})) {
-    await lift({projectRoot, branchesToVerify: this.additionalBranches});
+    await lift({projectRoot, results: {branchesToVerify: this.additionalBranches}});
   }
 });

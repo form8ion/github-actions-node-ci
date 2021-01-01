@@ -21,5 +21,5 @@ stubbedFs();
 
   await test({projectRoot: process.cwd()});
 
-  await lift({projectRoot: process.cwd(), branchesToVerify: ['foo', 'bar']});
+  await lift({projectRoot: process.cwd(), results: {branchesToVerify: ['foo', 'bar']}});
 })();
