@@ -12,5 +12,9 @@ export default async function ({projectRoot, results: {branchesToVerify}}) {
       pathToConfig,
       safeDump({...existingConfig, on: {push: {branches: mergeBranches(existingBranches, branchesToVerify)}}})
     );
+
+    return {};
   }
+
+  return {};
 }
