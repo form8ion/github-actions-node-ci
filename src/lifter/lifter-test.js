@@ -15,8 +15,8 @@ suite('lifter', () => {
 
     sandbox.stub(fs, 'readFile');
     sandbox.stub(fs, 'writeFile');
-    sandbox.stub(jsYaml, 'safeLoad');
-    sandbox.stub(jsYaml, 'safeDump');
+    sandbox.stub(jsYaml, 'load');
+    sandbox.stub(jsYaml, 'dump');
     sandbox.stub(branchListMerger, 'default');
   });
 
@@ -26,7 +26,7 @@ suite('lifter', () => {
     assert.deepEqual(await lift({projectRoot, results: any.simpleObject()}), {});
 
     assert.notCalled(fs.readFile);
-    assert.notCalled(jsYaml.safeLoad);
+    assert.notCalled(jsYaml.load);
   });
 
   test('that the additional branches are appended to the existing list', async () => {
@@ -37,9 +37,9 @@ suite('lifter', () => {
     const dumpedConfig = any.string();
     const mergedBranches = any.listOf(any.word);
     fs.readFile.withArgs(`${projectRoot}/.github/workflows/node-ci.yml`, 'utf-8').resolves(rawExistingConfig);
-    jsYaml.safeLoad.withArgs(rawExistingConfig).returns(existingConfig);
+    jsYaml.load.withArgs(rawExistingConfig).returns(existingConfig);
     branchListMerger.default.withArgs(existingBranches, branchesToVerify).returns(mergedBranches);
-    jsYaml.safeDump
+    jsYaml.dump
       .withArgs({...existingConfig, on: {push: {branches: mergedBranches}}})
       .returns(dumpedConfig);
 
