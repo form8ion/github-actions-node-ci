@@ -1,10 +1,10 @@
 import * as jsCore from '@form8ion/javascript-core';
 import {promises as fs} from 'fs';
+import jsYaml from 'js-yaml';
 import sinon from 'sinon';
 import any from '@travi/any';
 import {assert} from 'chai';
 import * as mkdir from '../../thirdparty-wrappers/make-dir';
-import * as yamlWriter from '../../thirdparty-wrappers/write-yaml';
 import scaffoldConfig from './config-scaffolder';
 
 suite('config scaffolder', () => {
@@ -12,12 +12,13 @@ suite('config scaffolder', () => {
   const projectType = any.word();
   const tests = any.simpleObject();
   const visibility = any.word();
+  const dumpedYaml = any.string();
 
   setup(() => {
     sandbox = sinon.createSandbox();
 
     sandbox.stub(mkdir, 'default');
-    sandbox.stub(yamlWriter, 'default');
+    sandbox.stub(jsYaml, 'dump');
     sandbox.stub(fs, 'writeFile');
     sandbox.stub(jsCore, 'projectTypeShouldBePublished');
     sandbox.stub(jsCore, 'coverageShouldBeReported');
@@ -31,13 +32,8 @@ suite('config scaffolder', () => {
     mkdir.default.withArgs(`${projectRoot}/.github/workflows`).resolves(pathToCreatedWorkflowsDirectory);
     jsCore.projectTypeShouldBePublished.returns(false);
     jsCore.coverageShouldBeReported.returns(false);
-
-    await scaffoldConfig({projectRoot, projectType});
-
-    assert.calledWith(
-      yamlWriter.default,
-      `${pathToCreatedWorkflowsDirectory}/node-ci.yml`,
-      {
+    jsYaml.dump
+      .withArgs({
         name: 'Node.js CI',
         on: {
           push: {branches: ['master']},
@@ -69,8 +65,12 @@ suite('config scaffolder', () => {
             ]
           }
         }
-      }
-    );
+      })
+      .returns(dumpedYaml);
+
+    await scaffoldConfig({projectRoot, projectType});
+
+    assert.calledWith(fs.writeFile, `${pathToCreatedWorkflowsDirectory}/node-ci.yml`, dumpedYaml);
   });
 
   test('that package publishing happens for appropriate project types', async () => {
@@ -79,13 +79,8 @@ suite('config scaffolder', () => {
     mkdir.default.withArgs(`${projectRoot}/.github/workflows`).resolves(pathToCreatedWorkflowsDirectory);
     jsCore.projectTypeShouldBePublished.withArgs(projectType).returns(true);
     jsCore.coverageShouldBeReported.returns(false);
-
-    await scaffoldConfig({projectRoot, projectType});
-
-    assert.calledWith(
-      yamlWriter.default,
-      `${pathToCreatedWorkflowsDirectory}/node-ci.yml`,
-      {
+    jsYaml.dump
+      .withArgs({
         name: 'Node.js CI',
         on: {
           push: {branches: ['master', 'alpha', 'beta']},
@@ -145,8 +140,12 @@ suite('config scaffolder', () => {
             ]
           }
         }
-      }
-    );
+      })
+      .returns(dumpedYaml);
+
+    await scaffoldConfig({projectRoot, projectType});
+
+    assert.calledWith(fs.writeFile, `${pathToCreatedWorkflowsDirectory}/node-ci.yml`, dumpedYaml);
   });
 
   test('that coverage is reported when appropriate', async () => {
@@ -155,13 +154,8 @@ suite('config scaffolder', () => {
     mkdir.default.withArgs(`${projectRoot}/.github/workflows`).resolves(pathToCreatedWorkflowsDirectory);
     jsCore.projectTypeShouldBePublished.returns(false);
     jsCore.coverageShouldBeReported.withArgs(visibility, tests).returns(true);
-
-    await scaffoldConfig({projectRoot, projectType, tests, visibility});
-
-    assert.calledWith(
-      yamlWriter.default,
-      `${pathToCreatedWorkflowsDirectory}/node-ci.yml`,
-      {
+    jsYaml.dump
+      .withArgs({
         name: 'Node.js CI',
         on: {
           push: {branches: ['master']},
@@ -197,7 +191,11 @@ suite('config scaffolder', () => {
             ]
           }
         }
-      }
-    );
+      })
+      .returns(dumpedYaml);
+
+    await scaffoldConfig({projectRoot, projectType, tests, visibility});
+
+    assert.calledWith(fs.writeFile, `${pathToCreatedWorkflowsDirectory}/node-ci.yml`, dumpedYaml);
   });
 });
