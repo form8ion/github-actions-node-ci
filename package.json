@@ -46,7 +46,7 @@
     "test:integration:focus": "run-s 'test:integration:base -- --profile focus'"
   },
   "devDependencies": {
-    "@babel/register": "7.12.10",
+    "@babel/register": "7.12.13",
     "@cucumber/cucumber": "7.0.0-rc.0",
     "@form8ion/babel-preset": "1.6.41",
     "@form8ion/commitlint-config": "1.0.14",
