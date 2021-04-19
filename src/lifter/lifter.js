@@ -10,7 +10,13 @@ export default async function ({projectRoot, results: {branchesToVerify}}) {
 
     await fs.writeFile(
       pathToConfig,
-      dump({...existingConfig, on: {push: {branches: mergeBranches(existingBranches, branchesToVerify)}}})
+      dump({
+        ...existingConfig,
+        on: {
+          ...existingConfig.on,
+          push: {branches: mergeBranches(existingBranches, branchesToVerify)}
+        }
+      })
     );
 
     return {};

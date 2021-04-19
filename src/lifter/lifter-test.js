@@ -32,7 +32,7 @@ suite('lifter', () => {
   test('that the additional branches are appended to the existing list', async () => {
     const existingBranches = any.listOf(any.word);
     const branchesToVerify = any.listOf(any.word);
-    const existingConfig = {...any.simpleObject(), on: {push: {branches: existingBranches}}};
+    const existingConfig = {...any.simpleObject(), on: {...any.simpleObject(), push: {branches: existingBranches}}};
     const rawExistingConfig = any.string();
     const dumpedConfig = any.string();
     const mergedBranches = any.listOf(any.word);
@@ -40,7 +40,7 @@ suite('lifter', () => {
     jsYaml.load.withArgs(rawExistingConfig).returns(existingConfig);
     branchListMerger.default.withArgs(existingBranches, branchesToVerify).returns(mergedBranches);
     jsYaml.dump
-      .withArgs({...existingConfig, on: {push: {branches: mergedBranches}}})
+      .withArgs({...existingConfig, on: {...existingConfig.on, push: {branches: mergedBranches}}})
       .returns(dumpedConfig);
 
     assert.deepEqual(await lift({projectRoot, results: {...any.simpleObject(), branchesToVerify}}), {});

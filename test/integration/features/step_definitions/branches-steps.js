@@ -17,8 +17,8 @@ Given('existing branches are provided as additional branches', async function ()
 });
 
 Then('the branches are added to the ci config', async function () {
-  assert.deepEqual(
-    load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`)).on.push.branches,
-    [...this.existingBranches, ...this.additionalBranches]
-  );
+  const triggers = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`)).on;
+
+  assert.deepEqual(triggers.push.branches, [...this.existingBranches, ...this.additionalBranches]);
+  assert.deepEqual(triggers.pull_request, this.prTriggerConfig);
 });
