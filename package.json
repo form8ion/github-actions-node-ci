@@ -61,7 +61,7 @@
     "chai": "4.3.4",
     "codecov": "3.8.2",
     "cz-conventional-changelog": "3.3.0",
-    "gherkin-lint": "4.2.1",
+    "gherkin-lint": "4.2.2",
     "husky": "6.0.0",
     "lockfile-lint": "4.6.2",
     "mocha": "8.4.0",
