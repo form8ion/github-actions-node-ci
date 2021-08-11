@@ -47,7 +47,7 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@babel/register": "7.14.5",
+    "@babel/register": "7.15.3",
     "@cucumber/cucumber": "7.3.1",
     "@form8ion/babel-preset": "1.6.66",
     "@form8ion/commitlint-config": "1.0.20",
