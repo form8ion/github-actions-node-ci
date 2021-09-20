@@ -49,16 +49,9 @@ export default async function ({projectRoot, projectType, tests, visibility}) {
             steps: [
               {uses: 'actions/checkout@v2'},
               {
-                name: 'Read .nvmrc',
-                run: 'echo ::set-output name=NVMRC::$(cat .nvmrc)',
-                id: 'nvm'
-              },
-              {
                 name: 'Setup node',
                 uses: 'actions/setup-node@v2',
-                with: {
-                  'node-version': '${{ steps.nvm.outputs.NVMRC }}'    // eslint-disable-line no-template-curly-in-string
-                }
+                with: {'node-version': 'lts/*'}
               },
               {uses: 'bahmutov/npm-install@v1'},
               {
