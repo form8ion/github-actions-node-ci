@@ -21,25 +21,12 @@ export default async function ({projectRoot, projectType, tests, visibility}) {
           'runs-on': 'ubuntu-latest',
           steps: [
             {uses: 'actions/checkout@v2'},
-            {
-              name: 'Read .nvmrc',
-              run: 'echo ::set-output name=NVMRC::$(cat .nvmrc)',
-              id: 'nvm'
-            },
-            {
-              name: 'Setup node',
-              uses: 'actions/setup-node@v2',
-              with: {
-                'node-version': '${{ steps.nvm.outputs.NVMRC }}'      // eslint-disable-line no-template-curly-in-string
-              }
-            },
+            {name: 'Setup node', uses: 'actions/setup-node@v2', with: {'node-version-file': '.nvmrc'}},
             {uses: 'bahmutov/npm-install@v1'},
             {run: 'npm test'},
             ...coverageShouldBeReported(visibility, tests)
-              ? [{
-                name: 'Upload coverage data to Codecov',
-                run: 'npm run coverage:report'
-              }] : []
+              ? [{name: 'Upload coverage data to Codecov', run: 'npm run coverage:report'}]
+              : []
           ]
         },
         ...projectTypeShouldBePublished(projectType) && {
