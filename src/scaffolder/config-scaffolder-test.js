@@ -48,8 +48,8 @@ suite('config scaffolder', () => {
             'runs-on': 'ubuntu-latest',
             steps: [
               {uses: 'actions/checkout@v2'},
-              {name: 'Setup node', uses: 'actions/setup-node@v2', with: {'node-version-file': '.nvmrc'}},
-              {uses: 'bahmutov/npm-install@v1'},
+              {name: 'Setup node', uses: 'actions/setup-node@v2', with: {'node-version-file': '.nvmrc', cache: 'npm'}},
+              {run: 'npm clean-install'},
               {run: 'npm test'}
             ]
           }
@@ -84,8 +84,8 @@ suite('config scaffolder', () => {
             'runs-on': 'ubuntu-latest',
             steps: [
               {uses: 'actions/checkout@v2'},
-              {name: 'Setup node', uses: 'actions/setup-node@v2', with: {'node-version-file': '.nvmrc'}},
-              {uses: 'bahmutov/npm-install@v1'},
+              {name: 'Setup node', uses: 'actions/setup-node@v2', with: {'node-version-file': '.nvmrc', cache: 'npm'}},
+              {run: 'npm clean-install'},
               {run: 'npm test'}
             ]
           },
@@ -94,12 +94,8 @@ suite('config scaffolder', () => {
             'runs-on': 'ubuntu-latest',
             steps: [
               {uses: 'actions/checkout@v2'},
-              {
-                name: 'Setup node',
-                uses: 'actions/setup-node@v2',
-                with: {'node-version': 'lts/*'}
-              },
-              {uses: 'bahmutov/npm-install@v1'},
+              {name: 'Setup node', uses: 'actions/setup-node@v2', with: {'node-version': 'lts/*', cache: 'npm'}},
+              {run: 'npm clean-install'},
               {
                 name: 'semantic-release',
                 run: 'npx semantic-release',
@@ -141,8 +137,8 @@ suite('config scaffolder', () => {
             'runs-on': 'ubuntu-latest',
             steps: [
               {uses: 'actions/checkout@v2'},
-              {name: 'Setup node', uses: 'actions/setup-node@v2', with: {'node-version-file': '.nvmrc'}},
-              {uses: 'bahmutov/npm-install@v1'},
+              {name: 'Setup node', uses: 'actions/setup-node@v2', with: {'node-version-file': '.nvmrc', cache: 'npm'}},
+              {run: 'npm clean-install'},
               {run: 'npm test'},
               {
                 name: 'Upload coverage data to Codecov',
