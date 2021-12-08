@@ -53,7 +53,7 @@
     "@form8ion/commitlint-config": "1.0.23",
     "@form8ion/eslint-config": "1.10.0",
     "@form8ion/eslint-config-cucumber": "1.4.0",
-    "@form8ion/eslint-config-mocha": "1.2.12",
+    "@form8ion/eslint-config-mocha": "1.2.14",
     "@form8ion/remark-lint-preset": "2.1.7",
     "@rollup/plugin-node-resolve": "13.0.6",
     "@travi/any": "2.0.19",
