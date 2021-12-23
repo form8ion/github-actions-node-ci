@@ -1,9 +1,9 @@
 import {promises as fs} from 'fs';
 import {dump} from 'js-yaml';
-import {coverageShouldBeReported, projectTypeShouldBePublished} from '@form8ion/javascript-core';
+import {projectTypeShouldBePublished} from '@form8ion/javascript-core';
 import mkdir from '../../thirdparty-wrappers/make-dir';
 
-export default async function ({projectRoot, projectType, tests, visibility}) {
+export default async function ({projectRoot, projectType}) {
   return fs.writeFile(
     `${await mkdir(`${projectRoot}/.github/workflows`)}/node-ci.yml`,
     dump({
@@ -23,10 +23,7 @@ export default async function ({projectRoot, projectType, tests, visibility}) {
             {uses: 'actions/checkout@v2'},
             {name: 'Setup node', uses: 'actions/setup-node@v2', with: {'node-version-file': '.nvmrc', cache: 'npm'}},
             {run: 'npm clean-install'},
-            {run: 'npm test'},
-            ...coverageShouldBeReported(visibility, tests)
-              ? [{name: 'Upload coverage data to Codecov', run: 'npm run coverage:report'}]
-              : []
+            {run: 'npm test'}
           ]
         },
         ...projectTypeShouldBePublished(projectType) && {

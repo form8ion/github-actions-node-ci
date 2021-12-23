@@ -10,8 +10,6 @@ import scaffoldConfig from './config-scaffolder';
 suite('config scaffolder', () => {
   let sandbox;
   const projectType = any.word();
-  const tests = any.simpleObject();
-  const visibility = any.word();
   const dumpedYaml = any.string();
 
   setup(() => {
@@ -21,7 +19,6 @@ suite('config scaffolder', () => {
     sandbox.stub(jsYaml, 'dump');
     sandbox.stub(fs, 'writeFile');
     sandbox.stub(jsCore, 'projectTypeShouldBePublished');
-    sandbox.stub(jsCore, 'coverageShouldBeReported');
   });
 
   teardown(() => sandbox.restore());
@@ -31,7 +28,6 @@ suite('config scaffolder', () => {
     const pathToCreatedWorkflowsDirectory = any.string();
     mkdir.default.withArgs(`${projectRoot}/.github/workflows`).resolves(pathToCreatedWorkflowsDirectory);
     jsCore.projectTypeShouldBePublished.returns(false);
-    jsCore.coverageShouldBeReported.returns(false);
     jsYaml.dump
       .withArgs({
         name: 'Node.js CI',
@@ -67,7 +63,6 @@ suite('config scaffolder', () => {
     const pathToCreatedWorkflowsDirectory = any.string();
     mkdir.default.withArgs(`${projectRoot}/.github/workflows`).resolves(pathToCreatedWorkflowsDirectory);
     jsCore.projectTypeShouldBePublished.withArgs(projectType).returns(true);
-    jsCore.coverageShouldBeReported.returns(false);
     jsYaml.dump
       .withArgs({
         name: 'Node.js CI',
@@ -111,46 +106,6 @@ suite('config scaffolder', () => {
       .returns(dumpedYaml);
 
     await scaffoldConfig({projectRoot, projectType});
-
-    assert.calledWith(fs.writeFile, `${pathToCreatedWorkflowsDirectory}/node-ci.yml`, dumpedYaml);
-  });
-
-  test('that coverage is reported when appropriate', async () => {
-    const projectRoot = any.string();
-    const pathToCreatedWorkflowsDirectory = any.string();
-    mkdir.default.withArgs(`${projectRoot}/.github/workflows`).resolves(pathToCreatedWorkflowsDirectory);
-    jsCore.projectTypeShouldBePublished.returns(false);
-    jsCore.coverageShouldBeReported.withArgs(visibility, tests).returns(true);
-    jsYaml.dump
-      .withArgs({
-        name: 'Node.js CI',
-        on: {
-          push: {branches: ['master']},
-          pull_request: {types: ['opened', 'synchronize']}
-        },
-        env: {
-          FORCE_COLOR: 1,
-          NPM_CONFIG_COLOR: 'always'
-        },
-        jobs: {
-          verify: {
-            'runs-on': 'ubuntu-latest',
-            steps: [
-              {uses: 'actions/checkout@v2'},
-              {name: 'Setup node', uses: 'actions/setup-node@v2', with: {'node-version-file': '.nvmrc', cache: 'npm'}},
-              {run: 'npm clean-install'},
-              {run: 'npm test'},
-              {
-                name: 'Upload coverage data to Codecov',
-                run: 'npm run coverage:report'
-              }
-            ]
-          }
-        }
-      })
-      .returns(dumpedYaml);
-
-    await scaffoldConfig({projectRoot, projectType, tests, visibility});
 
     assert.calledWith(fs.writeFile, `${pathToCreatedWorkflowsDirectory}/node-ci.yml`, dumpedYaml);
   });
