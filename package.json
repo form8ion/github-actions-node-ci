@@ -49,7 +49,7 @@
   "devDependencies": {
     "@babel/register": "7.16.7",
     "@cucumber/cucumber": "7.3.1",
-    "@form8ion/babel-preset": "1.6.73",
+    "@form8ion/babel-preset": "1.6.74",
     "@form8ion/commitlint-config": "1.0.25",
     "@form8ion/eslint-config": "2.0.2",
     "@form8ion/eslint-config-cucumber": "1.4.0",
