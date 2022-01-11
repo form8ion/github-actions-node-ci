@@ -67,7 +67,7 @@ suite('config scaffolder', () => {
       .withArgs({
         name: 'Node.js CI',
         on: {
-          push: {branches: ['master', 'alpha', 'beta']},
+          push: {branches: ['master', 'beta']},
           pull_request: {types: ['opened', 'synchronize']}
         },
         env: {

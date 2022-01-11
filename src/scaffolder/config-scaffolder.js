@@ -9,7 +9,7 @@ export default async function ({projectRoot, projectType}) {
     dump({
       name: 'Node.js CI',
       on: {
-        push: {branches: ['master', ...projectTypeShouldBePublished(projectType) ? ['alpha', 'beta'] : []]},
+        push: {branches: ['master', ...projectTypeShouldBePublished(projectType) ? ['beta'] : []]},
         pull_request: {types: ['opened', 'synchronize']}
       },
       env: {
