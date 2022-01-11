@@ -58,7 +58,7 @@ suite('config scaffolder', () => {
     assert.calledWith(fs.writeFile, `${pathToCreatedWorkflowsDirectory}/node-ci.yml`, dumpedYaml);
   });
 
-  test('that package publishing happens for appropriate project types', async () => {
+  test('that verification happens on the `beta` branch for appropriate project types', async () => {
     const projectRoot = any.string();
     const pathToCreatedWorkflowsDirectory = any.string();
     mkdir.default.withArgs(`${projectRoot}/.github/workflows`).resolves(pathToCreatedWorkflowsDirectory);
@@ -82,23 +82,6 @@ suite('config scaffolder', () => {
               {name: 'Setup node', uses: 'actions/setup-node@v2', with: {'node-version-file': '.nvmrc', cache: 'npm'}},
               {run: 'npm clean-install'},
               {run: 'npm test'}
-            ]
-          },
-          release: {
-            needs: 'verify',
-            'runs-on': 'ubuntu-latest',
-            steps: [
-              {uses: 'actions/checkout@v2'},
-              {name: 'Setup node', uses: 'actions/setup-node@v2', with: {'node-version': 'lts/*', cache: 'npm'}},
-              {run: 'npm clean-install'},
-              {
-                name: 'semantic-release',
-                run: 'npx semantic-release',
-                env: {
-                  GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}',        // eslint-disable-line no-template-curly-in-string
-                  NPM_TOKEN: '${{ secrets.NPM_PUBLISH_TOKEN }}'       // eslint-disable-line no-template-curly-in-string
-                }
-              }
             ]
           }
         }
