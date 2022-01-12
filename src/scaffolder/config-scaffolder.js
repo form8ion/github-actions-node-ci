@@ -1,15 +1,14 @@
 import {promises as fs} from 'fs';
 import {dump} from 'js-yaml';
-import {projectTypeShouldBePublished} from '@form8ion/javascript-core';
 import mkdir from '../../thirdparty-wrappers/make-dir';
 
-export default async function ({projectRoot, projectType}) {
+export default async function ({projectRoot}) {
   return fs.writeFile(
     `${await mkdir(`${projectRoot}/.github/workflows`)}/node-ci.yml`,
     dump({
       name: 'Node.js CI',
       on: {
-        push: {branches: ['master', ...projectTypeShouldBePublished(projectType) ? ['beta'] : []]},
+        push: {branches: ['master']},
         pull_request: {types: ['opened', 'synchronize']}
       },
       env: {
