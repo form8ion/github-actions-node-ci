@@ -20,11 +20,15 @@ suite('steps lifter', () => {
     const nvmrcReadStep = {...any.simpleObject(), id: 'nvm'};
     const firstStep = any.simpleObject();
     const lastStep = any.simpleObject();
+    const liftedFirstStep = any.simpleObject();
+    const liftedLastStep = any.simpleObject();
     const steps = [firstStep, nvmrcReadStep, lastStep];
+    stepLifter.default.withArgs(firstStep).returns(liftedFirstStep);
+    stepLifter.default.withArgs(lastStep).returns(liftedLastStep);
 
-    assert.notDeepInclude(liftSteps(steps), nvmrcReadStep);
+    const liftedSteps = liftSteps(steps);
 
-    assert.calledWith(stepLifter.default, firstStep);
-    assert.calledWith(stepLifter.default, lastStep);
+    assert.notDeepInclude(liftedSteps, nvmrcReadStep);
+    assert.deepEqual(liftedSteps, [liftedFirstStep, liftedLastStep]);
   });
 });
