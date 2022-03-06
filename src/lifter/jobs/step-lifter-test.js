@@ -32,4 +32,8 @@ suite('step lifter', () => {
 
     assert.deepEqual(liftStep(step), step);
   });
+
+  test('that the legacy install action is replaced with directly executing the install command', async () => {
+    assert.deepEqual(liftStep({uses: 'bahmutov/npm-install@v1'}), {run: 'npm clean-install'});
+  });
 });
