@@ -28,7 +28,7 @@ suite('lifter', () => {
     sandbox.stub(jobsLifter, 'default');
 
     fs.readFile.withArgs(`${projectRoot}/.github/workflows/node-ci.yml`, 'utf-8').resolves(rawExistingConfig);
-    jobsLifter.default.withArgs({jobs: existingJobs}).returns(liftedJobs);
+    jobsLifter.default.withArgs(existingJobs).returns(liftedJobs);
   });
 
   teardown(() => sandbox.restore());

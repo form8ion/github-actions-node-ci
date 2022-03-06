@@ -16,7 +16,7 @@ export default async function ({projectRoot, results: {branchesToVerify}}) {
       ...branchesToVerify && {
         on: {...existingConfig.on, push: {branches: mergeBranches(existingBranches, branchesToVerify)}}
       },
-      jobs: liftJobs({jobs: existingConfig.jobs})
+      jobs: liftJobs(existingConfig.jobs)
     })
   );
 

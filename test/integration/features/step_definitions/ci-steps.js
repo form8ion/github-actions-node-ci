@@ -33,6 +33,6 @@ Then('the ci config remains unchanged', async function () {
   assert.deepEqual(triggers.pull_request, this.prTriggerConfig);
 
   if (this.existingJobName) {
-    assert.deepEqual(jobs[this.existingJobName], this.existingJobSteps);
+    assert.deepEqual(jobs[this.existingJobName].steps, this.existingJobSteps);
   }
 });
