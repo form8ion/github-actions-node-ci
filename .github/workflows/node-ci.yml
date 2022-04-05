@@ -19,7 +19,7 @@ jobs:
           node-version-file: .nvmrc
       - run: npm clean-install
       - run: npm test
-      - uses: codecov/codecov-action@v2
+      - uses: codecov/codecov-action@v3
   trigger-release:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
