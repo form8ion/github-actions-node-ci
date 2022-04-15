@@ -4,6 +4,7 @@ import {dump, load} from 'js-yaml';
 import {Given, Then} from '@cucumber/cucumber';
 import any from '@travi/any';
 import {assert} from 'chai';
+import td from 'testdouble';
 
 import {pathToWorkflowsDirectory} from './ci-steps';
 
@@ -54,21 +55,41 @@ Given('the version is read from the nvmrc and passed as a value to the setup-nod
 
 Given('the node version is based on a matrix', async function () {
   this.existingJobName = any.word();
+  this.existingNodeVersions = any.listOf(any.integer);
   this.existingJobSteps = [
     {uses: 'actions/checkout@v3'},
     {
       name: 'Setup node',
       uses: 'actions/setup-node@v3',
-      with: {'node-version': '${{ matrix.node_version }}'}      // eslint-disable-line no-template-curly-in-string
+      with: {'node-version': '${{ matrix.node }}'}      // eslint-disable-line no-template-curly-in-string
     },
     {run: 'npm clean-install'}
   ];
 
   const ciWorkflow = load(await fs.readFile(pathToCiWorkflow, 'utf-8'));
 
-  ciWorkflow.jobs[this.existingJobName] = {steps: this.existingJobSteps};
+  ciWorkflow.jobs[this.existingJobName] = {
+    strategy: {matrix: {node: this.existingNodeVersions}},
+    steps: this.existingJobSteps
+  };
 
   await fs.writeFile(pathToCiWorkflow, dump(ciWorkflow));
+});
+
+Given('a greater-than-minimum node version range is defined', async function () {
+  this.minimumNodeVersion = `${any.integer()}.${any.integer()}`;
+  this.inRangeNodeLtsMajorVersions = any.listOf(any.integer);
+  const nodeVersionRange = `>=${this.minimumNodeVersion}`;
+
+  const packageContents = JSON.parse(await fs.readFile(`${process.cwd()}/package.json`, 'utf-8'));
+
+  await fs.writeFile(
+    `${process.cwd()}/package.json`,
+    JSON.stringify({...packageContents, engines: {node: nodeVersionRange}})
+  );
+
+  td.when(this.jsCore.determineActiveLtsNodeMajorVersions({withinRange: nodeVersionRange}))
+    .thenReturn(this.inRangeNodeLtsMajorVersions);
 });
 
 Then('the setup-node step is updated to reference the nvmrc file using the modern property', async function () {
@@ -81,4 +102,53 @@ Then('the setup-node step is updated to reference the nvmrc file using the moder
   const setupNodeStep = existingJob.steps.find(step => 'Setup node' === step.name);
   assert.equal(setupNodeStep.with['node-version-file'], '.nvmrc');
   assert.isUndefined(setupNodeStep.with['node-version']);
+});
+
+Then('no matrix job is configured', async function () {
+  const {jobs} = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+
+  assert.equal(Object.values(jobs).filter(job => job.strategy?.matrix).length, 0);
+});
+
+Then('the matrix job is unchanged', async function () {
+  const {jobs} = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+
+  assert.deepEqual(
+    jobs[this.existingJobName],
+    {strategy: {matrix: {node: this.existingNodeVersions}}, steps: this.existingJobSteps}
+  );
+});
+
+Then('a matrix job is added', async function () {
+  const {
+    jobs: {'verify-matrix': verifyMatrixJob}
+  } = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+
+  assert.deepEqual(
+    verifyMatrixJob,
+    {
+      'runs-on': 'ubuntu-latest',
+      strategy: {matrix: {node: [`${this.minimumNodeVersion}.0`, ...this.inRangeNodeLtsMajorVersions]}},
+      steps: [
+        {uses: 'actions/checkout@v3'},
+        {
+          name: 'Setup node',
+          uses: 'actions/setup-node@v3',
+          with: {
+            'node-version': '${{ matrix.node }}',             // eslint-disable-line no-template-curly-in-string
+            cache: 'npm'
+          }
+        },
+        {run: 'npm clean-install'},
+        {run: 'npm test'}
+      ]
+    }
+  );
+});
+
+Then('the matrix job is updated', async function () {
+  // const {jobs} = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+
+  // Write code here that turns the phrase above into concrete actions
+  return 'pending';
 });
