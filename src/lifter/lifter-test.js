@@ -16,6 +16,7 @@ suite('lifter', () => {
   const dumpedConfig = any.string();
   const existingJobs = any.listOf(any.simpleObject);
   const liftedJobs = any.listOf(any.simpleObject);
+  const enginesDefinition = any.simpleObject();
 
   setup(() => {
     sandbox = sinon.createSandbox();
@@ -28,7 +29,8 @@ suite('lifter', () => {
     sandbox.stub(jobsLifter, 'default');
 
     fs.readFile.withArgs(`${projectRoot}/.github/workflows/node-ci.yml`, 'utf-8').resolves(rawExistingConfig);
-    jobsLifter.default.withArgs(existingJobs).returns(liftedJobs);
+    fs.readFile.withArgs(`${projectRoot}/package.json`, 'utf-8').resolves(JSON.stringify({engines: enginesDefinition}));
+    jobsLifter.default.withArgs(existingJobs, enginesDefinition).returns(liftedJobs);
   });
 
   teardown(() => sandbox.restore());

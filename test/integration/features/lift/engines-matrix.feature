@@ -12,7 +12,6 @@ Feature: Engines matrix
     When the project is lifted
     Then a matrix job is added
 
-  @wip
   Scenario: Existing matrix, engines range defined
     Given a CI workflow exists
     And a greater-than-minimum node version range is defined

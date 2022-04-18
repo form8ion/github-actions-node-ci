@@ -147,8 +147,11 @@ Then('a matrix job is added', async function () {
 });
 
 Then('the matrix job is updated', async function () {
-  // const {jobs} = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+  const {jobs} = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
 
-  // Write code here that turns the phrase above into concrete actions
-  return 'pending';
+  assert.equal(Object.values(jobs).filter(job => job.strategy?.matrix).length, 1);
+  assert.deepEqual(
+    jobs[this.existingJobName].strategy.matrix.node,
+    [`${this.minimumNodeVersion}.0`, ...this.inRangeNodeLtsMajorVersions]
+  );
 });
