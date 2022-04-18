@@ -18,6 +18,7 @@ suite('node version matrix builder', () => {
   });
 
   teardown(() => sandbox.restore());
+
   test('that the list of node versions is built based on the engines definition', async () => {
     const nodeVersionRange = any.string();
     const minimumNodeVersion = any.string();
@@ -31,5 +32,13 @@ suite('node version matrix builder', () => {
       buildNodeVersionMatrix({node: nodeVersionRange}),
       [minimumNodeVersion, ...inRangeLtsNodeMajorVersions]
     );
+  });
+
+  test('that `undefined` is returned if `engines` is not defined', async () => {
+    assert.isUndefined(buildNodeVersionMatrix(undefined));
+  });
+
+  test('that `undefined` is returned if `engines.node` is not defined', async () => {
+    assert.isUndefined(buildNodeVersionMatrix({}));
   });
 });
