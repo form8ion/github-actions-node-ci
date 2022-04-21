@@ -15,7 +15,7 @@ export default function (step) {
   if (stepIsForSettingUpNode(step) && nvmrcReadWithLegacyApproach(step)) {
     const {'node-version': nodeVersion, ...otherWithProperties} = step.with;
 
-    return {...step, with: {...otherWithProperties, 'node-version-file': '.nvmrc'}};
+    return {...step, with: {...otherWithProperties, 'node-version-file': '.nvmrc', cache: 'npm'}};
   }
 
   if (stepIsLegacyInstallAction(step)) {

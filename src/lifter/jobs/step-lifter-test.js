@@ -20,7 +20,10 @@ suite('step lifter', () => {
       with: {...otherWithProperties, 'node-version': '${{ steps.nvm.outputs.NVMRC }}'}
     };
 
-    assert.deepEqual(liftStep(step), {...step, with: {...otherWithProperties, 'node-version-file': '.nvmrc'}});
+    assert.deepEqual(
+      liftStep(step),
+      {...step, with: {...otherWithProperties, 'node-version-file': '.nvmrc', cache: 'npm'}}
+    );
   });
 
   test('that the nvmrc file is not read for matrix jobs', async () => {
