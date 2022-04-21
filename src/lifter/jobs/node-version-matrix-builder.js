@@ -6,10 +6,11 @@ export default function (engines) {
     return undefined;
   }
 
-  const nodeVersionRange = engines.node;
+  const nodeVersionRanges = engines.node.split(' || ');
 
-  return [
-    minVersion(nodeVersionRange).version,
-    ...determineActiveLtsNodeMajorVersions({withinRange: nodeVersionRange})
-  ];
+  return nodeVersionRanges.reduce((acc, range) => ([
+    ...acc,
+    minVersion(range).version,
+    ...determineActiveLtsNodeMajorVersions({withinRange: range})
+  ]), []);
 }

@@ -13,9 +13,16 @@ Feature: Engines matrix
     When the project is lifted
     Then a matrix job is added
 
-  Scenario: Existing matrix, engines range defined
+  Scenario: Existing matrix, greater-than-minimum engines range defined
     Given a CI workflow exists
     And a greater-than-minimum node version range is defined
+    And the node version is based on a matrix
+    When the project is lifted
+    Then the matrix job is updated
+
+  Scenario: Existing matrix, multiple range engines definition
+    Given a CI workflow exists
+    And multiple node version ranges are defined
     And the node version is based on a matrix
     When the project is lifted
     Then the matrix job is updated

@@ -92,6 +92,27 @@ Given('a greater-than-minimum node version range is defined', async function () 
     .thenReturn(this.inRangeNodeLtsMajorVersions);
 });
 
+Given('multiple node version ranges are defined', async function () {
+  this.caretNodeVersion = `${any.integer()}.${any.integer()}.${any.integer()}`;
+  this.minimumNodeVersion = `${any.integer()}.${any.integer()}`;
+  this.inRangeNodeLtsMajorVersions = any.listOf(any.integer);
+  const caretNodeVersionRange = `^${this.caretNodeVersion}`;
+  const minimumNodeVersionRange = `>=${this.minimumNodeVersion}`;
+  const nodeVersionRange = `${caretNodeVersionRange} || ${minimumNodeVersionRange}`;
+
+  const packageContents = JSON.parse(await fs.readFile(`${process.cwd()}/package.json`, 'utf-8'));
+
+  await fs.writeFile(
+    `${process.cwd()}/package.json`,
+    JSON.stringify({...packageContents, engines: {node: nodeVersionRange}})
+  );
+
+  td.when(this.jsCore.determineActiveLtsNodeMajorVersions({withinRange: caretNodeVersionRange}))
+    .thenReturn([]);
+  td.when(this.jsCore.determineActiveLtsNodeMajorVersions({withinRange: minimumNodeVersionRange}))
+    .thenReturn(this.inRangeNodeLtsMajorVersions);
+});
+
 Then('the setup-node step is updated to reference the nvmrc file using the modern property', async function () {
   const {
     jobs: {[this.existingJobName]: existingJob}
@@ -154,6 +175,10 @@ Then('the matrix job is updated', async function () {
   assert.equal(Object.values(jobs).filter(job => job.strategy?.matrix).length, 1);
   assert.deepEqual(
     jobs[this.existingJobName].strategy.matrix.node,
-    [`${this.minimumNodeVersion}.0`, ...this.inRangeNodeLtsMajorVersions]
+    [
+      ...this.caretNodeVersion ? [this.caretNodeVersion] : [],
+      `${this.minimumNodeVersion}.0`,
+      ...this.inRangeNodeLtsMajorVersions
+    ]
   );
 });
