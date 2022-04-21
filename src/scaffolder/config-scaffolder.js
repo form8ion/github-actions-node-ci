@@ -20,7 +20,7 @@ export default async function ({projectRoot}) {
       jobs: {
         verify: {
           'runs-on': 'ubuntu-latest',
-          steps: [checkout(), setupNode(), installDependencies(), executeVerification()]
+          steps: [checkout(), setupNode({versionDeterminedBy: 'nvmrc'}), installDependencies(), executeVerification()]
         }
       }
     })

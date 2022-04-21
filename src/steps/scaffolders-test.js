@@ -7,10 +7,18 @@ suite('step scaffolders', () => {
     assert.deepEqual(checkout(), {uses: 'actions/checkout@v3'});
   });
 
-  test('that node is set up correctly', async () => {
+  test('that node is set up correctly when version is determined from the `.nvmrc`', async () => {
     assert.deepEqual(
-      setupNode(),
+      setupNode({versionDeterminedBy: 'nvmrc'}),
       {name: 'Setup node', uses: 'actions/setup-node@v3', with: {'node-version-file': '.nvmrc', cache: 'npm'}}
+    );
+  });
+
+  test('that node is set up correctly when the version is determined based on a matrix', async () => {
+    assert.deepEqual(
+      setupNode({versionDeterminedBy: 'matrix'}),
+      // eslint-disable-next-line no-template-curly-in-string
+      {name: 'Setup node', uses: 'actions/setup-node@v3', with: {'node-version': '${{ matrix.node }}', cache: 'npm'}}
     );
   });
 
