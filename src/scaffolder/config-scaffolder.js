@@ -1,6 +1,8 @@
 import {promises as fs} from 'fs';
 import {dump} from 'js-yaml';
+
 import mkdir from '../../thirdparty-wrappers/make-dir';
+import {checkout, setupNode, installDependencies, executeVerification} from '../steps/scaffolders';
 
 export default async function ({projectRoot}) {
   return fs.writeFile(
@@ -18,12 +20,7 @@ export default async function ({projectRoot}) {
       jobs: {
         verify: {
           'runs-on': 'ubuntu-latest',
-          steps: [
-            {uses: 'actions/checkout@v3'},
-            {name: 'Setup node', uses: 'actions/setup-node@v3', with: {'node-version-file': '.nvmrc', cache: 'npm'}},
-            {run: 'npm clean-install'},
-            {run: 'npm test'}
-          ]
+          steps: [checkout(), setupNode(), installDependencies(), executeVerification()]
         }
       }
     })
