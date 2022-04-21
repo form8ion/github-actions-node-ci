@@ -40,8 +40,8 @@ suite('config scaffolder', () => {
           verify: {
             'runs-on': 'ubuntu-latest',
             steps: [
-              {uses: 'actions/checkout@v2'},
-              {name: 'Setup node', uses: 'actions/setup-node@v2', with: {'node-version-file': '.nvmrc', cache: 'npm'}},
+              {uses: 'actions/checkout@v3'},
+              {name: 'Setup node', uses: 'actions/setup-node@v3', with: {'node-version-file': '.nvmrc', cache: 'npm'}},
               {run: 'npm clean-install'},
               {run: 'npm test'}
             ]
