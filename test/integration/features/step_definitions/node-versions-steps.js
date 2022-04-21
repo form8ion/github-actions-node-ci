@@ -120,10 +120,12 @@ Then('the matrix job is unchanged', async function () {
 });
 
 Then('a matrix job is added', async function () {
-  const {
-    jobs: {'verify-matrix': verifyMatrixJob}
-  } = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+  const {jobs} = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+  const {'verify-matrix': verifyMatrixJob} = jobs;
+  const jobDefinitions = Object.values(jobs);
 
+  assert.equal(jobDefinitions.length, 2);
+  assert.equal(jobDefinitions.filter(job => job.strategy?.matrix).length, 1);
   assert.deepEqual(
     verifyMatrixJob,
     {

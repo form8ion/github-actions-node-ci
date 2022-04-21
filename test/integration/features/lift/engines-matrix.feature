@@ -8,6 +8,7 @@ Feature: Engines matrix
   @wip
   Scenario: No existing matrix, engines range defined
     Given a CI workflow exists
+    And the nvmrc is referenced using the modern property
     And a greater-than-minimum node version range is defined
     When the project is lifted
     Then a matrix job is added
