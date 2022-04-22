@@ -2,7 +2,7 @@ import {promises as fs} from 'fs';
 import {dump} from 'js-yaml';
 
 import mkdir from '../../thirdparty-wrappers/make-dir';
-import {checkout, setupNode, installDependencies, executeVerification} from '../steps/scaffolders';
+import {nvmrcVerification} from '../jobs/scaffolder';
 
 export default async function ({projectRoot}) {
   return fs.writeFile(
@@ -17,12 +17,7 @@ export default async function ({projectRoot}) {
         FORCE_COLOR: 1,
         NPM_CONFIG_COLOR: 'always'
       },
-      jobs: {
-        verify: {
-          'runs-on': 'ubuntu-latest',
-          steps: [checkout(), setupNode({versionDeterminedBy: 'nvmrc'}), installDependencies(), executeVerification()]
-        }
-      }
+      jobs: {verify: nvmrcVerification()}
     })
   );
 }
