@@ -5,7 +5,6 @@ Feature: Engines matrix
     When the project is lifted
     Then no matrix job is configured
 
-  @wip
   Scenario: No existing matrix, engines range defined
     Given a CI workflow exists
     And the nvmrc is referenced using the modern property
