@@ -1,8 +1,9 @@
+import * as githubWorkflowsCore from '@form8ion/github-workflows-core';
+
 import {assert} from 'chai';
 import any from '@travi/any';
 import sinon from 'sinon';
 
-import * as stepsScaffolders from '../steps/scaffolders';
 import {nvmrcVerification, matrixVerification} from './scaffolder';
 
 suite('jobs scaffolder', () => {
@@ -15,20 +16,20 @@ suite('jobs scaffolder', () => {
   setup(() => {
     sandbox = sinon.createSandbox();
 
-    sandbox.stub(stepsScaffolders, 'checkout');
-    sandbox.stub(stepsScaffolders, 'setupNode');
-    sandbox.stub(stepsScaffolders, 'executeVerification');
-    sandbox.stub(stepsScaffolders, 'installDependencies');
+    sandbox.stub(githubWorkflowsCore, 'scaffoldCheckoutStep');
+    sandbox.stub(githubWorkflowsCore, 'scaffoldNodeSetupStep');
+    sandbox.stub(githubWorkflowsCore, 'scaffoldVerificationStep');
+    sandbox.stub(githubWorkflowsCore, 'scaffoldDependencyInstallationStep');
 
-    stepsScaffolders.checkout.returns(checkoutStep);
-    stepsScaffolders.installDependencies.returns(installDependenciesStep);
-    stepsScaffolders.executeVerification.returns(executeVerificationStep);
+    githubWorkflowsCore.scaffoldCheckoutStep.returns(checkoutStep);
+    githubWorkflowsCore.scaffoldDependencyInstallationStep.returns(installDependenciesStep);
+    githubWorkflowsCore.scaffoldVerificationStep.returns(executeVerificationStep);
   });
 
   teardown(() => sandbox.restore());
 
   test('that an nvmrc verification job is created', async () => {
-    stepsScaffolders.setupNode.withArgs({versionDeterminedBy: 'nvmrc'}).returns(setupNodeStep);
+    githubWorkflowsCore.scaffoldNodeSetupStep.withArgs({versionDeterminedBy: 'nvmrc'}).returns(setupNodeStep);
 
     assert.deepEqual(
       nvmrcVerification(),
@@ -41,7 +42,7 @@ suite('jobs scaffolder', () => {
 
   test('that a matrix verification job is created', async () => {
     const nodeEnginesMatrix = any.listOf(any.integer);
-    stepsScaffolders.setupNode.withArgs({versionDeterminedBy: 'matrix'}).returns(setupNodeStep);
+    githubWorkflowsCore.scaffoldNodeSetupStep.withArgs({versionDeterminedBy: 'matrix'}).returns(setupNodeStep);
 
     assert.deepEqual(
       matrixVerification(nodeEnginesMatrix),

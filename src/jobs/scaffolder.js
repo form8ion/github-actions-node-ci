@@ -1,9 +1,19 @@
-import {checkout, executeVerification, installDependencies, setupNode} from '../steps/scaffolders';
+import {
+  scaffoldCheckoutStep,
+  scaffoldNodeSetupStep,
+  scaffoldDependencyInstallationStep,
+  scaffoldVerificationStep
+} from '@form8ion/github-workflows-core';
 
 export function nvmrcVerification() {
   return {
     'runs-on': 'ubuntu-latest',
-    steps: [checkout(), setupNode({versionDeterminedBy: 'nvmrc'}), installDependencies(), executeVerification()]
+    steps: [
+      scaffoldCheckoutStep(),
+      scaffoldNodeSetupStep({versionDeterminedBy: 'nvmrc'}),
+      scaffoldDependencyInstallationStep(),
+      scaffoldVerificationStep()
+    ]
   };
 }
 
@@ -11,6 +21,11 @@ export function matrixVerification(nodeEnginesMatrix) {
   return {
     'runs-on': 'ubuntu-latest',
     strategy: {matrix: {node: nodeEnginesMatrix}},
-    steps: [checkout(), setupNode({versionDeterminedBy: 'matrix'}), installDependencies(), executeVerification()]
+    steps: [
+      scaffoldCheckoutStep(),
+      scaffoldNodeSetupStep({versionDeterminedBy: 'matrix'}),
+      scaffoldDependencyInstallationStep(),
+      scaffoldVerificationStep()
+    ]
   };
 }
