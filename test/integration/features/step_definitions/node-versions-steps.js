@@ -10,14 +10,17 @@ import {pathToWorkflowsDirectory} from './ci-steps';
 
 const pathToCiWorkflow = `${pathToWorkflowsDirectory}/node-ci.yml`;
 
-Given('the nvmrc is referenced using the modern property', async function () {
+Given('the nvmrc is referenced using the modern property {string} caching enabled', async function (cachingEnabled) {
   this.existingJobName = any.word();
   this.existingJobSteps = [
     {uses: 'actions/checkout@v3'},
     {
       name: 'Setup node',
       uses: 'actions/setup-node@v3',
-      with: {'node-version-file': '.nvmrc'}
+      with: {
+        'node-version-file': '.nvmrc',
+        ...'with' === cachingEnabled && {cache: 'npm'}
+      }
     },
     {run: 'npm clean-install'}
   ];
@@ -53,7 +56,7 @@ Given('the version is read from the nvmrc and passed as a value to the setup-nod
   await fs.writeFile(pathToCiWorkflow, dump(ciWorkflow));
 });
 
-Given('the node version is based on a matrix', async function () {
+Given('the node version is based on a matrix {string} caching enabled', async function (cachingEnabled) {
   this.existingJobName = any.word();
   this.existingNodeVersions = any.listOf(any.integer);
   this.existingJobSteps = [
@@ -61,7 +64,10 @@ Given('the node version is based on a matrix', async function () {
     {
       name: 'Setup node',
       uses: 'actions/setup-node@v3',
-      with: {'node-version': '${{ matrix.node }}'}      // eslint-disable-line no-template-curly-in-string
+      with: {
+        'node-version': '${{ matrix.node }}',               // eslint-disable-line no-template-curly-in-string
+        ...'with' === cachingEnabled && {cache: 'npm'}
+      }
     },
     {run: 'npm clean-install'}
   ];

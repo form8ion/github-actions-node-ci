@@ -36,3 +36,10 @@ Then('the ci config remains unchanged', async function () {
     assert.deepEqual(jobs[this.existingJobName].steps, this.existingJobSteps);
   }
 });
+
+Then('dependency caching is enabled', async function () {
+  const {jobs} = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+
+  const setupNodeStep = jobs[this.existingJobName].steps.find(step => 'Setup node' === step.name);
+  assert.equal(setupNodeStep.with.cache, 'npm');
+});

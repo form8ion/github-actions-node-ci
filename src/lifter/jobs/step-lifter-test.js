@@ -30,7 +30,7 @@ suite('step lifter', () => {
     const step = {
       ...any.simpleObject(),
       name: 'Setup node',
-      with: {...otherWithProperties, 'node-version': any.string()}
+      with: {...otherWithProperties, 'node-version': any.string(), cache: 'npm'}
     };
 
     assert.deepEqual(liftStep(step), step);

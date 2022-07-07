@@ -11,11 +11,22 @@ function stepIsLegacyInstallAction(step) {
   return 'bahmutov/npm-install@v1' === step.uses;
 }
 
+function stepIsSetupNode(step) {
+  return stepIsForSettingUpNode(step);
+}
+
 export default function (step) {
-  if (stepIsForSettingUpNode(step) && nvmrcReadWithLegacyApproach(step)) {
+  if (stepIsSetupNode(step)) {
     const {'node-version': nodeVersion, ...otherWithProperties} = step.with;
 
-    return {...step, with: {...otherWithProperties, 'node-version-file': '.nvmrc', cache: 'npm'}};
+    return {
+      ...step,
+      with: {
+        ...otherWithProperties,
+        ...nvmrcReadWithLegacyApproach(step) ? {'node-version-file': '.nvmrc'} : {'node-version': nodeVersion},
+        cache: 'npm'
+      }
+    };
   }
 
   if (stepIsLegacyInstallAction(step)) {
