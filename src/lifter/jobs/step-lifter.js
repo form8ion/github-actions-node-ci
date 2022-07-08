@@ -1,3 +1,5 @@
+import semver from 'semver';
+
 function stepIsForSettingUpNode(step) {
   return 'Setup node' === step.name;
 }
@@ -7,23 +9,27 @@ function nvmrcReadWithLegacyApproach(step) {
   return '${{ steps.nvm.outputs.NVMRC }}' === step.with['node-version'];
 }
 
+function nodeVersionIsDefinedStatically(step) {
+  return !!semver.coerce(step.with['node-version']);
+}
+
 function stepIsLegacyInstallAction(step) {
   return 'bahmutov/npm-install@v1' === step.uses;
 }
 
-function stepIsSetupNode(step) {
-  return stepIsForSettingUpNode(step);
+function versionShouldBeDeterminedFromNvmrc(step) {
+  return nvmrcReadWithLegacyApproach(step) || nodeVersionIsDefinedStatically(step);
 }
 
 export default function (step) {
-  if (stepIsSetupNode(step)) {
+  if (stepIsForSettingUpNode(step)) {
     const {'node-version': nodeVersion, ...otherWithProperties} = step.with;
 
     return {
       ...step,
       with: {
         ...otherWithProperties,
-        ...nvmrcReadWithLegacyApproach(step) ? {'node-version-file': '.nvmrc'} : {'node-version': nodeVersion},
+        ...versionShouldBeDeterminedFromNvmrc(step) ? {'node-version-file': '.nvmrc'} : {'node-version': nodeVersion},
         cache: 'npm'
       }
     };

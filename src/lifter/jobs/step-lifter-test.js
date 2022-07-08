@@ -12,7 +12,7 @@ suite('step lifter', () => {
     assert.deepEqual(liftStep(step), step);
   });
 
-  test('that the nvmrc file is read through the modern property', async () => {
+  test('that the nvmrc reference is updated to the modern property', async () => {
     const step = {
       ...any.simpleObject(),
       name: 'Setup node',
@@ -26,11 +26,25 @@ suite('step lifter', () => {
     );
   });
 
+  test('that a static node version definition is updated to reference the .nvmrc', async () => {
+    const step = {...any.simpleObject(), name: 'Setup node', with: {...otherWithProperties, 'node-version': '12.x'}};
+
+    assert.deepEqual(
+      liftStep(step),
+      {...step, with: {...otherWithProperties, 'node-version-file': '.nvmrc', cache: 'npm'}}
+    );
+  });
+
   test('that the nvmrc file is not read for matrix jobs', async () => {
     const step = {
       ...any.simpleObject(),
       name: 'Setup node',
-      with: {...otherWithProperties, 'node-version': any.string(), cache: 'npm'}
+      with: {
+        ...otherWithProperties,
+        // eslint-disable-next-line no-template-curly-in-string
+        'node-version': '${{ matrix.node }}',
+        cache: 'npm'
+      }
     };
 
     assert.deepEqual(liftStep(step), step);

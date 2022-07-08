@@ -24,3 +24,10 @@ Feature: Node Version
     And the node version is based on a matrix "with" caching enabled
     When the project is lifted
     Then the ci config remains unchanged
+
+  Scenario: node version is defined as a static range
+    Given a CI workflow exists
+    And the version is defined statically
+    When the project is lifted
+    Then the setup-node step is updated to reference the nvmrc file using the modern property
+    And dependency caching is enabled

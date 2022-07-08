@@ -82,6 +82,21 @@ Given('the node version is based on a matrix {string} caching enabled', async fu
   await fs.writeFile(pathToCiWorkflow, dump(ciWorkflow));
 });
 
+Given('the version is defined statically', async function () {
+  this.existingJobName = any.word();
+  this.existingJobSteps = [
+    {uses: 'actions/checkout@v3'},
+    {name: 'Setup node', uses: 'actions/setup-node@v3', with: {'node-version': '12.x'}},
+    {run: 'npm clean-install'}
+  ];
+
+  const ciWorkflow = load(await fs.readFile(pathToCiWorkflow, 'utf-8'));
+
+  ciWorkflow.jobs[this.existingJobName] = {steps: this.existingJobSteps};
+
+  await fs.writeFile(pathToCiWorkflow, dump(ciWorkflow));
+});
+
 Given('a greater-than-minimum node version range is defined', async function () {
   this.minimumNodeVersion = `${any.integer()}.${any.integer()}`;
   this.inRangeNodeLtsMajorVersions = any.listOf(any.integer);
