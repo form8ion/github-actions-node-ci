@@ -21,6 +21,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: .nvmrc
+          cache: npm
       - run: npm clean-install
       - run: npm test
       - uses: codecov/codecov-action@v3
