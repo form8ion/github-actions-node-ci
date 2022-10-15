@@ -1,5 +1,5 @@
 import semver from 'semver';
-import * as jsCore from '@form8ion/javascript-core';
+import jsCore from '@form8ion/javascript-core';
 
 import {assert} from 'chai';
 import any from '@travi/any';
@@ -17,10 +17,10 @@ suite('node version matrix builder', () => {
     sandbox = sinon.createSandbox();
 
     sandbox.stub(semver, 'minVersion');
-    sandbox.stub(jsCore, 'determineActiveLtsNodeMajorVersions');
+    sandbox.stub(jsCore, 'determineSupportedNodeMajorVersions');
 
     semver.minVersion.withArgs(nodeVersionRange).returns({version: minimumNodeVersion});
-    jsCore.determineActiveLtsNodeMajorVersions
+    jsCore.determineSupportedNodeMajorVersions
       .withArgs({withinRange: nodeVersionRange})
       .returns(inRangeLtsNodeMajorVersions);
   });
@@ -40,7 +40,7 @@ suite('node version matrix builder', () => {
     const secondMinimumNodeVersion = any.string();
     const inSecondRangeLtsNodeMajorVersions = any.listOf(any.integer);
     semver.minVersion.withArgs(secondNodeVersionRange).returns({version: secondMinimumNodeVersion});
-    jsCore.determineActiveLtsNodeMajorVersions
+    jsCore.determineSupportedNodeMajorVersions
       .withArgs({withinRange: secondNodeVersionRange})
       .returns(inSecondRangeLtsNodeMajorVersions);
 

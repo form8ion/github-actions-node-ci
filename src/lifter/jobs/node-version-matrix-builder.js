@@ -1,5 +1,5 @@
 import {minVersion} from 'semver';
-import {determineActiveLtsNodeMajorVersions} from '@form8ion/javascript-core';
+import {determineSupportedNodeMajorVersions} from '@form8ion/javascript-core';
 
 export default function (engines) {
   if (!engines || !engines.node) {
@@ -11,6 +11,6 @@ export default function (engines) {
   return nodeVersionRanges.reduce((acc, range) => ([
     ...acc,
     minVersion(range).version,
-    ...determineActiveLtsNodeMajorVersions({withinRange: range})
+    ...determineSupportedNodeMajorVersions({withinRange: range})
   ]), []);
 }

@@ -109,7 +109,7 @@ Given('a greater-than-minimum node version range is defined', async function () 
     JSON.stringify({...packageContents, engines: {node: nodeVersionRange}})
   );
 
-  td.when(this.jsCore.determineActiveLtsNodeMajorVersions({withinRange: nodeVersionRange}))
+  td.when(this.jsCore.determineSupportedNodeMajorVersions({withinRange: nodeVersionRange}))
     .thenReturn(this.inRangeNodeLtsMajorVersions);
 });
 
@@ -128,9 +128,9 @@ Given('multiple node version ranges are defined', async function () {
     JSON.stringify({...packageContents, engines: {node: nodeVersionRange}})
   );
 
-  td.when(this.jsCore.determineActiveLtsNodeMajorVersions({withinRange: caretNodeVersionRange}))
+  td.when(this.jsCore.determineSupportedNodeMajorVersions({withinRange: caretNodeVersionRange}))
     .thenReturn([]);
-  td.when(this.jsCore.determineActiveLtsNodeMajorVersions({withinRange: minimumNodeVersionRange}))
+  td.when(this.jsCore.determineSupportedNodeMajorVersions({withinRange: minimumNodeVersionRange}))
     .thenReturn(this.inRangeNodeLtsMajorVersions);
 });
 
