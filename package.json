@@ -58,7 +58,7 @@
     "@travi/any": "2.1.6",
     "ban-sensitive-files": "1.9.18",
     "c8": "7.12.0",
-    "chai": "4.3.6",
+    "chai": "4.3.7",
     "cross-env": "7.0.3",
     "cz-conventional-changelog": "3.3.0",
     "gherkin-lint": "4.2.2",
