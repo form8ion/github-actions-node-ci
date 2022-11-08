@@ -62,7 +62,7 @@
     "cross-env": "7.0.3",
     "cz-conventional-changelog": "3.3.0",
     "gherkin-lint": "4.2.2",
-    "husky": "8.0.1",
+    "husky": "8.0.2",
     "lockfile-lint": "4.9.6",
     "lodash.zip": "4.2.0",
     "mocha": "10.1.0",
