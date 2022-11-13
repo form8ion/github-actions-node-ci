@@ -30,6 +30,14 @@ suite('job lifter', () => {
     );
   });
 
+  test('that a job that calls a reusable workflow is lifted', async () => {
+    const jobThatCallsReusableWorkflow = {...any.simpleObject(), uses: any.string()};
+    const liftedJob = liftJob([jobName, jobThatCallsReusableWorkflow]);
+
+    assert.notCalled(stepsLifter.default);
+    assert.deepEqual(liftedJob, [jobName, jobThatCallsReusableWorkflow]);
+  });
+
   test('that the provided node versions are replaced in the matrix definition for an existing matrix job', async () => {
     const [, updatedJobDefinition] = liftJob(
       [jobName, {...any.simpleObject(), strategy: {matrix: {node: any.listOf(any.integer)}}}],

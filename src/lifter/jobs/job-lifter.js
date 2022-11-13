@@ -9,7 +9,7 @@ export default function ([jobName, job], inRangeNodeVersions) {
     jobName,
     {
       ...job,
-      steps: liftSteps(job.steps),
+      ...job.steps && {steps: liftSteps(job.steps)},
       ...enginesShouldBeUpdated(inRangeNodeVersions, job) && {strategy: {matrix: {node: inRangeNodeVersions}}}
     }
   ];
