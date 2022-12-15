@@ -75,7 +75,7 @@
     "rimraf": "3.0.2",
     "rollup": "3.7.4",
     "rollup-plugin-auto-external": "2.0.0",
-    "sinon": "15.0.0",
+    "sinon": "15.0.1",
     "testdouble": "3.16.7"
   },
   "dependencies": {
