@@ -42,7 +42,7 @@ suite('lifter', () => {
       jobs: existingJobs
     };
     jsYaml.load.withArgs(rawExistingConfig).returns(existingConfig);
-    jsYaml.dump.withArgs({...existingConfig, jobs: liftedJobs}).returns(dumpedConfig);
+    jsYaml.dump.withArgs({...existingConfig, permissions: {contents: 'read'}, jobs: liftedJobs}).returns(dumpedConfig);
 
     assert.deepEqual(await lift({projectRoot, results: any.simpleObject()}), {});
 
@@ -62,7 +62,12 @@ suite('lifter', () => {
     jsYaml.load.withArgs(rawExistingConfig).returns(existingConfig);
     branchListMerger.default.withArgs(existingBranches, branchesToVerify).returns(mergedBranches);
     jsYaml.dump
-      .withArgs({...existingConfig, on: {...existingConfig.on, push: {branches: mergedBranches}}, jobs: liftedJobs})
+      .withArgs({
+        ...existingConfig,
+        on: {...existingConfig.on, push: {branches: mergedBranches}},
+        permissions: {contents: 'read'},
+        jobs: liftedJobs
+      })
       .returns(dumpedConfig);
 
     assert.deepEqual(await lift({projectRoot, results: {...any.simpleObject(), branchesToVerify}}), {});

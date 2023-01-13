@@ -17,6 +17,7 @@ export default async function ({projectRoot, results: {branchesToVerify}}) {
       ...branchesToVerify && {
         on: {...existingConfig.on, push: {branches: mergeBranches(existingBranches, branchesToVerify)}}
       },
+      permissions: {contents: 'read'},
       jobs: liftJobs(existingConfig.jobs, engines)
     })
   );
