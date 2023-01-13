@@ -36,6 +36,7 @@ suite('config scaffolder', () => {
           FORCE_COLOR: 1,
           NPM_CONFIG_COLOR: 'always'
         },
+        permissions: {contents: 'read'},
         jobs: {
           verify: {
             'runs-on': 'ubuntu-latest',

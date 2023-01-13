@@ -17,6 +17,7 @@ export default async function ({projectRoot}) {
         FORCE_COLOR: 1,
         NPM_CONFIG_COLOR: 'always'
       },
+      permissions: {contents: 'read'},
       jobs: {verify: nvmrcVerification()}
     })
   );
