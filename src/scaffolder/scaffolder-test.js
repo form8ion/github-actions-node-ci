@@ -30,7 +30,9 @@ suite('scaffolder', () => {
           status: {
             'github-actions-ci': {
               text: 'Node CI Workflow Status',
-              img: `https://github.com/${vcsOwner}/${vcsName}/workflows/Node.js%20CI/badge.svg`,
+              img: `https://img.shields.io/github/actions/workflow/status/${vcsOwner}/${
+                vcsName
+              }/node-ci.yml.svg?branch=master&logo=github`,
               link:
                 `https://github.com/${vcsOwner}/${vcsName}/actions?query=workflow%3A%22Node.js+CI%22+branch%3Amaster`
             }
