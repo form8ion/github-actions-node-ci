@@ -63,7 +63,7 @@
     "cz-conventional-changelog": "3.3.0",
     "gherkin-lint": "4.2.2",
     "husky": "8.0.3",
-    "lockfile-lint": "4.10.0",
+    "lockfile-lint": "4.10.1",
     "lodash.zip": "4.2.0",
     "mocha": "10.2.0",
     "mock-fs": "5.2.0",
