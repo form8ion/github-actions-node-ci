@@ -1,4 +1,5 @@
 import semver from 'semver';
+import {scaffoldDependencyInstallationStep} from '@form8ion/github-workflows-core';
 
 function stepIsForSettingUpNode(step) {
   return 'Setup node' === step.name;
@@ -36,7 +37,7 @@ export default function (step) {
   }
 
   if (stepIsLegacyInstallAction(step)) {
-    return {run: 'npm clean-install'};
+    return scaffoldDependencyInstallationStep();
   }
 
   return step;
