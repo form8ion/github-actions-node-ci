@@ -46,7 +46,8 @@
     "lib/"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "dependencies": {
     "@form8ion/core": "^2.0.0",
