@@ -11,7 +11,7 @@ export function nvmrcVerification() {
     steps: [
       scaffoldCheckoutStep(),
       scaffoldNodeSetupStep({versionDeterminedBy: 'nvmrc'}),
-      scaffoldDependencyInstallationStep(),
+      ...scaffoldDependencyInstallationStep(),
       scaffoldVerificationStep()
     ]
   };
@@ -24,7 +24,7 @@ export function matrixVerification(nodeEnginesMatrix) {
     steps: [
       scaffoldCheckoutStep(),
       scaffoldNodeSetupStep({versionDeterminedBy: 'matrix'}),
-      scaffoldDependencyInstallationStep(),
+      ...scaffoldDependencyInstallationStep(),
       scaffoldVerificationStep()
     ]
   };

@@ -184,6 +184,7 @@ Then('a matrix job is added', async function () {
           }
         },
         {run: 'npm clean-install'},
+        {run: 'npm audit signatures'},
         {run: 'npm test'}
       ]
     }

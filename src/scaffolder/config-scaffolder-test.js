@@ -44,6 +44,7 @@ suite('config scaffolder', () => {
               {uses: 'actions/checkout@v3'},
               {name: 'Setup node', uses: 'actions/setup-node@v3', with: {'node-version-file': '.nvmrc', cache: 'npm'}},
               {run: 'npm clean-install'},
+              {run: 'npm audit signatures'},
               {run: 'npm test'}
             ]
           }

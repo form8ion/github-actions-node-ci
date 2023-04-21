@@ -1,4 +1,4 @@
-import * as githubWorkflowsCore from '@form8ion/github-workflows-core';
+import githubWorkflowsCore from '@form8ion/github-workflows-core';
 
 import {assert} from 'chai';
 import any from '@travi/any';
@@ -10,7 +10,7 @@ suite('jobs scaffolder', () => {
   let sandbox;
   const checkoutStep = any.simpleObject();
   const setupNodeStep = any.simpleObject();
-  const installDependenciesStep = any.simpleObject();
+  const installDependenciesStep = any.listOf(any.simpleObject);
   const executeVerificationStep = any.simpleObject();
 
   setup(() => {
@@ -35,7 +35,7 @@ suite('jobs scaffolder', () => {
       nvmrcVerification(),
       {
         'runs-on': 'ubuntu-latest',
-        steps: [checkoutStep, setupNodeStep, installDependenciesStep, executeVerificationStep]
+        steps: [checkoutStep, setupNodeStep, ...installDependenciesStep, executeVerificationStep]
       }
     );
   });
@@ -49,7 +49,7 @@ suite('jobs scaffolder', () => {
       {
         'runs-on': 'ubuntu-latest',
         strategy: {matrix: {node: nodeEnginesMatrix}},
-        steps: [checkoutStep, setupNodeStep, installDependenciesStep, executeVerificationStep]
+        steps: [checkoutStep, setupNodeStep, ...installDependenciesStep, executeVerificationStep]
       }
     );
   });
