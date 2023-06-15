@@ -1,2 +1,2 @@
 export {default as lift} from './lifter';
-export {default as test} from './test';
+export {default as test} from './tester';

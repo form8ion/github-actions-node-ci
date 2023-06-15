@@ -2,7 +2,7 @@ import * as core from '@form8ion/core';
 import {assert} from 'chai';
 import sinon from 'sinon';
 import any from '@travi/any';
-import testThatCiWorkflowExists from './test';
+import testThatCiWorkflowExists from './tester';
 
 suite('match predicate', () => {
   let sandbox;
