@@ -55,7 +55,7 @@
     "@form8ion/github-workflows-core": "^3.0.0",
     "@form8ion/javascript-core": "^9.0.0",
     "js-yaml": "^4.0.0",
-    "make-dir": "^3.1.0",
+    "make-dir": "^4.0.0",
     "semver": "^7.3.7"
   },
   "devDependencies": {
