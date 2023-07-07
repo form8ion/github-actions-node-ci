@@ -51,7 +51,7 @@
     "provenance": true
   },
   "dependencies": {
-    "@form8ion/core": "^2.0.0",
+    "@form8ion/core": "^3.0.0",
     "@form8ion/github-workflows-core": "^4.0.0",
     "@form8ion/javascript-core": "^10.0.0",
     "js-yaml": "^4.0.0",
