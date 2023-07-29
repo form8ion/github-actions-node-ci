@@ -15,7 +15,7 @@ function nodeVersionIsDefinedStatically(step) {
 }
 
 function stepIsLegacyInstallAction(step) {
-  return 'bahmutov/npm-install@v1' === step.uses;
+  return step.uses?.startsWith('bahmutov/npm-install@');
 }
 
 function versionShouldBeDeterminedFromNvmrc(step) {

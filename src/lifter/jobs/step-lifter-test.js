@@ -52,7 +52,7 @@ suite('step lifter', () => {
 
   test('that the legacy install action is replaced with directly executing the install command', async () => {
     assert.deepEqual(
-      liftStep({uses: 'bahmutov/npm-install@v1'}),
+      liftStep({uses: `bahmutov/npm-install@${any.string()}`}),
       [{run: 'npm clean-install'}, {run: 'npm audit signatures'}]
     );
   });
