@@ -1,8 +1,8 @@
+import {promises as fs} from 'node:fs';
 import {Given, Then} from '@cucumber/cucumber';
 import any from '@travi/any';
 import {assert} from 'chai';
 import {load} from 'js-yaml';
-import {promises as fs} from 'fs';
 
 Given('additional branches are provided', async function () {
   this.additionalBranches = any.listOf(any.word);
