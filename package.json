@@ -92,6 +92,6 @@
     "rollup-plugin-auto-external": "2.0.0",
     "sinon": "15.2.0",
     "testdouble": "3.16.7",
-    "vitest": "0.34.1"
+    "vitest": "0.34.2"
   }
 }
