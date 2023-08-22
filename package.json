@@ -67,7 +67,7 @@
     "@form8ion/eslint-config-cucumber": "1.4.1",
     "@form8ion/eslint-config-mocha": "3.0.0",
     "@form8ion/remark-lint-preset": "6.0.0",
-    "@rollup/plugin-node-resolve": "15.2.0",
+    "@rollup/plugin-node-resolve": "15.2.1",
     "@travi/any": "2.1.8",
     "ban-sensitive-files": "1.9.19",
     "c8": "8.0.1",
