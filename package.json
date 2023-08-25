@@ -81,7 +81,7 @@
     "lodash.zip": "4.2.0",
     "mocha": "10.2.0",
     "mock-fs": "5.2.0",
-    "npm-run-all2": "5.0.2",
+    "npm-run-all2": "6.0.6",
     "package-preview": "4.0.0",
     "publint": "0.2.2",
     "remark-cli": "11.0.0",
