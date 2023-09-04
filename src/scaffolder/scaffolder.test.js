@@ -1,9 +1,12 @@
 import {describe, it, vi, expect} from 'vitest';
 import any from '@travi/any';
+import {when} from 'jest-when';
 
+import {scaffold as scaffoldBadges} from '../badges';
 import scaffoldConfig from './config-scaffolder';
 import scaffold from './scaffolder';
 
+vi.mock('../badges');
 vi.mock('./config-scaffolder');
 
 describe('scaffolder', () => {
@@ -14,21 +17,13 @@ describe('scaffolder', () => {
     const vcsName = any.word();
     const tests = any.simpleObject();
     const visibility = any.word();
+    const vcs = {owner: vcsOwner, name: vcsName};
+    const badgesResults = any.simpleObject();
+    when(scaffoldBadges).calledWith({vcs}).mockReturnValue(badgesResults);
 
-    expect(await scaffold({projectRoot, projectType, vcs: {owner: vcsOwner, name: vcsName}, tests, visibility}))
+    expect(await scaffold({projectRoot, projectType, vcs, tests, visibility}))
       .toEqual({
-        badges: {
-          status: {
-            'github-actions-ci': {
-              text: 'Node CI Workflow Status',
-              img: `https://img.shields.io/github/actions/workflow/status/${vcsOwner}/${
-                vcsName
-              }/node-ci.yml.svg?branch=master&logo=github`,
-              link:
-                `https://github.com/${vcsOwner}/${vcsName}/actions?query=workflow%3A%22Node.js+CI%22+branch%3Amaster`
-            }
-          }
-        },
+        badges: badgesResults,
         nextSteps: [{summary: 'Enable building branches in GitHub Actions for the chosen dependency updater'}]
       });
     expect(scaffoldConfig).toHaveBeenCalledWith({projectRoot, projectType, tests, visibility});
