@@ -112,7 +112,7 @@ $ npm test
 
 [npm-link]: https://www.npmjs.com/package/@form8ion/github-actions-node-ci
 
-[npm-badge]: https://img.shields.io/npm/v/@form8ion/github-actions-node-ci.svg
+[npm-badge]: https://img.shields.io/npm/v/@form8ion/github-actions-node-ci?logo=npm
 
 [runkit-link]: https://npm.runkit.com/@form8ion/github-actions-node-ci
 
