@@ -1,21 +1,13 @@
+import {describe, it, vi, expect} from 'vitest';
 import any from '@travi/any';
-import sinon from 'sinon';
-import {assert} from 'chai';
-import * as configScaffolder from './config-scaffolder';
+
+import scaffoldConfig from './config-scaffolder';
 import scaffold from './scaffolder';
 
-suite('scaffolder', () => {
-  let sandbox;
+vi.mock('./config-scaffolder');
 
-  setup(() => {
-    sandbox = sinon.createSandbox();
-
-    sandbox.stub(configScaffolder, 'default');
-  });
-
-  teardown(() => sandbox.restore());
-
-  test('that the ci config is generated for a node project', async () => {
+describe('scaffolder', () => {
+  it('should generate the ci config for a node project', async () => {
     const projectRoot = any.string();
     const projectType = any.string();
     const vcsOwner = any.word();
@@ -23,9 +15,8 @@ suite('scaffolder', () => {
     const tests = any.simpleObject();
     const visibility = any.word();
 
-    assert.deepEqual(
-      await scaffold({projectRoot, projectType, vcs: {owner: vcsOwner, name: vcsName}, tests, visibility}),
-      {
+    expect(await scaffold({projectRoot, projectType, vcs: {owner: vcsOwner, name: vcsName}, tests, visibility}))
+      .toEqual({
         badges: {
           status: {
             'github-actions-ci': {
@@ -39,9 +30,7 @@ suite('scaffolder', () => {
           }
         },
         nextSteps: [{summary: 'Enable building branches in GitHub Actions for the chosen dependency updater'}]
-      }
-    );
-
-    assert.calledWith(configScaffolder.default, {projectRoot, projectType, tests, visibility});
+      });
+    expect(scaffoldConfig).toHaveBeenCalledWith({projectRoot, projectType, tests, visibility});
   });
 });
