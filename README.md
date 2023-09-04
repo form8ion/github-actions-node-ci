@@ -5,6 +5,7 @@ CI scaffolder for JavaScript projects on [GitHub Actions](https://github.com/fea
 <!--status-badges start -->
 
 [![Node CI Workflow Status][github-actions-ci-badge]][github-actions-ci-link]
+[![Codecov][coverage-badge]][coverage-link]
 
 <!--status-badges end -->
 
@@ -121,3 +122,7 @@ $ npm test
 [github-actions-ci-link]: https://github.com/form8ion/github-actions-node-ci/actions?query=workflow%3A%22Node.js+CI%22+branch%3Amaster
 
 [github-actions-ci-badge]: https://img.shields.io/github/actions/workflow/status/form8ion/github-actions-node-ci/node-ci.yml.svg?branch=master&logo=github
+
+[coverage-link]: https://codecov.io/github/form8ion/github-actions-node-ci
+
+[coverage-badge]: https://img.shields.io/codecov/c/github/form8ion/github-actions-node-ci?logo=codecov
