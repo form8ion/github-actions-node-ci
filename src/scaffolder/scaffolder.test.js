@@ -1,4 +1,4 @@
-import {describe, it, vi, expect} from 'vitest';
+import {afterEach, describe, it, vi, expect} from 'vitest';
 import any from '@travi/any';
 import {when} from 'jest-when';
 
@@ -10,6 +10,10 @@ vi.mock('../badges');
 vi.mock('./config-scaffolder');
 
 describe('scaffolder', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should generate the ci config for a node project', async () => {
     const projectRoot = any.string();
     const projectType = any.string();
