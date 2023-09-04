@@ -100,7 +100,7 @@ $ npm test
 
 [semantic-release-link]: https://github.com/semantic-release/semantic-release
 
-[semantic-release-badge]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg
+[semantic-release-badge]: https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release
 
 [renovate-link]: https://renovatebot.com
 
