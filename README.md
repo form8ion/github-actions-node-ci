@@ -59,7 +59,11 @@ import {scaffold, lift, test} from './lib/index.cjs';
 
   await test({projectRoot: process.cwd()});
 
-  await lift({projectRoot: process.cwd(), results: {branchesToVerify: ['foo', 'bar']}});
+  await lift({
+    projectRoot: process.cwd(),
+    results: {branchesToVerify: ['foo', 'bar']},
+    vcs: {owner: 'repo-owner', name: 'repo-name'}
+  });
 })();
 ```
 

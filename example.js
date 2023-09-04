@@ -19,5 +19,9 @@ stubbedFs({'package.json': JSON.stringify({})});
 
   await test({projectRoot: process.cwd()});
 
-  await lift({projectRoot: process.cwd(), results: {branchesToVerify: ['foo', 'bar']}});
+  await lift({
+    projectRoot: process.cwd(),
+    results: {branchesToVerify: ['foo', 'bar']},
+    vcs: {owner: 'repo-owner', name: 'repo-name'}
+  });
 })();

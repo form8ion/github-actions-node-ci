@@ -17,11 +17,9 @@ describe('scaffolder', () => {
   it('should generate the ci config for a node project', async () => {
     const projectRoot = any.string();
     const projectType = any.string();
-    const vcsOwner = any.word();
-    const vcsName = any.word();
     const tests = any.simpleObject();
     const visibility = any.word();
-    const vcs = {owner: vcsOwner, name: vcsName};
+    const vcs = any.simpleObject();
     const badgesResults = any.simpleObject();
     when(scaffoldBadges).calledWith({vcs}).mockReturnValue(badgesResults);
 

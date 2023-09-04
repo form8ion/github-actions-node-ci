@@ -1,9 +1,8 @@
 import {resolve} from 'path';
 
-import {After, Before, Then, When} from '@cucumber/cucumber';
+import {After, Before, When} from '@cucumber/cucumber';
 import stubbedFs from 'mock-fs';
 import any from '@travi/any';
-import {assert} from 'chai';
 import td from 'testdouble';
 
 const stubbedNodeModules = stubbedFs.load(resolve(__dirname, '..', '..', '..', '..', 'node_modules'));
@@ -31,10 +30,13 @@ When('the project is lifted', async function () {
   const projectRoot = process.cwd();
 
   if (await test({projectRoot})) {
-    this.results = await lift({projectRoot, results: {branchesToVerify: this.additionalBranches}});
-  }
-});
+    this.vcsOwner = any.word();
+    this.vcsName = any.word();
 
-Then('empty results are returned', async function () {
-  assert.deepEqual(this.results, {});
+    this.results = await lift({
+      projectRoot,
+      results: {branchesToVerify: this.additionalBranches},
+      vcs: {owner: this.vcsOwner, name: this.vcsName}
+    });
+  }
 });

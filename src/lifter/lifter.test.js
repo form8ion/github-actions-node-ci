@@ -5,6 +5,7 @@ import {afterEach, beforeEach, describe, it, vi, expect} from 'vitest';
 import any from '@travi/any';
 import {when} from 'jest-when';
 
+import {scaffold as scaffoldBadges} from '../badges';
 import mergeBranchList from './branches/merge-branches';
 import {lift as liftJobs} from './jobs';
 import lift from './lifter';
@@ -13,6 +14,7 @@ vi.mock('node:fs');
 vi.mock('js-yaml');
 vi.mock('./branches/merge-branches');
 vi.mock('./jobs');
+vi.mock('../badges');
 
 describe('lifter', () => {
   const projectRoot = any.string();
@@ -21,6 +23,8 @@ describe('lifter', () => {
   const existingJobs = any.listOf(any.simpleObject);
   const liftedJobs = any.listOf(any.simpleObject);
   const enginesDefinition = any.simpleObject();
+  const badgesResults = any.simpleObject();
+  const vcs = any.simpleObject();
 
   beforeEach(() => {
     when(fs.readFile)
@@ -30,6 +34,7 @@ describe('lifter', () => {
       .calledWith(`${projectRoot}/package.json`, 'utf-8')
       .mockResolvedValue(JSON.stringify({engines: enginesDefinition}));
     when(liftJobs).calledWith(existingJobs, enginesDefinition).mockReturnValue(liftedJobs);
+    when(scaffoldBadges).calledWith({vcs}).mockReturnValue(badgesResults);
   });
 
   afterEach(() => {
@@ -47,7 +52,7 @@ describe('lifter', () => {
       .calledWith({...existingConfig, permissions: {contents: 'read'}, jobs: liftedJobs})
       .mockReturnValue(dumpedConfig);
 
-    expect(await lift({projectRoot, results: any.simpleObject()})).toEqual({});
+    expect(await lift({projectRoot, results: any.simpleObject(), vcs})).toEqual({badges: badgesResults});
     expect(fs.writeFile).toHaveBeenCalledWith(`${projectRoot}/.github/workflows/node-ci.yml`, dumpedConfig);
   });
 
@@ -71,7 +76,8 @@ describe('lifter', () => {
       })
       .mockReturnValue(dumpedConfig);
 
-    expect(await lift({projectRoot, results: {...any.simpleObject(), branchesToVerify}})).toEqual({});
+    expect(await lift({projectRoot, results: {...any.simpleObject(), branchesToVerify}, vcs}))
+      .toEqual({badges: badgesResults});
     expect(fs.writeFile).toHaveBeenCalledWith(`${projectRoot}/.github/workflows/node-ci.yml`, dumpedConfig);
   });
 });

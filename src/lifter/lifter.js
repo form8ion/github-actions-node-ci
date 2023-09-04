@@ -1,10 +1,11 @@
 import {promises as fs} from 'fs';
 import {dump, load} from 'js-yaml';
 
+import {scaffold as scaffoldBadges} from '../badges';
 import {lift as liftJobs} from './jobs';
 import mergeBranches from './branches/merge-branches';
 
-export default async function ({projectRoot, results: {branchesToVerify}}) {
+export default async function ({projectRoot, results: {branchesToVerify}, vcs}) {
   const pathToConfig = `${projectRoot}/.github/workflows/node-ci.yml`;
   const existingConfig = load(await fs.readFile(pathToConfig, 'utf-8'));
   const {engines} = JSON.parse(await fs.readFile(`${projectRoot}/package.json`, 'utf-8'));
@@ -22,5 +23,5 @@ export default async function ({projectRoot, results: {branchesToVerify}}) {
     })
   );
 
-  return {};
+  return {badges: scaffoldBadges({vcs})};
 }
