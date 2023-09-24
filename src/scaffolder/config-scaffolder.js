@@ -1,12 +1,12 @@
 import {promises as fs} from 'fs';
 import {dump} from 'js-yaml';
 
-import mkdir from '../../thirdparty-wrappers/make-dir';
+import makeDir from 'make-dir';
 import {nvmrcVerification} from '../jobs/scaffolder';
 
 export default async function ({projectRoot}) {
   return fs.writeFile(
-    `${await mkdir(`${projectRoot}/.github/workflows`)}/node-ci.yml`,
+    `${await makeDir(`${projectRoot}/.github/workflows`)}/node-ci.yml`,
     dump({
       name: 'Node.js CI',
       on: {
