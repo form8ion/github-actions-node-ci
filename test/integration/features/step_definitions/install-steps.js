@@ -5,7 +5,7 @@ import {Given, Then} from '@cucumber/cucumber';
 import any from '@travi/any';
 import {assert} from 'chai';
 
-import {pathToWorkflowsDirectory} from './ci-steps';
+import {pathToWorkflowsDirectory} from './ci-steps.js';
 
 const pathToCiWorkflow = `${pathToWorkflowsDirectory}/node-ci.yml`;
 

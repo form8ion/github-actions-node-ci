@@ -1,4 +1,4 @@
-import stepLifter from './step-lifter';
+import stepLifter from './step-lifter.js';
 
 export default function (steps) {
   return steps

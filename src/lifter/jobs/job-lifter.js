@@ -1,4 +1,4 @@
-import liftSteps from './steps-lifter';
+import liftSteps from './steps-lifter.js';
 
 function enginesShouldBeUpdated(inRangeNodeVersions, job) {
   return inRangeNodeVersions && job.strategy?.matrix?.node;

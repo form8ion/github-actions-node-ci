@@ -1,6 +1,6 @@
-import buildNodeVersionMatrix from './node-version-matrix-builder';
-import insertMissingJobs from './missing-job-inserter';
-import liftJob from './job-lifter';
+import buildNodeVersionMatrix from './node-version-matrix-builder.js';
+import insertMissingJobs from './missing-job-inserter.js';
+import liftJob from './job-lifter.js';
 
 export default function (jobs, engines) {
   const nodeEnginesMatrix = buildNodeVersionMatrix(engines);

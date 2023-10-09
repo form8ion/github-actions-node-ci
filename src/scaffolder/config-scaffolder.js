@@ -2,7 +2,7 @@ import {promises as fs} from 'fs';
 import {dump} from 'js-yaml';
 
 import makeDir from 'make-dir';
-import {nvmrcVerification} from '../jobs/scaffolder';
+import {nvmrcVerification} from '../jobs/scaffolder.js';
 
 export default async function ({projectRoot}) {
   return fs.writeFile(

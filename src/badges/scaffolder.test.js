@@ -1,7 +1,7 @@
 import {expect, describe, it} from 'vitest';
 import any from '@travi/any';
 
-import scaffoldBadges from './scaffolder';
+import scaffoldBadges from './scaffolder.js';
 
 describe('badges scaffolder', () => {
   it('should define the ci status badge', () => {

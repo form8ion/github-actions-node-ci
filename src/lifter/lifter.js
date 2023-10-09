@@ -1,9 +1,9 @@
 import {promises as fs} from 'fs';
 import {dump, load} from 'js-yaml';
 
-import {scaffold as scaffoldBadges} from '../badges';
-import {lift as liftJobs} from './jobs';
-import mergeBranches from './branches/merge-branches';
+import {scaffold as scaffoldBadges} from '../badges/index.js';
+import {lift as liftJobs} from './jobs/index.js';
+import mergeBranches from './branches/merge-branches.js';
 
 export default async function ({projectRoot, results: {branchesToVerify}, vcs}) {
   const pathToConfig = `${projectRoot}/.github/workflows/node-ci.yml`;

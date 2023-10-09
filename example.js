@@ -1,7 +1,7 @@
 // #### Import
 // remark-usage-ignore-next
 import stubbedFs from 'mock-fs';
-import {scaffold, lift, test} from './lib/index.cjs';
+import {scaffold, lift, test} from './lib/index.cjs.js';
 
 // remark-usage-ignore-next
 stubbedFs({'package.json': JSON.stringify({})});
