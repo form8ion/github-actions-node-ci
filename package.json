@@ -62,7 +62,7 @@
     "@babel/register": "7.22.15",
     "@cucumber/cucumber": "10.0.0",
     "@form8ion/babel-preset": "1.6.116",
-    "@form8ion/commitlint-config": "1.0.56",
+    "@form8ion/commitlint-config": "1.0.57",
     "@form8ion/eslint-config": "6.0.5",
     "@form8ion/eslint-config-cucumber": "1.4.1",
     "@form8ion/eslint-config-mocha": "3.0.1",
