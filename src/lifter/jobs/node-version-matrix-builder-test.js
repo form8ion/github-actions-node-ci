@@ -5,7 +5,7 @@ import {assert} from 'chai';
 import any from '@travi/any';
 import sinon from 'sinon';
 
-import buildNodeVersionMatrix from './node-version-matrix-builder';
+import buildNodeVersionMatrix from './node-version-matrix-builder.js';
 
 suite('node version matrix builder', () => {
   let sandbox;

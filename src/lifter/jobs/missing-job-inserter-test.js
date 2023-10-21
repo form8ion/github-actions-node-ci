@@ -2,8 +2,8 @@ import {assert} from 'chai';
 import any from '@travi/any';
 import sinon from 'sinon';
 
-import * as jobsScaffolder from '../../jobs/scaffolder';
-import insertMissingJobs from './missing-job-inserter';
+import * as jobsScaffolder from '../../jobs/scaffolder.js';
+import insertMissingJobs from './missing-job-inserter.js';
 
 suite('missing job inserter', () => {
   suite('matrix verification', () => {

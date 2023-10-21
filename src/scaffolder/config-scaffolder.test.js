@@ -6,7 +6,7 @@ import any from '@travi/any';
 import {afterEach, describe, expect, it, vi} from 'vitest';
 import {when} from 'jest-when';
 
-import scaffoldConfig from './config-scaffolder';
+import scaffoldConfig from './config-scaffolder.js';
 
 vi.mock('fs');
 vi.mock('make-dir');

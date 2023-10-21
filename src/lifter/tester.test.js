@@ -4,7 +4,7 @@ import {afterEach, describe, it, vi, expect} from 'vitest';
 import any from '@travi/any';
 import {when} from 'jest-when';
 
-import testThatCiWorkflowExists from './tester';
+import testThatCiWorkflowExists from './tester.js';
 
 vi.mock('@form8ion/core');
 

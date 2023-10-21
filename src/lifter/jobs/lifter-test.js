@@ -3,10 +3,10 @@ import {assert} from 'chai';
 import sinon from 'sinon';
 import zip from 'lodash.zip';
 
-import * as missingJobInserter from './missing-job-inserter';
-import * as nodeVersionMatrixBuilder from './node-version-matrix-builder';
-import * as jobLifter from './job-lifter';
-import liftJobs from './lifter';
+import * as missingJobInserter from './missing-job-inserter.js';
+import * as nodeVersionMatrixBuilder from './node-version-matrix-builder.js';
+import * as jobLifter from './job-lifter.js';
+import liftJobs from './lifter.js';
 
 suite('jobs lifter', () => {
   let sandbox;

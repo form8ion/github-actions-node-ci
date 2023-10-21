@@ -1,7 +1,7 @@
 import any from '@travi/any';
 import {assert} from 'chai';
 
-import liftStep from './step-lifter';
+import liftStep from './step-lifter.js';
 
 suite('step lifter', () => {
   const otherWithProperties = any.simpleObject();

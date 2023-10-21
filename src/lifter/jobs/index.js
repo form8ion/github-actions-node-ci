@@ -1,1 +1,1 @@
-export {default as lift} from './lifter';
+export {default as lift} from './lifter.js';

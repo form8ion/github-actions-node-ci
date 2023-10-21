@@ -6,7 +6,7 @@ import any from '@travi/any';
 import {assert} from 'chai';
 import td from 'testdouble';
 
-import {pathToWorkflowsDirectory} from './ci-steps';
+import {pathToWorkflowsDirectory} from './ci-steps.js';
 
 const pathToCiWorkflow = `${pathToWorkflowsDirectory}/node-ci.yml`;
 

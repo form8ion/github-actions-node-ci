@@ -1,1 +1,1 @@
-export {default} from './scaffolder';
+export {default} from './scaffolder.js';

@@ -9,7 +9,7 @@ import {afterEach, beforeEach, describe, vi, it, expect} from 'vitest';
 import any from '@travi/any';
 import {when} from 'jest-when';
 
-import {matrixVerification, nvmrcVerification} from './scaffolder';
+import {matrixVerification, nvmrcVerification} from './scaffolder.js';
 
 vi.mock('@form8ion/github-workflows-core');
 

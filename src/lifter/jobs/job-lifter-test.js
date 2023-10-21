@@ -2,8 +2,8 @@ import any from '@travi/any';
 import {assert} from 'chai';
 import sinon from 'sinon';
 
-import * as stepsLifter from './steps-lifter';
-import liftJob from './job-lifter';
+import * as stepsLifter from './steps-lifter.js';
+import liftJob from './job-lifter.js';
 
 suite('job lifter', () => {
   let sandbox;
