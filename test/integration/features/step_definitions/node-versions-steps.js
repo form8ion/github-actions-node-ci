@@ -4,7 +4,7 @@ import {dump, load} from 'js-yaml';
 import {Given, Then} from '@cucumber/cucumber';
 import any from '@travi/any';
 import {assert} from 'chai';
-import td from 'testdouble';
+import * as td from 'testdouble';
 
 import {pathToWorkflowsDirectory} from './ci-steps.js';
 

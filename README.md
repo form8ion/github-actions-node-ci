@@ -28,6 +28,7 @@ CI scaffolder for JavaScript projects on [GitHub Actions](https://github.com/fea
 [![MIT license][license-badge]][license-link]
 [![npm][npm-badge]][npm-link]
 [![Try @form8ion/github-actions-node-ci on RunKit][runkit-badge]][runkit-link]
+![node][node-badge]
 
 <!--consumer-badges end -->
 
@@ -133,3 +134,5 @@ $ npm test
 [coverage-badge]: https://img.shields.io/codecov/c/github/form8ion/github-actions-node-ci?logo=codecov
 
 [slsa-badge]: https://slsa.dev/images/gh-badge-level2.svg
+
+[node-badge]: https://img.shields.io/node/v/@form8ion/github-actions-node-ci?logo=node.js
