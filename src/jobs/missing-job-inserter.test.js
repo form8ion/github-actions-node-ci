@@ -2,10 +2,10 @@ import {describe, it, expect, afterEach, beforeEach, vi} from 'vitest';
 import any from '@travi/any';
 import {when} from 'jest-when';
 
-import {matrixVerification} from '../../jobs/scaffolder.js';
+import {matrixVerification} from './scaffolder.js';
 import insertMissingJobs from './missing-job-inserter.js';
 
-vi.mock('../../jobs/scaffolder.js');
+vi.mock('./scaffolder.js');
 
 describe('missing job inserter', () => {
   describe('matrix verification', () => {

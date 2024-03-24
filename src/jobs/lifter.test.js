@@ -6,12 +6,12 @@ import {when} from 'jest-when';
 
 import insertMissingJob from './missing-job-inserter.js';
 import buildNodeVersionMatrix from './node-version-matrix-builder.js';
-import {lift as liftJob} from '../../job/index.js';
+import {lift as liftJob} from '../job/index.js';
 import liftJobs from './lifter.js';
 
 vi.mock('./missing-job-inserter.js');
 vi.mock('./node-version-matrix-builder.js');
-vi.mock('../../job/index.js');
+vi.mock('../job/index.js');
 
 describe('jobs lifter', () => {
   afterEach(() => {

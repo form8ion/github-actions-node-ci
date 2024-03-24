@@ -1,4 +1,4 @@
-import {matrixVerification} from '../../jobs/scaffolder.js';
+import {matrixVerification} from './scaffolder.js';
 
 function noMatrixJobExistsIn(jobs) {
   return !jobs.filter(([, job]) => job.strategy?.matrix?.node).length;

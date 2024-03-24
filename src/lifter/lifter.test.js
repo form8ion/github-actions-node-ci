@@ -7,13 +7,13 @@ import {when} from 'jest-when';
 
 import {scaffold as scaffoldBadges} from '../badges/index.js';
 import mergeBranchList from './branches/merge-branches.js';
-import {lift as liftJobs} from './jobs/index.js';
+import {lift as liftJobs} from '../jobs/index.js';
 import lift from './lifter.js';
 
 vi.mock('node:fs');
 vi.mock('js-yaml');
 vi.mock('./branches/merge-branches');
-vi.mock('./jobs');
+vi.mock('../jobs/index.js');
 vi.mock('../badges');
 
 describe('lifter', () => {
