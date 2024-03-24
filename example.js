@@ -14,7 +14,8 @@ stubbedFs({'package.json': JSON.stringify({})});
     vcs: {
       owner: 'repo-owner',
       name: 'repo-name'
-    }
+    },
+    runner: 'hosted-runner-name'    // optional. uses `ubuntu-latest` if not provided
   });
 
   await test({projectRoot: process.cwd()});

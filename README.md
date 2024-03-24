@@ -43,7 +43,7 @@ $ npm install @form8ion/github-actions-node-ci --save-prod
 #### Import
 
 ```javascript
-import {scaffold, lift, test} from './lib/index.cjs';
+import {scaffold, lift, test} from '@form8ion/github-actions-node-ci';
 ```
 
 #### Execute
