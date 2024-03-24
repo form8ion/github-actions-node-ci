@@ -13,12 +13,12 @@ vi.mock('./missing-job-inserter.js');
 vi.mock('./node-version-matrix-builder.js');
 vi.mock('../job/index.js');
 
-describe('jobs lifter', () => {
+describe('steps lifter', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should lift the jobs', async () => {
+  it('should lift the steps', async () => {
     const jobNames = any.listOf(any.word);
     const jobDefinitions = jobNames.map(any.simpleObject);
     const liftedJobDefinitions = jobDefinitions.map(any.simpleObject);

@@ -31,7 +31,7 @@ describe('step lifter', () => {
       .toEqual({...step, with: {...otherWithProperties, 'node-version-file': '.nvmrc', cache: 'npm'}});
   });
 
-  it('should not read the nvmrc file for matrix jobs', () => {
+  it('should not read the nvmrc file for matrix steps', () => {
     const step = {
       ...any.simpleObject(),
       name: 'Setup node',

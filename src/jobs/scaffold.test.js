@@ -15,7 +15,7 @@ import {matrixVerification, nvmrcVerification} from './scaffolder.js';
 vi.mock('@form8ion/github-workflows-core');
 vi.mock('../job/index.js');
 
-describe('jobs scaffolder', () => {
+describe('steps scaffolder', () => {
   const checkoutStep = any.simpleObject();
   const setupNodeStep = any.simpleObject();
   const installDependenciesStep = any.listOf(any.simpleObject);
