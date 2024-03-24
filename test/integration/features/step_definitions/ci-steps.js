@@ -1,4 +1,4 @@
-import {promises as fs} from 'fs';
+import {promises as fs} from 'node:fs';
 import makeDir from 'make-dir';
 import {dump, load} from 'js-yaml';
 import {
@@ -76,15 +76,4 @@ Then('the verification workflow is created', async function () {
       scaffoldVerificationStep()
     ]
   );
-});
-
-Then('the jobs use {string} as the runners', async function (runner) {
-  const {jobs} = load(await fs.readFile(
-    `${process.cwd()}/.github/workflows/node-ci.yml`,
-    'utf-8'
-  ));
-
-  Object.values(jobs).forEach(job => {
-    assert.equal(job['runs-on'], runner);
-  });
 });

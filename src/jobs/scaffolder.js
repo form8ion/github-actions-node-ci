@@ -7,8 +7,9 @@ import {
 
 import {scaffold as scaffoldJob} from '../job/index.js';
 
-export function nvmrcVerification() {
+export function nvmrcVerification({runner}) {
   return scaffoldJob({
+    runner,
     steps: [
       scaffoldCheckoutStep(),
       scaffoldNodeSetupStep({versionDeterminedBy: 'nvmrc'}),

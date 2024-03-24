@@ -21,13 +21,14 @@ describe('scaffolder', () => {
     const visibility = any.word();
     const vcs = any.simpleObject();
     const badgesResults = any.simpleObject();
+    const runner = any.word();
     when(scaffoldBadges).calledWith({vcs}).mockReturnValue(badgesResults);
 
-    expect(await scaffold({projectRoot, projectType, vcs, tests, visibility}))
+    expect(await scaffold({projectRoot, projectType, vcs, tests, visibility, runner}))
       .toEqual({
         badges: badgesResults,
         nextSteps: [{summary: 'Enable building branches in GitHub Actions for the chosen dependency updater'}]
       });
-    expect(scaffoldConfig).toHaveBeenCalledWith({projectRoot, projectType, tests, visibility});
+    expect(scaffoldConfig).toHaveBeenCalledWith({projectRoot, projectType, tests, visibility, runner});
   });
 });

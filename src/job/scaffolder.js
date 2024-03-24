@@ -1,6 +1,6 @@
-export default function ({steps, strategy}) {
+export default function ({steps, strategy, runner = 'ubuntu-latest'}) {
   return {
-    'runs-on': 'ubuntu-latest',
+    'runs-on': runner,
     ...strategy && {strategy},
     steps
   };

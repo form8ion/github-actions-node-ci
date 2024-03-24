@@ -10,6 +10,12 @@ describe('job scaffolder', () => {
     expect(scaffoldJob({steps})).toStrictEqual({'runs-on': 'ubuntu-latest', steps});
   });
 
+  it('should use an alternative runner when defined', () => {
+    const runner = any.word();
+
+    expect(scaffoldJob({steps, runner})).toStrictEqual({'runs-on': runner, steps});
+  });
+
   it('should define the `strategy` if it is provided', () => {
     const strategy = any.simpleObject();
 

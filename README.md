@@ -55,7 +55,8 @@ import {scaffold, lift, test} from './lib/index.cjs';
     vcs: {
       owner: 'repo-owner',
       name: 'repo-name'
-    }
+    },
+    runner: 'hosted-runner-name'    // optional. uses `ubuntu-latest` if not provided
   });
 
   await test({projectRoot: process.cwd()});

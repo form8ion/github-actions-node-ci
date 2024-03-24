@@ -22,6 +22,7 @@ describe('config scaffolder', () => {
     const projectType = any.word();
     const pathToCreatedWorkflowsDirectory = any.string();
     const dumpedYaml = any.string();
+    const runner = any.word();
     when(makeDir).calledWith(`${projectRoot}/.github/workflows`).mockResolvedValue(pathToCreatedWorkflowsDirectory);
     when(dump).calledWith({
       name: 'Node.js CI',
@@ -36,7 +37,7 @@ describe('config scaffolder', () => {
       permissions: {contents: 'read'},
       jobs: {
         verify: {
-          'runs-on': 'ubuntu-latest',
+          'runs-on': runner,
           steps: [
             {uses: 'actions/checkout@v3'},
             {name: 'Setup node', uses: 'actions/setup-node@v3', with: {'node-version-file': '.nvmrc', cache: 'npm'}},
@@ -48,7 +49,7 @@ describe('config scaffolder', () => {
       }
     }).mockReturnValue(dumpedYaml);
 
-    await scaffoldConfig({projectRoot, projectType});
+    await scaffoldConfig({projectRoot, projectType, runner});
 
     expect(fs.writeFile).toHaveBeenCalledWith(`${pathToCreatedWorkflowsDirectory}/node-ci.yml`, dumpedYaml);
   });

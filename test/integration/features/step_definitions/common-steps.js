@@ -34,7 +34,11 @@ After(function () {
 });
 
 When('the project is scaffolded', async function () {
-  this.results = await scaffold({projectRoot: this.projectRoot, vcs: {owner: this.vcsOwner, name: this.vcsName}});
+  this.results = await scaffold({
+    projectRoot: this.projectRoot,
+    vcs: {owner: this.vcsOwner, name: this.vcsName},
+    ...this.preferredRunner && {runner: this.preferredRunner}
+  });
 });
 
 When('the project is lifted', async function () {

@@ -33,12 +33,13 @@ describe('steps scaffolder', () => {
   });
 
   it('should create an nvmrc verification job', () => {
+    const runner = any.word();
     when(scaffoldNodeSetupStep).calledWith({versionDeterminedBy: 'nvmrc'}).mockReturnValue(setupNodeStep);
     when(scaffoldJob)
-      .calledWith({steps: [checkoutStep, setupNodeStep, ...installDependenciesStep, executeVerificationStep]})
+      .calledWith({runner, steps: [checkoutStep, setupNodeStep, ...installDependenciesStep, executeVerificationStep]})
       .mockReturnValue(job);
 
-    expect(nvmrcVerification()).toEqual(job);
+    expect(nvmrcVerification({runner})).toEqual(job);
   });
 
   it('should create a matrix verification job', () => {

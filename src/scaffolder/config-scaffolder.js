@@ -4,7 +4,7 @@ import {dump} from 'js-yaml';
 import makeDir from 'make-dir';
 import {nvmrcVerification} from '../jobs/scaffolder.js';
 
-export default async function ({projectRoot}) {
+export default async function ({projectRoot, runner}) {
   return fs.writeFile(
     `${await makeDir(`${projectRoot}/.github/workflows`)}/node-ci.yml`,
     dump({
@@ -18,7 +18,7 @@ export default async function ({projectRoot}) {
         NPM_CONFIG_COLOR: 'always'
       },
       permissions: {contents: 'read'},
-      jobs: {verify: nvmrcVerification()}
+      jobs: {verify: nvmrcVerification({runner})}
     })
   );
 }
