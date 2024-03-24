@@ -6,7 +6,6 @@ Feature: Verify Workflow
     And the jobs use "ubuntu-latest" as the runners
     And the status badge is returned
 
-  @wip
   Scenario: new project with specific runner preference
     Given the project prefers to use the "foo" runner
     When the project is scaffolded
