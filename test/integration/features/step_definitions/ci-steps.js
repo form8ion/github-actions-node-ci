@@ -1,7 +1,14 @@
 import {promises as fs} from 'fs';
 import makeDir from 'make-dir';
-import {Before, Given, Then} from '@cucumber/cucumber';
 import {dump, load} from 'js-yaml';
+import {
+  scaffoldCheckoutStep,
+  scaffoldDependencyInstallationStep,
+  scaffoldNodeSetupStep,
+  scaffoldVerificationStep
+} from '@form8ion/github-workflows-core';
+
+import {Before, Given, Then} from '@cucumber/cucumber';
 import {assert} from 'chai';
 import any from '@travi/any';
 
@@ -42,4 +49,42 @@ Then('dependency caching is enabled', async function () {
 
   const setupNodeStep = jobs[this.existingJobName].steps.find(step => 'Setup node' === step.name);
   assert.equal(setupNodeStep.with.cache, 'npm');
+});
+
+Then('the verification workflow is created', async function () {
+  const {name, on: triggers, env, permissions, jobs} = load(await fs.readFile(
+    `${process.cwd()}/.github/workflows/node-ci.yml`,
+    'utf-8'
+  ));
+
+  assert.equal(name, 'Node.js CI');
+  assert.deepEqual(
+    triggers,
+    {
+      push: {branches: ['master']},
+      pull_request: {types: ['opened', 'synchronize']}
+    }
+  );
+  assert.deepEqual(env, {FORCE_COLOR: 1, NPM_CONFIG_COLOR: 'always'});
+  assert.deepEqual(permissions, {contents: 'read'});
+  assert.deepEqual(
+    jobs.verify.steps,
+    [
+      scaffoldCheckoutStep(),
+      scaffoldNodeSetupStep({versionDeterminedBy: 'nvmrc'}),
+      ...scaffoldDependencyInstallationStep(),
+      scaffoldVerificationStep()
+    ]
+  );
+});
+
+Then('the jobs use {string} as the runners', async function (runner) {
+  const {jobs} = load(await fs.readFile(
+    `${process.cwd()}/.github/workflows/node-ci.yml`,
+    'utf-8'
+  ));
+
+  Object.values(jobs).forEach(job => {
+    assert.equal(job['runs-on'], runner);
+  });
 });
