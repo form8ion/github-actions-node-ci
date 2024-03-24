@@ -5,21 +5,21 @@ import {
   scaffoldVerificationStep
 } from '@form8ion/github-workflows-core';
 
+import {scaffold as scaffoldJob} from '../job/index.js';
+
 export function nvmrcVerification() {
-  return {
-    'runs-on': 'ubuntu-latest',
+  return scaffoldJob({
     steps: [
       scaffoldCheckoutStep(),
       scaffoldNodeSetupStep({versionDeterminedBy: 'nvmrc'}),
       ...scaffoldDependencyInstallationStep(),
       scaffoldVerificationStep()
     ]
-  };
+  });
 }
 
 export function matrixVerification(nodeEnginesMatrix) {
-  return {
-    'runs-on': 'ubuntu-latest',
+  return scaffoldJob({
     strategy: {matrix: {node: nodeEnginesMatrix}},
     steps: [
       scaffoldCheckoutStep(),
@@ -27,5 +27,5 @@ export function matrixVerification(nodeEnginesMatrix) {
       ...scaffoldDependencyInstallationStep(),
       scaffoldVerificationStep()
     ]
-  };
+  });
 }
