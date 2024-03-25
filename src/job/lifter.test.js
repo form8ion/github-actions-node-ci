@@ -2,10 +2,10 @@ import {describe, it, expect, afterEach, vi} from 'vitest';
 import any from '@travi/any';
 import {when} from 'jest-when';
 
-import liftSteps from '../lifter/steps/steps-lifter.js';
+import {lift as liftSteps} from '../steps/index.js';
 import liftJob from './lifter.js';
 
-vi.mock('../lifter/steps/steps-lifter.js');
+vi.mock('../steps/index.js');
 
 describe('job lifter', () => {
   const jobName = any.word();
