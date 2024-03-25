@@ -1,7 +1,7 @@
 import {describe, expect, it} from 'vitest';
 import any from '@travi/any';
 
-import liftStep from './step-lifter.js';
+import liftStep from './lifter.js';
 
 describe('step lifter', () => {
   const otherWithProperties = any.simpleObject();

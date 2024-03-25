@@ -2,10 +2,10 @@ import {afterEach, describe, expect, it, vi} from 'vitest';
 import any from '@travi/any';
 import {when} from 'jest-when';
 
-import liftStep from '../lifter/steps/step-lifter.js';
+import {lift as liftStep} from '../step/index.js';
 import liftSteps from './lifter.js';
 
-vi.mock('../lifter/steps/step-lifter.js');
+vi.mock('../step/index.js');
 
 describe('steps lifter', () => {
   afterEach(() => {
