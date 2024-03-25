@@ -44,14 +44,16 @@ describe('steps scaffolder', () => {
 
   it('should create a matrix verification job', () => {
     const nodeEnginesMatrix = any.listOf(any.integer);
+    const runner = any.word();
     when(scaffoldNodeSetupStep).calledWith({versionDeterminedBy: 'matrix'}).mockReturnValue(setupNodeStep);
     when(scaffoldJob)
       .calledWith({
         strategy: {matrix: {node: nodeEnginesMatrix}},
-        steps: [checkoutStep, setupNodeStep, ...installDependenciesStep, executeVerificationStep]
+        steps: [checkoutStep, setupNodeStep, ...installDependenciesStep, executeVerificationStep],
+        runner
       })
       .mockReturnValue(job);
 
-    expect(matrixVerification(nodeEnginesMatrix)).toEqual(job);
+    expect(matrixVerification({versions: nodeEnginesMatrix, runner})).toEqual(job);
   });
 });

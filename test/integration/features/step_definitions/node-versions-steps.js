@@ -169,26 +169,33 @@ Then('a matrix job is added', async function () {
   assert.equal(jobDefinitions.length, 2);
   assert.equal(jobDefinitions.filter(job => job.strategy?.matrix).length, 1);
   assert.deepEqual(
-    verifyMatrixJob,
-    {
-      'runs-on': 'ubuntu-latest',
-      strategy: {matrix: {node: [`${this.minimumNodeVersion}.0`, ...this.inRangeNodeLtsMajorVersions]}},
-      steps: [
-        {uses: 'actions/checkout@v3'},
-        {
-          name: 'Setup node',
-          uses: 'actions/setup-node@v3',
-          with: {
-            'node-version': '${{ matrix.node }}',             // eslint-disable-line no-template-curly-in-string
-            cache: 'npm'
-          }
-        },
-        {run: 'npm clean-install'},
-        {run: 'npm audit signatures'},
-        {run: 'npm test'}
-      ]
-    }
+    verifyMatrixJob.strategy,
+    {matrix: {node: [`${this.minimumNodeVersion}.0`, ...this.inRangeNodeLtsMajorVersions]}}
   );
+  assert.deepEqual(
+    verifyMatrixJob.steps,
+    [
+      {uses: 'actions/checkout@v3'},
+      {
+        name: 'Setup node',
+        uses: 'actions/setup-node@v3',
+        with: {
+          'node-version': '${{ matrix.node }}',             // eslint-disable-line no-template-curly-in-string
+          cache: 'npm'
+        }
+      },
+      {run: 'npm clean-install'},
+      {run: 'npm audit signatures'},
+      {run: 'npm test'}
+    ]
+  );
+});
+
+Then('the matrix job uses {string} as the runner', async function (runner) {
+  const {jobs} = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+  const {'verify-matrix': verifyMatrixJob} = jobs;
+
+  assert.equal(verifyMatrixJob['runs-on'], runner);
 });
 
 Then('the matrix job is updated', async function () {

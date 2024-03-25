@@ -64,7 +64,8 @@ import {scaffold, lift, test} from '@form8ion/github-actions-node-ci';
   await lift({
     projectRoot: process.cwd(),
     results: {branchesToVerify: ['foo', 'bar']},
-    vcs: {owner: 'repo-owner', name: 'repo-name'}
+    vcs: {owner: 'repo-owner', name: 'repo-name'},
+    runner: 'hosted-runner-name'    // optional. uses `ubuntu-latest` if not provided
   });
 })();
 ```

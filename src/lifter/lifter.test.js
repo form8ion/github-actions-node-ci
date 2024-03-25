@@ -25,6 +25,7 @@ describe('lifter', () => {
   const enginesDefinition = any.simpleObject();
   const badgesResults = any.simpleObject();
   const vcs = any.simpleObject();
+  const runner = any.word();
 
   beforeEach(() => {
     when(fs.readFile)
@@ -33,7 +34,7 @@ describe('lifter', () => {
     when(fs.readFile)
       .calledWith(`${projectRoot}/package.json`, 'utf-8')
       .mockResolvedValue(JSON.stringify({engines: enginesDefinition}));
-    when(liftJobs).calledWith(existingJobs, enginesDefinition).mockReturnValue(liftedJobs);
+    when(liftJobs).calledWith({jobs: existingJobs, engines: enginesDefinition, runner}).mockReturnValue(liftedJobs);
     when(scaffoldBadges).calledWith({vcs}).mockReturnValue(badgesResults);
   });
 
@@ -52,7 +53,7 @@ describe('lifter', () => {
       .calledWith({...existingConfig, permissions: {contents: 'read'}, jobs: liftedJobs})
       .mockReturnValue(dumpedConfig);
 
-    expect(await lift({projectRoot, results: any.simpleObject(), vcs})).toEqual({badges: badgesResults});
+    expect(await lift({projectRoot, results: any.simpleObject(), vcs, runner})).toEqual({badges: badgesResults});
     expect(fs.writeFile).toHaveBeenCalledWith(`${projectRoot}/.github/workflows/node-ci.yml`, dumpedConfig);
   });
 
@@ -76,7 +77,7 @@ describe('lifter', () => {
       })
       .mockReturnValue(dumpedConfig);
 
-    expect(await lift({projectRoot, results: {...any.simpleObject(), branchesToVerify}, vcs}))
+    expect(await lift({projectRoot, results: {...any.simpleObject(), branchesToVerify}, vcs, runner}))
       .toEqual({badges: badgesResults});
     expect(fs.writeFile).toHaveBeenCalledWith(`${projectRoot}/.github/workflows/node-ci.yml`, dumpedConfig);
   });

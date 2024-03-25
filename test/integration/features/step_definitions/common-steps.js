@@ -46,7 +46,8 @@ When('the project is lifted', async function () {
     this.results = await lift({
       projectRoot: this.projectRoot,
       results: {branchesToVerify: this.additionalBranches},
-      vcs: {owner: this.vcsOwner, name: this.vcsName}
+      vcs: {owner: this.vcsOwner, name: this.vcsName},
+      ...this.preferredRunner && {runner: this.preferredRunner}
     });
   }
 });

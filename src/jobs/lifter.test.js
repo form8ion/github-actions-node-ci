@@ -25,9 +25,10 @@ describe('steps lifter', () => {
     const supportedNodeVersionRange = any.string();
     const supportedNodeVersions = any.listOf(any.integer);
     const jobPairsWithMissingInjected = zip(any.listOf(any.word), any.listOf(any.simpleObject));
+    const runner = any.word();
     when(buildNodeVersionMatrix).calledWith(supportedNodeVersionRange).mockReturnValue(supportedNodeVersions);
     when(insertMissingJob)
-      .calledWith(supportedNodeVersions, zip(jobNames, liftedJobDefinitions))
+      .calledWith({versions: supportedNodeVersions, jobs: zip(jobNames, liftedJobDefinitions), runner})
       .mockReturnValue(jobPairsWithMissingInjected);
     zip(jobDefinitions, liftedJobDefinitions, jobNames).forEach(
       ([job, liftedJob, jobName]) => when(liftJob)
@@ -35,7 +36,10 @@ describe('steps lifter', () => {
         .mockReturnValue([jobName, liftedJob])
     );
 
-    expect(await liftJobs(Object.fromEntries(zip(jobNames, jobDefinitions)), supportedNodeVersionRange))
-      .toEqual(Object.fromEntries(jobPairsWithMissingInjected));
+    expect(await liftJobs({
+      jobs: Object.fromEntries(zip(jobNames, jobDefinitions)),
+      engines: supportedNodeVersionRange,
+      runner
+    })).toEqual(Object.fromEntries(jobPairsWithMissingInjected));
   });
 });

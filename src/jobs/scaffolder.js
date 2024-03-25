@@ -19,9 +19,10 @@ export function nvmrcVerification({runner}) {
   });
 }
 
-export function matrixVerification(nodeEnginesMatrix) {
+export function matrixVerification({versions: nodeEnginesMatrix, runner}) {
   return scaffoldJob({
     strategy: {matrix: {node: nodeEnginesMatrix}},
+    runner,
     steps: [
       scaffoldCheckoutStep(),
       scaffoldNodeSetupStep({versionDeterminedBy: 'matrix'}),

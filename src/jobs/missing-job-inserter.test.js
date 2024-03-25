@@ -12,9 +12,12 @@ describe('missing job inserter', () => {
     const matrixOfNodeVersions = any.listOf(any.integer);
     const matrixVerificationJobName = 'verify-matrix';
     const matrixVerificationJob = any.simpleObject();
+    const runner = any.word();
 
     beforeEach(() => {
-      when(matrixVerification).calledWith(matrixOfNodeVersions).mockReturnValue(matrixVerificationJob);
+      when(matrixVerification)
+        .calledWith({versions: matrixOfNodeVersions, runner})
+        .mockReturnValue(matrixVerificationJob);
     });
 
     afterEach(() => {
@@ -24,7 +27,7 @@ describe('missing job inserter', () => {
     it('should insert a matrix verification job if none exists', async () => {
       const jobs = any.listOf(() => ([any.word(), any.simpleObject()]));
 
-      expect(insertMissingJobs(matrixOfNodeVersions, jobs))
+      expect(insertMissingJobs({versions: matrixOfNodeVersions, jobs, runner}))
         .toEqual([[matrixVerificationJobName, matrixVerificationJob], ...jobs]);
     });
 
@@ -33,7 +36,7 @@ describe('missing job inserter', () => {
       async () => {
         const jobs = [...any.listOf(() => ([any.word(), any.simpleObject()])), [any.word(), {strategy: {}}]];
 
-        expect(insertMissingJobs(matrixOfNodeVersions, jobs))
+        expect(insertMissingJobs({versions: matrixOfNodeVersions, jobs, runner}))
           .toEqual([[matrixVerificationJobName, matrixVerificationJob], ...jobs]);
       }
     );
@@ -41,7 +44,7 @@ describe('missing job inserter', () => {
     it('should insert a matrix verification job if a matrix job already exists but not for node', async () => {
       const jobs = [...any.listOf(() => ([any.word(), any.simpleObject()])), [any.word(), {strategy: {matrix: {}}}]];
 
-      expect(insertMissingJobs(matrixOfNodeVersions, jobs))
+      expect(insertMissingJobs({versions: matrixOfNodeVersions, jobs, runner}))
         .toEqual([[matrixVerificationJobName, matrixVerificationJob], ...jobs]);
     });
 
@@ -51,13 +54,13 @@ describe('missing job inserter', () => {
         [any.word(), {strategy: {matrix: {node: {}}}}]
       ];
 
-      expect(insertMissingJobs(matrixOfNodeVersions, jobs)).toEqual(jobs);
+      expect(insertMissingJobs({versions: matrixOfNodeVersions, jobs})).toEqual(jobs);
     });
 
     it('should not insert a matrix verification job if no matrix of node versions is provided', async () => {
       const jobs = any.listOf(() => ([any.word(), any.simpleObject()]));
 
-      expect(insertMissingJobs(undefined, jobs)).toEqual(jobs);
+      expect(insertMissingJobs({versions: undefined, jobs})).toEqual(jobs);
     });
   });
 });

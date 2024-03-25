@@ -11,6 +11,16 @@ Feature: Engines matrix
     And a greater-than-minimum node version range is defined
     When the project is lifted
     Then a matrix job is added
+    And the matrix job uses "ubuntu-latest" as the runner
+
+  Scenario: No existing matrix, engines range defined, custom runner
+    Given a CI workflow exists
+    And the project prefers to use the "foo" runner
+    And the nvmrc is referenced using the modern property "with" caching enabled
+    And a greater-than-minimum node version range is defined
+    When the project is lifted
+    Then a matrix job is added
+    And the matrix job uses "foo" as the runner
 
   Scenario: Existing matrix, greater-than-minimum engines range defined
     Given a CI workflow exists
