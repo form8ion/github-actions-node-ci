@@ -48,6 +48,6 @@ describe('step lifter', () => {
 
   it('should replace the legacy install action with directly executing the install command', () => {
     expect(liftStep({uses: `bahmutov/npm-install@${any.string()}`}))
-      .toEqual([{run: 'npm clean-install'}, {run: 'npm audit signatures'}]);
+      .toEqual([{run: 'npm clean-install'}, {run: 'corepack npm audit signatures'}]);
   });
 });
