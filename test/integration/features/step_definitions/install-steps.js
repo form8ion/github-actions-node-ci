@@ -1,5 +1,6 @@
 import {promises as fs} from 'fs';
-import {dump, load} from 'js-yaml';
+import {load} from 'js-yaml';
+import {writeWorkflowFile} from '@form8ion/github-workflows-core';
 
 import {Given, Then} from '@cucumber/cucumber';
 import any from '@travi/any';
@@ -25,7 +26,7 @@ Given('the legacy action is in use for installing dependencies', async function 
 
   ciWorkflow.jobs[this.existingJobName] = {steps: this.existingJobSteps};
 
-  await fs.writeFile(pathToCiWorkflow, dump(ciWorkflow));
+  await writeWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci', config: ciWorkflow});
 });
 
 Then('the legacy action is replaced with direct installation', async function () {

@@ -1,5 +1,6 @@
 import {promises as fs} from 'fs';
-import {dump, load} from 'js-yaml';
+import {load} from 'js-yaml';
+import {writeWorkflowFile} from '@form8ion/github-workflows-core';
 
 import {Given} from '@cucumber/cucumber';
 import any from '@travi/any';
@@ -11,8 +12,9 @@ Given('a reusable workflow is called', async function () {
 
   const existingWorkflowDetails = load(await fs.readFile(pathToCiWorkflow, 'utf-8'));
 
-  await fs.writeFile(
-    pathToCiWorkflow,
-    dump({...existingWorkflowDetails, jobs: {...existingWorkflowDetails.jobs, [any.word()]: {uses: any.string()}}})
-  );
+  await writeWorkflowFile({
+    projectRoot: this.projectRoot,
+    name: 'node-ci',
+    config: {...existingWorkflowDetails, jobs: {...existingWorkflowDetails.jobs, [any.word()]: {uses: any.string()}}}
+  });
 });

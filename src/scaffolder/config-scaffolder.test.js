@@ -1,16 +1,17 @@
-import {promises as fs} from 'fs';
-import makeDir from 'make-dir';
-import {dump} from 'js-yaml';
+import {promises as fs} from 'node:fs';
+import {writeWorkflowFile} from '@form8ion/github-workflows-core';
 
 import any from '@travi/any';
 import {afterEach, describe, expect, it, vi} from 'vitest';
 import {when} from 'jest-when';
 
+import {nvmrcVerification} from '../jobs/scaffolder.js';
 import scaffoldConfig from './config-scaffolder.js';
 
 vi.mock('fs');
-vi.mock('make-dir');
 vi.mock('js-yaml');
+vi.mock('@form8ion/github-workflows-core');
+vi.mock('../jobs/scaffolder.js');
 
 describe('config scaffolder', () => {
   afterEach(() => {
@@ -20,37 +21,29 @@ describe('config scaffolder', () => {
   it('should define the workflow file', async () => {
     const projectRoot = any.string();
     const projectType = any.word();
-    const pathToCreatedWorkflowsDirectory = any.string();
-    const dumpedYaml = any.string();
     const runner = any.word();
-    when(makeDir).calledWith(`${projectRoot}/.github/workflows`).mockResolvedValue(pathToCreatedWorkflowsDirectory);
-    when(dump).calledWith({
-      name: 'Node.js CI',
-      on: {
-        push: {branches: ['master']},
-        pull_request: {types: ['opened', 'synchronize']}
-      },
-      env: {
-        FORCE_COLOR: 1,
-        NPM_CONFIG_COLOR: 'always'
-      },
-      permissions: {contents: 'read'},
-      jobs: {
-        verify: {
-          'runs-on': runner,
-          steps: [
-            {uses: 'actions/checkout@v3'},
-            {name: 'Setup node', uses: 'actions/setup-node@v3', with: {'node-version-file': '.nvmrc', cache: 'npm'}},
-            {run: 'npm clean-install'},
-            {run: 'corepack npm audit signatures'},
-            {run: 'npm test'}
-          ]
-        }
-      }
-    }).mockReturnValue(dumpedYaml);
+    const verifyJob = any.simpleObject();
+    when(nvmrcVerification).calledWith({runner}).mockReturnValue(verifyJob);
 
     await scaffoldConfig({projectRoot, projectType, runner});
 
-    expect(fs.writeFile).toHaveBeenCalledWith(`${pathToCreatedWorkflowsDirectory}/node-ci.yml`, dumpedYaml);
+    expect(fs.mkdir).toHaveBeenCalledWith(`${projectRoot}/.github/workflows`, {recursive: true});
+    expect(writeWorkflowFile).toHaveBeenCalledWith({
+      projectRoot,
+      name: 'node-ci',
+      config: {
+        name: 'Node.js CI',
+        on: {
+          push: {branches: ['master']},
+          pull_request: {types: ['opened', 'synchronize']}
+        },
+        env: {
+          FORCE_COLOR: 1,
+          NPM_CONFIG_COLOR: 'always'
+        },
+        permissions: {contents: 'read'},
+        jobs: {verify: verifyJob}
+      }
+    });
   });
 });

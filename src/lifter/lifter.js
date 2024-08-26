@@ -1,5 +1,6 @@
 import {promises as fs} from 'fs';
-import {dump, load} from 'js-yaml';
+import {load} from 'js-yaml';
+import {writeWorkflowFile} from '@form8ion/github-workflows-core';
 
 import {scaffold as scaffoldBadges} from '../badges/index.js';
 import {lift as liftJobs} from '../jobs/index.js';
@@ -11,17 +12,18 @@ export default async function ({projectRoot, results: {branchesToVerify}, vcs, r
   const {engines} = JSON.parse(await fs.readFile(`${projectRoot}/package.json`, 'utf-8'));
   const existingBranches = existingConfig.on.push.branches;
 
-  await fs.writeFile(
-    pathToConfig,
-    dump({
+  await writeWorkflowFile({
+    projectRoot,
+    name: 'node-ci',
+    config: {
       ...existingConfig,
       ...branchesToVerify && {
         on: {...existingConfig.on, push: {branches: mergeBranches(existingBranches, branchesToVerify)}}
       },
       permissions: {contents: 'read'},
       jobs: liftJobs({jobs: existingConfig.jobs, engines, runner})
-    })
-  );
+    }
+  });
 
   return {badges: scaffoldBadges({vcs})};
 }

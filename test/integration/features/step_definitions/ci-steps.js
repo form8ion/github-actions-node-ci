@@ -1,11 +1,11 @@
 import {promises as fs} from 'node:fs';
-import makeDir from 'make-dir';
-import {dump, load} from 'js-yaml';
+import {load} from 'js-yaml';
 import {
   scaffoldCheckoutStep,
   scaffoldDependencyInstallationStep,
   scaffoldNodeSetupStep,
-  scaffoldVerificationStep
+  scaffoldVerificationStep,
+  writeWorkflowFile
 } from '@form8ion/github-workflows-core';
 
 import {Before, Given, Then} from '@cucumber/cucumber';
@@ -19,18 +19,19 @@ Before(async function () {
 });
 
 Given('a CI workflow exists', async function () {
-  const workflowsDirectory = await makeDir(pathToWorkflowsDirectory);
+  await fs.mkdir(pathToWorkflowsDirectory, {recursive: true});
 
-  await fs.writeFile(
-    `${workflowsDirectory}/node-ci.yml`,
-    dump({
+  await writeWorkflowFile({
+    projectRoot: this.projectRoot,
+    name: 'node-ci',
+    config: {
       on: {
         push: {branches: this.existingBranches},
         pull_request: this.prTriggerConfig
       },
       jobs: {}
-    })
-  );
+    }
+  });
 });
 
 Then('the ci config remains unchanged', async function () {

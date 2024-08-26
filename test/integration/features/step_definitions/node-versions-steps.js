@@ -1,5 +1,7 @@
 import {promises as fs} from 'fs';
-import {dump, load} from 'js-yaml';
+import {load} from 'js-yaml';
+import {writePackageJson} from '@form8ion/javascript-core';
+import {scaffoldCheckoutStep, scaffoldNodeSetupStep, writeWorkflowFile} from '@form8ion/github-workflows-core';
 
 import {Given, Then} from '@cucumber/cucumber';
 import any from '@travi/any';
@@ -8,7 +10,8 @@ import * as td from 'testdouble';
 
 import {pathToWorkflowsDirectory} from './ci-steps.js';
 
-const pathToCiWorkflow = `${pathToWorkflowsDirectory}/node-ci.yml`;
+const ciWorkflowName = 'node-ci';
+const pathToCiWorkflow = `${pathToWorkflowsDirectory}/${ciWorkflowName}.yml`;
 
 Given('the nvmrc is referenced using the modern property {string} caching enabled', async function (cachingEnabled) {
   this.existingJobName = any.word();
@@ -29,7 +32,11 @@ Given('the nvmrc is referenced using the modern property {string} caching enable
 
   ciWorkflow.jobs[this.existingJobName] = {steps: this.existingJobSteps};
 
-  await fs.writeFile(pathToCiWorkflow, dump(ciWorkflow));
+  await writeWorkflowFile({
+    projectRoot: this.projectRoot,
+    name: ciWorkflowName,
+    config: ciWorkflow
+  });
 });
 
 Given('the version is read from the nvmrc and passed as a value to the setup-node step', async function () {
@@ -53,7 +60,11 @@ Given('the version is read from the nvmrc and passed as a value to the setup-nod
 
   ciWorkflow.jobs[this.existingJobName] = {steps: this.existingJobSteps};
 
-  await fs.writeFile(pathToCiWorkflow, dump(ciWorkflow));
+  await writeWorkflowFile({
+    projectRoot: this.projectRoot,
+    name: ciWorkflowName,
+    config: ciWorkflow
+  });
 });
 
 Given('the node version is based on a matrix {string} caching enabled', async function (cachingEnabled) {
@@ -79,7 +90,11 @@ Given('the node version is based on a matrix {string} caching enabled', async fu
     steps: this.existingJobSteps
   };
 
-  await fs.writeFile(pathToCiWorkflow, dump(ciWorkflow));
+  await writeWorkflowFile({
+    projectRoot: this.projectRoot,
+    name: ciWorkflowName,
+    config: ciWorkflow
+  });
 });
 
 Given('the version is defined statically', async function () {
@@ -94,7 +109,11 @@ Given('the version is defined statically', async function () {
 
   ciWorkflow.jobs[this.existingJobName] = {steps: this.existingJobSteps};
 
-  await fs.writeFile(pathToCiWorkflow, dump(ciWorkflow));
+  await writeWorkflowFile({
+    projectRoot: this.projectRoot,
+    name: ciWorkflowName,
+    config: ciWorkflow
+  });
 });
 
 Given('a greater-than-minimum node version range is defined', async function () {
@@ -104,10 +123,10 @@ Given('a greater-than-minimum node version range is defined', async function () 
 
   const packageContents = JSON.parse(await fs.readFile(`${process.cwd()}/package.json`, 'utf-8'));
 
-  await fs.writeFile(
-    `${process.cwd()}/package.json`,
-    JSON.stringify({...packageContents, engines: {node: nodeVersionRange}})
-  );
+  await writePackageJson({
+    projectRoot: this.projectRoot,
+    config: {...packageContents, engines: {node: nodeVersionRange}}
+  });
 
   td.when(this.jsCore.determineSupportedNodeMajorVersions({withinRange: nodeVersionRange}))
     .thenReturn(this.inRangeNodeLtsMajorVersions);
@@ -123,10 +142,10 @@ Given('multiple node version ranges are defined', async function () {
 
   const packageContents = JSON.parse(await fs.readFile(`${process.cwd()}/package.json`, 'utf-8'));
 
-  await fs.writeFile(
-    `${process.cwd()}/package.json`,
-    JSON.stringify({...packageContents, engines: {node: nodeVersionRange}})
-  );
+  await writePackageJson({
+    projectRoot: this.projectRoot,
+    config: {...packageContents, engines: {node: nodeVersionRange}}
+  });
 
   td.when(this.jsCore.determineSupportedNodeMajorVersions({withinRange: caretNodeVersionRange}))
     .thenReturn([]);
@@ -175,15 +194,8 @@ Then('a matrix job is added', async function () {
   assert.deepEqual(
     verifyMatrixJob.steps,
     [
-      {uses: 'actions/checkout@v3'},
-      {
-        name: 'Setup node',
-        uses: 'actions/setup-node@v3',
-        with: {
-          'node-version': '${{ matrix.node }}',             // eslint-disable-line no-template-curly-in-string
-          cache: 'npm'
-        }
-      },
+      scaffoldCheckoutStep(),
+      scaffoldNodeSetupStep({versionDeterminedBy: 'matrix'}),
       {run: 'npm clean-install'},
       {run: 'corepack npm audit signatures'},
       {run: 'npm test'}

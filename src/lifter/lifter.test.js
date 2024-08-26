@@ -1,5 +1,6 @@
 import {promises as fs} from 'node:fs';
 import jsYaml from 'js-yaml';
+import {writeWorkflowFile} from '@form8ion/github-workflows-core';
 
 import {afterEach, beforeEach, describe, it, vi, expect} from 'vitest';
 import any from '@travi/any';
@@ -12,6 +13,7 @@ import lift from './lifter.js';
 
 vi.mock('node:fs');
 vi.mock('js-yaml');
+vi.mock('@form8ion/github-workflows-core');
 vi.mock('./branches/merge-branches');
 vi.mock('../jobs/index.js');
 vi.mock('../badges');
@@ -19,7 +21,6 @@ vi.mock('../badges');
 describe('lifter', () => {
   const projectRoot = any.string();
   const rawExistingConfig = any.string();
-  const dumpedConfig = any.string();
   const existingJobs = any.listOf(any.simpleObject);
   const liftedJobs = any.listOf(any.simpleObject);
   const enginesDefinition = any.simpleObject();
@@ -49,12 +50,13 @@ describe('lifter', () => {
       jobs: existingJobs
     };
     when(jsYaml.load).calledWith(rawExistingConfig).mockReturnValue(existingConfig);
-    when(jsYaml.dump)
-      .calledWith({...existingConfig, permissions: {contents: 'read'}, jobs: liftedJobs})
-      .mockReturnValue(dumpedConfig);
 
     expect(await lift({projectRoot, results: any.simpleObject(), vcs, runner})).toEqual({badges: badgesResults});
-    expect(fs.writeFile).toHaveBeenCalledWith(`${projectRoot}/.github/workflows/node-ci.yml`, dumpedConfig);
+    expect(writeWorkflowFile).toHaveBeenCalledWith({
+      projectRoot,
+      name: 'node-ci',
+      config: {...existingConfig, permissions: {contents: 'read'}, jobs: liftedJobs}
+    });
   });
 
   it('should append the additional branches to the existing list', async () => {
@@ -68,17 +70,18 @@ describe('lifter', () => {
     const mergedBranches = any.listOf(any.word);
     when(jsYaml.load).calledWith(rawExistingConfig).mockReturnValue(existingConfig);
     when(mergeBranchList).calledWith(existingBranches, branchesToVerify).mockReturnValue(mergedBranches);
-    when(jsYaml.dump)
-      .calledWith({
+
+    expect(await lift({projectRoot, results: {...any.simpleObject(), branchesToVerify}, vcs, runner}))
+      .toEqual({badges: badgesResults});
+    expect(writeWorkflowFile).toHaveBeenCalledWith({
+      projectRoot,
+      name: 'node-ci',
+      config: {
         ...existingConfig,
         on: {...existingConfig.on, push: {branches: mergedBranches}},
         permissions: {contents: 'read'},
         jobs: liftedJobs
-      })
-      .mockReturnValue(dumpedConfig);
-
-    expect(await lift({projectRoot, results: {...any.simpleObject(), branchesToVerify}, vcs, runner}))
-      .toEqual({badges: badgesResults});
-    expect(fs.writeFile).toHaveBeenCalledWith(`${projectRoot}/.github/workflows/node-ci.yml`, dumpedConfig);
+      }
+    });
   });
 });

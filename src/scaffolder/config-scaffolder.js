@@ -1,13 +1,15 @@
-import {promises as fs} from 'fs';
-import {dump} from 'js-yaml';
+import {promises as fs} from 'node:fs';
+import {writeWorkflowFile} from '@form8ion/github-workflows-core';
 
-import makeDir from 'make-dir';
 import {nvmrcVerification} from '../jobs/scaffolder.js';
 
 export default async function ({projectRoot, runner}) {
-  return fs.writeFile(
-    `${await makeDir(`${projectRoot}/.github/workflows`)}/node-ci.yml`,
-    dump({
+  await fs.mkdir(`${projectRoot}/.github/workflows`, {recursive: true});
+
+  return writeWorkflowFile({
+    projectRoot,
+    name: 'node-ci',
+    config: {
       name: 'Node.js CI',
       on: {
         push: {branches: ['master']},
@@ -19,6 +21,6 @@ export default async function ({projectRoot, runner}) {
       },
       permissions: {contents: 'read'},
       jobs: {verify: nvmrcVerification({runner})}
-    })
-  );
+    }
+  });
 }
