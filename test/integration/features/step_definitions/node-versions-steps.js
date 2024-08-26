@@ -1,17 +1,18 @@
 import {promises as fs} from 'fs';
-import {load} from 'js-yaml';
 import {writePackageJson} from '@form8ion/javascript-core';
-import {scaffoldCheckoutStep, scaffoldNodeSetupStep, writeWorkflowFile} from '@form8ion/github-workflows-core';
+import {
+  loadWorkflowFile,
+  scaffoldCheckoutStep,
+  scaffoldNodeSetupStep,
+  writeWorkflowFile
+} from '@form8ion/github-workflows-core';
 
 import {Given, Then} from '@cucumber/cucumber';
 import any from '@travi/any';
 import {assert} from 'chai';
 import * as td from 'testdouble';
 
-import {pathToWorkflowsDirectory} from './ci-steps.js';
-
 const ciWorkflowName = 'node-ci';
-const pathToCiWorkflow = `${pathToWorkflowsDirectory}/${ciWorkflowName}.yml`;
 
 Given('the nvmrc is referenced using the modern property {string} caching enabled', async function (cachingEnabled) {
   this.existingJobName = any.word();
@@ -28,7 +29,7 @@ Given('the nvmrc is referenced using the modern property {string} caching enable
     {run: 'npm clean-install'}
   ];
 
-  const ciWorkflow = load(await fs.readFile(pathToCiWorkflow, 'utf-8'));
+  const ciWorkflow = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
 
   ciWorkflow.jobs[this.existingJobName] = {steps: this.existingJobSteps};
 
@@ -56,7 +57,7 @@ Given('the version is read from the nvmrc and passed as a value to the setup-nod
     {run: 'npm clean-install'}
   ];
 
-  const ciWorkflow = load(await fs.readFile(pathToCiWorkflow, 'utf-8'));
+  const ciWorkflow = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
 
   ciWorkflow.jobs[this.existingJobName] = {steps: this.existingJobSteps};
 
@@ -83,7 +84,7 @@ Given('the node version is based on a matrix {string} caching enabled', async fu
     {run: 'npm clean-install'}
   ];
 
-  const ciWorkflow = load(await fs.readFile(pathToCiWorkflow, 'utf-8'));
+  const ciWorkflow = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
 
   ciWorkflow.jobs[this.existingJobName] = {
     strategy: {matrix: {node: this.existingNodeVersions}},
@@ -105,7 +106,7 @@ Given('the version is defined statically', async function () {
     {run: 'npm clean-install'}
   ];
 
-  const ciWorkflow = load(await fs.readFile(pathToCiWorkflow, 'utf-8'));
+  const ciWorkflow = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
 
   ciWorkflow.jobs[this.existingJobName] = {steps: this.existingJobSteps};
 
@@ -156,7 +157,7 @@ Given('multiple node version ranges are defined', async function () {
 Then('the setup-node step is updated to reference the nvmrc file using the modern property', async function () {
   const {
     jobs: {[this.existingJobName]: existingJob}
-  } = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+  } = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
 
   assert.isEmpty(existingJob.steps.filter(step => 'nvm' === step.id));
 
@@ -166,13 +167,13 @@ Then('the setup-node step is updated to reference the nvmrc file using the moder
 });
 
 Then('no matrix job is configured', async function () {
-  const {jobs} = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
 
   assert.equal(Object.values(jobs).filter(job => job.strategy?.matrix).length, 0);
 });
 
 Then('the matrix job is unchanged', async function () {
-  const {jobs} = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
 
   assert.deepEqual(
     jobs[this.existingJobName],
@@ -181,7 +182,7 @@ Then('the matrix job is unchanged', async function () {
 });
 
 Then('a matrix job is added', async function () {
-  const {jobs} = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
   const {'verify-matrix': verifyMatrixJob} = jobs;
   const jobDefinitions = Object.values(jobs);
 
@@ -204,14 +205,14 @@ Then('a matrix job is added', async function () {
 });
 
 Then('the matrix job uses {string} as the runner', async function (runner) {
-  const {jobs} = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
   const {'verify-matrix': verifyMatrixJob} = jobs;
 
   assert.equal(verifyMatrixJob['runs-on'], runner);
 });
 
 Then('the matrix job is updated', async function () {
-  const {jobs} = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
 
   assert.equal(Object.values(jobs).filter(job => job.strategy?.matrix).length, 1);
   assert.deepEqual(

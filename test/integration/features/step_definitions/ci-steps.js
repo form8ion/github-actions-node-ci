@@ -1,6 +1,6 @@
 import {promises as fs} from 'node:fs';
-import {load} from 'js-yaml';
 import {
+  loadWorkflowFile,
   scaffoldCheckoutStep,
   scaffoldDependencyInstallationStep,
   scaffoldNodeSetupStep,
@@ -12,14 +12,12 @@ import {Before, Given, Then} from '@cucumber/cucumber';
 import {assert} from 'chai';
 import any from '@travi/any';
 
-export const pathToWorkflowsDirectory = `${process.cwd()}/.github/workflows`;
-
 Before(async function () {
   this.prTriggerConfig = any.simpleObject();
 });
 
 Given('a CI workflow exists', async function () {
-  await fs.mkdir(pathToWorkflowsDirectory, {recursive: true});
+  await fs.mkdir(`${process.cwd()}/.github/workflows`, {recursive: true});
 
   await writeWorkflowFile({
     projectRoot: this.projectRoot,
@@ -35,7 +33,7 @@ Given('a CI workflow exists', async function () {
 });
 
 Then('the ci config remains unchanged', async function () {
-  const {on: triggers, jobs} = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+  const {on: triggers, jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci'});
 
   assert.deepEqual(triggers.push.branches, this.existingBranches);
   assert.deepEqual(triggers.pull_request, this.prTriggerConfig);
@@ -46,17 +44,20 @@ Then('the ci config remains unchanged', async function () {
 });
 
 Then('dependency caching is enabled', async function () {
-  const {jobs} = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci'});
 
   const setupNodeStep = jobs[this.existingJobName].steps.find(step => 'Setup node' === step.name);
   assert.equal(setupNodeStep.with.cache, 'npm');
 });
 
 Then('the verification workflow is created', async function () {
-  const {name, on: triggers, env, permissions, jobs} = load(await fs.readFile(
-    `${process.cwd()}/.github/workflows/node-ci.yml`,
-    'utf-8'
-  ));
+  const {
+    name,
+    on: triggers,
+    env,
+    permissions,
+    jobs
+  } = await loadWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci'});
 
   assert.equal(name, 'Node.js CI');
   assert.deepEqual(

@@ -9,7 +9,6 @@ import {nvmrcVerification} from '../jobs/scaffolder.js';
 import scaffoldConfig from './config-scaffolder.js';
 
 vi.mock('fs');
-vi.mock('js-yaml');
 vi.mock('@form8ion/github-workflows-core');
 vi.mock('../jobs/scaffolder.js');
 

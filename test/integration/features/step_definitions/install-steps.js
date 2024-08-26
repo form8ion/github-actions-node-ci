@@ -1,14 +1,8 @@
-import {promises as fs} from 'fs';
-import {load} from 'js-yaml';
-import {writeWorkflowFile} from '@form8ion/github-workflows-core';
+import {loadWorkflowFile, writeWorkflowFile} from '@form8ion/github-workflows-core';
 
 import {Given, Then} from '@cucumber/cucumber';
 import any from '@travi/any';
 import {assert} from 'chai';
-
-import {pathToWorkflowsDirectory} from './ci-steps.js';
-
-const pathToCiWorkflow = `${pathToWorkflowsDirectory}/node-ci.yml`;
 
 Given('the legacy action is in use for installing dependencies', async function () {
   this.existingJobName = any.word();
@@ -22,7 +16,7 @@ Given('the legacy action is in use for installing dependencies', async function 
     {uses: 'bahmutov/npm-install@v1'}
   ];
 
-  const ciWorkflow = load(await fs.readFile(pathToCiWorkflow, 'utf-8'));
+  const ciWorkflow = await loadWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci'});
 
   ciWorkflow.jobs[this.existingJobName] = {steps: this.existingJobSteps};
 
@@ -32,7 +26,7 @@ Given('the legacy action is in use for installing dependencies', async function 
 Then('the legacy action is replaced with direct installation', async function () {
   const {
     jobs: {[this.existingJobName]: existingJob}
-  } = load(await fs.readFile(`${process.cwd()}/.github/workflows/node-ci.yml`, 'utf-8'));
+  } = await loadWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci'});
 
   assert.notDeepInclude(existingJob.steps, {uses: 'bahmutov/npm-install@v1'});
   assert.deepInclude(existingJob.steps, {run: 'npm clean-install'});
