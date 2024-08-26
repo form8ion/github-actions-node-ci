@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@form8ion/core": "^4.0.0",
-    "@form8ion/github-workflows-core": "^5.2.0",
+    "@form8ion/github-workflows-core": "^5.3.0",
     "@form8ion/javascript-core": "^11.0.0",
     "semver": "^7.3.7"
   },

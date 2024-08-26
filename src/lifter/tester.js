@@ -1,5 +1,5 @@
-import {fileExists} from '@form8ion/core';
+import {workflowFileExists} from '@form8ion/github-workflows-core';
 
 export default function ({projectRoot}) {
-  return fileExists(`${projectRoot}/.github/workflows/node-ci.yml`);
+  return workflowFileExists({projectRoot, name: 'node-ci'});
 }
