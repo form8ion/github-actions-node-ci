@@ -6,7 +6,7 @@ import {afterEach, describe, expect, it, vi} from 'vitest';
 import {when} from 'jest-when';
 
 import {nvmrcVerification} from '../jobs/scaffolder.js';
-import scaffoldConfig from './config-scaffolder.js';
+import scaffoldConfig from './scaffolder.js';
 
 vi.mock('fs');
 vi.mock('@form8ion/github-workflows-core');

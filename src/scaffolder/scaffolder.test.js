@@ -3,11 +3,11 @@ import any from '@travi/any';
 import {when} from 'jest-when';
 
 import {scaffold as scaffoldBadges} from '../badges/index.js';
-import scaffoldConfig from './config-scaffolder.js';
+import {scaffold as scaffoldWorkflow} from '../workflow/index.js';
 import scaffold from './scaffolder.js';
 
 vi.mock('../badges');
-vi.mock('./config-scaffolder');
+vi.mock('../workflow/index.js');
 
 describe('scaffolder', () => {
   afterEach(() => {
@@ -29,6 +29,6 @@ describe('scaffolder', () => {
         badges: badgesResults,
         nextSteps: [{summary: 'Enable building branches in GitHub Actions for the chosen dependency updater'}]
       });
-    expect(scaffoldConfig).toHaveBeenCalledWith({projectRoot, projectType, tests, visibility, runner});
+    expect(scaffoldWorkflow).toHaveBeenCalledWith({projectRoot, projectType, tests, visibility, runner});
   });
 });
