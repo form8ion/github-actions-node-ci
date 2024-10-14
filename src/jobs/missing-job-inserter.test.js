@@ -4,8 +4,10 @@ import {when} from 'jest-when';
 
 import {matrixVerification} from './scaffolder.js';
 import insertMissingJobs from './missing-job-inserter.js';
+import {scaffold as scaffoldWorkflowResultJob} from './workflow-result/index.js';
 
 vi.mock('./scaffolder.js');
+vi.mock('./workflow-result/index.js');
 
 describe('missing job inserter', () => {
   describe('matrix verification', () => {
@@ -51,16 +53,26 @@ describe('missing job inserter', () => {
     it('should not insert a matrix verification job if a matrix job already exists for node', async () => {
       const jobs = [
         ...any.listOf(() => ([any.word(), any.simpleObject()])),
-        [any.word(), {strategy: {matrix: {node: {}}}}]
+        [any.word(), {strategy: {matrix: {node: {}}}}],
+        ['workflow-result', any.simpleObject()]
       ];
 
       expect(insertMissingJobs({versions: matrixOfNodeVersions, jobs})).toEqual(jobs);
     });
 
     it('should not insert a matrix verification job if no matrix of node versions is provided', async () => {
-      const jobs = any.listOf(() => ([any.word(), any.simpleObject()]));
+      const jobs = [...any.listOf(() => ([any.word(), any.simpleObject()])), ['workflow-result', any.simpleObject()]];
 
       expect(insertMissingJobs({versions: undefined, jobs})).toEqual(jobs);
+    });
+
+    it('should insert a `workflow-result` job when one doesnt already exist', async () => {
+      const jobs = any.listOf(() => ([any.word(), any.simpleObject()]));
+      const resultJob = any.simpleObject();
+      when(scaffoldWorkflowResultJob).calledWith().mockReturnValue(resultJob);
+
+      expect(insertMissingJobs({jobs}))
+        .toEqual([...jobs, ['workflow-result', resultJob]]);
     });
   });
 });

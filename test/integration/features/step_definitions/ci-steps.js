@@ -14,6 +14,8 @@ import any from '@travi/any';
 
 Before(async function () {
   this.prTriggerConfig = any.simpleObject();
+
+  this.injectedJobs = [];
 });
 
 Given('a CI workflow exists', async function () {
@@ -28,6 +30,25 @@ Given('a CI workflow exists', async function () {
         pull_request: this.prTriggerConfig
       },
       jobs: {}
+    }
+  });
+});
+
+Given('a {string} job exists', async function (jobName) {
+  const existingWorkflowContents = await loadWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci'});
+  const job = any.simpleObject();
+
+  this.injectedJobs[jobName] = job;
+
+  await writeWorkflowFile({
+    projectRoot: this.projectRoot,
+    name: 'node-ci',
+    config: {
+      ...existingWorkflowContents,
+      jobs: {
+        ...existingWorkflowContents.jobs,
+        [jobName]: job
+      }
     }
   });
 });
@@ -78,4 +99,22 @@ Then('the verification workflow is created', async function () {
       scaffoldVerificationStep()
     ]
   );
+});
+
+Then('the workflow-result job exists', async function () {
+  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci'});
+
+  assert.include(Object.keys(jobs), 'workflow-result');
+});
+
+Then('the {string} job is unchanged', async function (jobName) {
+  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci'});
+
+  assert.deepEqual(jobs[jobName], this.injectedJobs[jobName]);
+});
+
+Then('the workflow-result job depends on {string}', async function (jobName) {
+  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci'});
+
+  assert.include(jobs['workflow-result'].needs, jobName);
 });
