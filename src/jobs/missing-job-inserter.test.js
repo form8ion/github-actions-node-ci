@@ -69,9 +69,9 @@ describe('missing job inserter', () => {
     it('should insert a `workflow-result` job when one doesnt already exist', async () => {
       const jobs = any.listOf(() => ([any.word(), any.simpleObject()]));
       const resultJob = any.simpleObject();
-      when(scaffoldWorkflowResultJob).calledWith().mockReturnValue(resultJob);
+      when(scaffoldWorkflowResultJob).calledWith({runner}).mockReturnValue(resultJob);
 
-      expect(insertMissingJobs({jobs}))
+      expect(insertMissingJobs({jobs, runner}))
         .toEqual([...jobs, ['workflow-result', resultJob]]);
     });
   });

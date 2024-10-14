@@ -12,6 +12,8 @@ import {Before, Given, Then} from '@cucumber/cucumber';
 import {assert} from 'chai';
 import any from '@travi/any';
 
+const ciWorkflowName = 'node-ci';
+
 Before(async function () {
   this.prTriggerConfig = any.simpleObject();
 
@@ -23,7 +25,7 @@ Given('a CI workflow exists', async function () {
 
   await writeWorkflowFile({
     projectRoot: this.projectRoot,
-    name: 'node-ci',
+    name: ciWorkflowName,
     config: {
       on: {
         push: {branches: this.existingBranches},
@@ -35,14 +37,14 @@ Given('a CI workflow exists', async function () {
 });
 
 Given('a {string} job exists', async function (jobName) {
-  const existingWorkflowContents = await loadWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci'});
+  const existingWorkflowContents = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
   const job = any.simpleObject();
 
   this.injectedJobs[jobName] = job;
 
   await writeWorkflowFile({
     projectRoot: this.projectRoot,
-    name: 'node-ci',
+    name: ciWorkflowName,
     config: {
       ...existingWorkflowContents,
       jobs: {
@@ -54,7 +56,7 @@ Given('a {string} job exists', async function (jobName) {
 });
 
 Then('the ci config remains unchanged', async function () {
-  const {on: triggers, jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci'});
+  const {on: triggers, jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
 
   assert.deepEqual(triggers.push.branches, this.existingBranches);
   assert.deepEqual(triggers.pull_request, this.prTriggerConfig);
@@ -65,7 +67,7 @@ Then('the ci config remains unchanged', async function () {
 });
 
 Then('dependency caching is enabled', async function () {
-  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci'});
+  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
 
   const setupNodeStep = jobs[this.existingJobName].steps.find(step => 'Setup node' === step.name);
   assert.equal(setupNodeStep.with.cache, 'npm');
@@ -78,7 +80,7 @@ Then('the verification workflow is created', async function () {
     env,
     permissions,
     jobs
-  } = await loadWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci'});
+  } = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
 
   assert.equal(name, 'Node.js CI');
   assert.deepEqual(
@@ -102,19 +104,26 @@ Then('the verification workflow is created', async function () {
 });
 
 Then('the workflow-result job exists', async function () {
-  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci'});
+  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
 
   assert.include(Object.keys(jobs), 'workflow-result');
 });
 
 Then('the {string} job is unchanged', async function (jobName) {
-  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci'});
+  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
 
   assert.deepEqual(jobs[jobName], this.injectedJobs[jobName]);
 });
 
 Then('the workflow-result job depends on {string}', async function (jobName) {
-  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: 'node-ci'});
+  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
 
   assert.include(jobs['workflow-result'].needs, jobName);
+});
+
+Then('the workflow-result job uses {string} as the runner', async function (runner) {
+  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
+  const {'workflow-result': resultJob} = jobs;
+
+  assert.equal(resultJob['runs-on'], runner);
 });

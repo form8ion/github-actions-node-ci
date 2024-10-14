@@ -1,6 +1,8 @@
-export default function () {
-  return {
-    'runs-on': 'ubuntu-latest',
+import {scaffold as scaffoldJob} from '../../job/index.js';
+
+export default function ({runner}) {
+  return scaffoldJob({
+    runner,
     needs: ['verify'],
     // eslint-disable-next-line no-template-curly-in-string
     if: '${{ !cancelled() }}',
@@ -18,5 +20,5 @@ export default function () {
         run: 'exit 1'
       }
     ]
-  };
+  });
 }

@@ -21,4 +21,16 @@ describe('job scaffolder', () => {
 
     expect(scaffoldJob({steps, strategy})).toEqual({'runs-on': 'ubuntu-latest', strategy, steps});
   });
+
+  it('should define the `needs` dependencies if any are provided', () => {
+    const dependencies = any.listOf(any.word);
+
+    expect(scaffoldJob({steps, needs: dependencies})).toEqual({'runs-on': 'ubuntu-latest', needs: dependencies, steps});
+  });
+
+  it('should define the `if` conditional if provided', () => {
+    const conditional = any.string();
+
+    expect(scaffoldJob({steps, if: conditional})).toEqual({'runs-on': 'ubuntu-latest', if: conditional, steps});
+  });
 });

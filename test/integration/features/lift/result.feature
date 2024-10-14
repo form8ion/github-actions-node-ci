@@ -13,6 +13,14 @@ Feature: Overall Workflow Result
     When the project is lifted
     Then the workflow-result job exists
     And the workflow-result job depends on "verify"
+    And the workflow-result job uses "ubuntu-latest" as the runner
+
+  Scenario: custom runner
+    Given a CI workflow exists
+    And a "verify" job exists
+    And the project prefers to use the "foo" runner
+    When the project is lifted
+    Then the workflow-result job uses "foo" as the runner
 
   @wip
   Scenario: No existing result job, existing verify and verify-matrix

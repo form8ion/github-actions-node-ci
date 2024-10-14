@@ -14,7 +14,7 @@ export default function ({versions: matrixOfNodeVersions, jobs, runner}) {
     return [['verify-matrix', matrixVerification({versions: matrixOfNodeVersions, runner})], ...jobs];
   }
 
-  if (!resultJobAlreadyExists(jobs)) return [...jobs, ['workflow-result', scaffoldWorkflowResultJob()]];
+  if (!resultJobAlreadyExists(jobs)) return [...jobs, ['workflow-result', scaffoldWorkflowResultJob({runner})]];
 
   return jobs;
 }
