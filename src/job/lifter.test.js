@@ -1,4 +1,4 @@
-import {describe, it, expect, afterEach, vi} from 'vitest';
+import {describe, expect, it, vi} from 'vitest';
 import any from '@travi/any';
 import {when} from 'jest-when';
 
@@ -9,60 +9,44 @@ vi.mock('../steps/index.js');
 
 describe('job lifter', () => {
   const jobName = any.word();
-  const updatedSupportedNodeVersions = any.listOf(any.simpleObject);
-
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
+  const jobSteps = any.listOf(any.simpleObject);
+  const liftedSteps = any.listOf(any.simpleObject);
+  const enhancerOptions = any.simpleObject();
+  const nonApplicableEnhancerFactory = () => ({test: () => false});
 
   it('should lift the steps of a job', () => {
     const jobWithoutSteps = any.simpleObject();
-    const jobSteps = any.listOf(any.simpleObject);
-    const liftedSteps = any.listOf(any.simpleObject);
     when(liftSteps).calledWith(jobSteps).mockReturnValue(liftedSteps);
 
-    expect(liftJob([jobName, {...jobWithoutSteps, steps: jobSteps}]))
+    expect(liftJob([jobName, {...jobWithoutSteps, steps: jobSteps}], any.listOf(nonApplicableEnhancerFactory)))
       .toEqual([jobName, {...jobWithoutSteps, steps: liftedSteps}]);
   });
 
   it('should lift a job that calls a reusable workflow', () => {
     const jobThatCallsReusableWorkflow = {...any.simpleObject(), uses: any.string()};
-    const liftedJob = liftJob([jobName, jobThatCallsReusableWorkflow]);
+    const liftedJob = liftJob([jobName, jobThatCallsReusableWorkflow], any.listOf(nonApplicableEnhancerFactory));
 
     expect(liftSteps).not.toHaveBeenCalled();
     expect(liftedJob).toEqual([jobName, jobThatCallsReusableWorkflow]);
   });
 
-  it('should replace the node versions in an existing matrix job', () => {
-    const [, updatedJobDefinition] = liftJob(
-      [jobName, {...any.simpleObject(), strategy: {matrix: {node: any.listOf(any.integer)}}}],
-      updatedSupportedNodeVersions
-    );
+  it('should apply a related enhancer', () => {
+    const jobLifter = vi.fn();
+    const applicableEnhancer = {test: () => true, lift: jobLifter};
+    const enhancers = [
+      ...any.listOf(nonApplicableEnhancerFactory),
+      applicableEnhancer,
+      ...any.listOf(nonApplicableEnhancerFactory)
+    ];
+    const existingJobDetails = {...any.simpleObject(), steps: jobSteps};
+    const liftedJobDetails = any.simpleObject();
+    when(liftSteps).calledWith(jobSteps).mockReturnValue(liftedSteps);
+    when(jobLifter)
+      .calledWith({...existingJobDetails, steps: liftedSteps}, enhancerOptions)
+      .mockReturnValue(liftedJobDetails);
 
-    expect(updatedJobDefinition.strategy.matrix.node).toEqual(updatedSupportedNodeVersions);
-  });
+    const [, updatedJobDefinition] = liftJob(['verify-matrix', existingJobDetails], enhancers, enhancerOptions);
 
-  it('should not add a test strategy to a job that does not already have one defined', () => {
-    const [, updatedJobDefinition] = liftJob([jobName, any.simpleObject()], updatedSupportedNodeVersions);
-
-    expect(updatedJobDefinition.strategy).toBe(undefined);
-  });
-
-  it('should not add a test matrix to a job that does not already have one defined', () => {
-    const [, updatedJobDefinition] = liftJob(
-      [jobName, {...any.simpleObject(), strategy: any.simpleObject()}],
-      updatedSupportedNodeVersions
-    );
-
-    expect(updatedJobDefinition.strategy.matrix).toBe(undefined);
-  });
-
-  it('should not add a list of supported node versions to a job that does not already have one defined', () => {
-    const [, updatedJobDefinition] = liftJob(
-      [jobName, {...any.simpleObject(), strategy: {...any.simpleObject(), matrix: any.simpleObject()}}],
-      updatedSupportedNodeVersions
-    );
-
-    expect(updatedJobDefinition.strategy.matrix.node).toBe(undefined);
+    expect(updatedJobDefinition).toEqual(liftedJobDetails);
   });
 });

@@ -69,7 +69,7 @@ Given('the version is read from the nvmrc and passed as a value to the setup-nod
 });
 
 Given('the node version is based on a matrix {string} caching enabled', async function (cachingEnabled) {
-  this.existingJobName = any.word();
+  this.existingJobName = 'verify-matrix';
   this.existingNodeVersions = any.listOf(any.integer);
   this.existingJobSteps = [
     {uses: 'actions/checkout@v3'},

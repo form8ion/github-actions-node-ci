@@ -1,16 +1,9 @@
 import {lift as liftSteps} from '../steps/index.js';
 
-function enginesShouldBeUpdated(inRangeNodeVersions, job) {
-  return inRangeNodeVersions && job.strategy?.matrix?.node;
-}
+export default function ([jobName, job], enhancers, options) {
+  const enhancer = enhancers.find(({test}) => test({jobName}));
 
-export default function ([jobName, job], inRangeNodeVersions) {
-  return [
-    jobName,
-    {
-      ...job,
-      ...job.steps && {steps: liftSteps(job.steps)},
-      ...enginesShouldBeUpdated(inRangeNodeVersions, job) && {strategy: {matrix: {node: inRangeNodeVersions}}}
-    }
-  ];
+  const jobWithLiftedSteps = {...job, ...job.steps && {steps: liftSteps(job.steps)}};
+
+  return [jobName, enhancer ? enhancer.lift(jobWithLiftedSteps, options) : jobWithLiftedSteps];
 }

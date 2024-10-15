@@ -1,12 +1,13 @@
 import zip from 'lodash.zip';
 
-import {describe, it, expect, afterEach, vi} from 'vitest';
+import {describe, expect, it, vi} from 'vitest';
 import any from '@travi/any';
 import {when} from 'jest-when';
 
+import {lift as liftJob} from '../job/index.js';
+import * as matrixVerificationJobEnhancer from './verify-matrix/index.js';
 import insertMissingJob from './missing-job-inserter.js';
 import buildNodeVersionMatrix from './node-version-matrix-builder.js';
-import {lift as liftJob} from '../job/index.js';
 import liftJobs from './lifter.js';
 
 vi.mock('./missing-job-inserter.js');
@@ -14,10 +15,6 @@ vi.mock('./node-version-matrix-builder.js');
 vi.mock('../job/index.js');
 
 describe('steps lifter', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('should lift the steps', async () => {
     const jobNames = any.listOf(any.word);
     const jobDefinitions = jobNames.map(any.simpleObject);
@@ -32,7 +29,7 @@ describe('steps lifter', () => {
       .mockReturnValue(jobPairsWithMissingInjected);
     zip(jobDefinitions, liftedJobDefinitions, jobNames).forEach(
       ([job, liftedJob, jobName]) => when(liftJob)
-        .calledWith([jobName, job], supportedNodeVersions)
+        .calledWith([jobName, job], [matrixVerificationJobEnhancer], {inRangeNodeVersions: supportedNodeVersions})
         .mockReturnValue([jobName, liftedJob])
     );
 
