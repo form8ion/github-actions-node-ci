@@ -18,16 +18,3 @@ export function nvmrcVerification({runner}) {
     ]
   });
 }
-
-export function matrixVerification({versions: nodeEnginesMatrix, runner}) {
-  return scaffoldJob({
-    strategy: {matrix: {node: nodeEnginesMatrix}},
-    runner,
-    steps: [
-      scaffoldCheckoutStep(),
-      scaffoldNodeSetupStep({versionDeterminedBy: 'matrix'}),
-      ...scaffoldDependencyInstallationStep(),
-      scaffoldVerificationStep()
-    ]
-  });
-}

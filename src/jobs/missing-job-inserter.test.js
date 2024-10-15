@@ -2,11 +2,11 @@ import {describe, it, expect, afterEach, beforeEach, vi} from 'vitest';
 import any from '@travi/any';
 import {when} from 'jest-when';
 
-import {matrixVerification} from './scaffolder.js';
-import insertMissingJobs from './missing-job-inserter.js';
+import {scaffold as scaffoldMatrixVerificationJob} from './verify-matrix/index.js';
 import {scaffold as scaffoldWorkflowResultJob} from './workflow-result/index.js';
+import insertMissingJobs from './missing-job-inserter.js';
 
-vi.mock('./scaffolder.js');
+vi.mock('./verify-matrix/index.js');
 vi.mock('./workflow-result/index.js');
 
 describe('missing job inserter', () => {
@@ -17,7 +17,7 @@ describe('missing job inserter', () => {
     const runner = any.word();
 
     beforeEach(() => {
-      when(matrixVerification)
+      when(scaffoldMatrixVerificationJob)
         .calledWith({versions: matrixOfNodeVersions, runner})
         .mockReturnValue(matrixVerificationJob);
     });

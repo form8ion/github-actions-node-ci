@@ -1,16 +1,16 @@
 import {
   scaffoldCheckoutStep,
-  scaffoldNodeSetupStep,
   scaffoldDependencyInstallationStep,
+  scaffoldNodeSetupStep,
   scaffoldVerificationStep
 } from '@form8ion/github-workflows-core';
 
-import {afterEach, beforeEach, describe, vi, it, expect} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import any from '@travi/any';
 import {when} from 'jest-when';
 
 import {scaffold as scaffoldJob} from '../job/index.js';
-import {matrixVerification, nvmrcVerification} from './scaffolder.js';
+import {nvmrcVerification} from './scaffolder.js';
 
 vi.mock('@form8ion/github-workflows-core');
 vi.mock('../job/index.js');
@@ -40,20 +40,5 @@ describe('steps scaffolder', () => {
       .mockReturnValue(job);
 
     expect(nvmrcVerification({runner})).toEqual(job);
-  });
-
-  it('should create a matrix verification job', () => {
-    const nodeEnginesMatrix = any.listOf(any.integer);
-    const runner = any.word();
-    when(scaffoldNodeSetupStep).calledWith({versionDeterminedBy: 'matrix'}).mockReturnValue(setupNodeStep);
-    when(scaffoldJob)
-      .calledWith({
-        strategy: {matrix: {node: nodeEnginesMatrix}},
-        steps: [checkoutStep, setupNodeStep, ...installDependenciesStep, executeVerificationStep],
-        runner
-      })
-      .mockReturnValue(job);
-
-    expect(matrixVerification({versions: nodeEnginesMatrix, runner})).toEqual(job);
   });
 });

@@ -1,5 +1,5 @@
 import {scaffold as scaffoldWorkflowResultJob} from './workflow-result/index.js';
-import {matrixVerification} from './scaffolder.js';
+import {scaffold as scaffoldMatrixVerificationJob} from './verify-matrix/index.js';
 
 function noMatrixJobExistsIn(jobs) {
   return !jobs.filter(([, job]) => job.strategy?.matrix?.node).length;
@@ -11,7 +11,7 @@ function resultJobAlreadyExists(jobs) {
 
 export default function ({versions: matrixOfNodeVersions, jobs, runner}) {
   if (matrixOfNodeVersions && noMatrixJobExistsIn(jobs)) {
-    return [['verify-matrix', matrixVerification({versions: matrixOfNodeVersions, runner})], ...jobs];
+    return [['verify-matrix', scaffoldMatrixVerificationJob({versions: matrixOfNodeVersions, runner})], ...jobs];
   }
 
   if (!resultJobAlreadyExists(jobs)) return [...jobs, ['workflow-result', scaffoldWorkflowResultJob({runner})]];
