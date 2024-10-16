@@ -6,6 +6,7 @@ import {when} from 'jest-when';
 
 import {lift as liftJob} from '../job/index.js';
 import * as matrixVerificationJobEnhancer from './verify-matrix/index.js';
+import * as workflowResultJobEnhancer from './workflow-result/index.js';
 import insertMissingJob from './missing-job-inserter.js';
 import buildNodeVersionMatrix from './node-version-matrix-builder.js';
 import liftJobs from './lifter.js';
@@ -17,26 +18,29 @@ vi.mock('../job/index.js');
 describe('steps lifter', () => {
   it('should lift the steps', async () => {
     const jobNames = any.listOf(any.word);
+    const jobNamesWithMissingInjected = any.listOf(any.word);
     const jobDefinitions = jobNames.map(any.simpleObject);
-    const liftedJobDefinitions = jobDefinitions.map(any.simpleObject);
+    const jobDefinitionsWithMissingInjected = jobNamesWithMissingInjected.map(any.simpleObject);
+    const liftedJobDefinitions = jobDefinitionsWithMissingInjected.map(any.simpleObject);
     const supportedNodeVersionRange = any.string();
     const supportedNodeVersions = any.listOf(any.integer);
-    const jobPairsWithMissingInjected = zip(any.listOf(any.word), any.listOf(any.simpleObject));
     const runner = any.word();
+    const jobs = Object.fromEntries(zip(jobNames, jobDefinitions));
     when(buildNodeVersionMatrix).calledWith(supportedNodeVersionRange).mockReturnValue(supportedNodeVersions);
     when(insertMissingJob)
-      .calledWith({versions: supportedNodeVersions, jobs: zip(jobNames, liftedJobDefinitions), runner})
-      .mockReturnValue(jobPairsWithMissingInjected);
-    zip(jobDefinitions, liftedJobDefinitions, jobNames).forEach(
+      .calledWith({versions: supportedNodeVersions, jobs: zip(jobNames, jobDefinitions), runner})
+      .mockReturnValue(zip(jobNamesWithMissingInjected, jobDefinitionsWithMissingInjected));
+    zip(jobDefinitionsWithMissingInjected, liftedJobDefinitions, jobNamesWithMissingInjected).forEach(
       ([job, liftedJob, jobName]) => when(liftJob)
-        .calledWith([jobName, job], [matrixVerificationJobEnhancer], {inRangeNodeVersions: supportedNodeVersions})
+        .calledWith(
+          [jobName, job],
+          [matrixVerificationJobEnhancer, workflowResultJobEnhancer],
+          {inRangeNodeVersions: supportedNodeVersions, jobs}
+        )
         .mockReturnValue([jobName, liftedJob])
     );
 
-    expect(await liftJobs({
-      jobs: Object.fromEntries(zip(jobNames, jobDefinitions)),
-      engines: supportedNodeVersionRange,
-      runner
-    })).toEqual(Object.fromEntries(jobPairsWithMissingInjected));
+    expect(await liftJobs({jobs, engines: supportedNodeVersionRange, runner}))
+      .toEqual(Object.fromEntries(zip(jobNamesWithMissingInjected, liftedJobDefinitions)));
   });
 });
