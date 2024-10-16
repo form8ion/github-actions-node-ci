@@ -18,7 +18,7 @@
   "scripts": {
     "pretest": "run-s build",
     "test": "npm-run-all --print-label --parallel lint:* --parallel test:*",
-    "lint:lockfile": "lockfile-lint --path package-lock.json --type npm --validate-https --allowed-hosts npm",
+    "lint:lockfile": "lockfile-lint",
     "lint:js": "eslint . --cache",
     "lint:md": "remark . --frail",
     "generate:md": "remark . --output",
