@@ -2,5 +2,39 @@ _extends: .github
 repository:
   name: github-actions-node-ci
   description: CI scaffolder for JavaScript projects on GitHub Actions
-  homepage: 'https://npm.im/@form8ion/github-actions-node-ci'
+  homepage: https://npm.im/@form8ion/github-actions-node-ci
   private: false
+branches:
+  - name: master
+    protection: null
+rulesets:
+  - name: prevent destruction of the default branch
+    target: branch
+    enforcement: active
+    conditions:
+      ref_name:
+        include:
+          - ~DEFAULT_BRANCH
+        exclude: []
+    rules:
+      - type: deletion
+      - type: non_fast_forward
+  - name: verification must pass
+    target: branch
+    enforcement: active
+    conditions:
+      ref_name:
+        include:
+          - ~DEFAULT_BRANCH
+        exclude: []
+    rules:
+      - type: required_status_checks
+        parameters:
+          strict_required_status_checks_policy: false
+          required_status_checks:
+            - context: workflow-result
+              integration_id: 15368
+    bypass_actors:
+      - actor_id: 3208999
+        actor_type: Team
+        bypass_mode: always
