@@ -198,6 +198,7 @@ Then('a matrix job is added', async function () {
       scaffoldCheckoutStep(),
       scaffoldNodeSetupStep({versionDeterminedBy: 'matrix'}),
       {run: 'npm clean-install'},
+      {run: 'npm install --global corepack@latest'},
       {run: 'corepack npm audit signatures'},
       {run: 'npm test'}
     ]
