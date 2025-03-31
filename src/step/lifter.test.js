@@ -47,7 +47,10 @@ describe('step lifter', () => {
   });
 
   it('should replace the legacy install action with directly executing the install command', () => {
-    expect(liftStep({uses: `bahmutov/npm-install@${any.string()}`}))
-      .toEqual([{run: 'npm clean-install'}, {run: 'corepack npm audit signatures'}]);
+    expect(liftStep({uses: `bahmutov/npm-install@${any.string()}`})).toEqual([
+      {run: 'npm clean-install'},
+      {run: 'npm install --global corepack@latest'},
+      {run: 'corepack npm audit signatures'}
+    ]);
   });
 });
