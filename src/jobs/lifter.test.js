@@ -2,7 +2,7 @@ import zip from 'lodash.zip';
 
 import {describe, expect, it, vi} from 'vitest';
 import any from '@travi/any';
-import {when} from 'jest-when';
+import {when} from 'vitest-when';
 
 import {lift as liftJob} from '../job/index.js';
 import * as matrixVerificationJobEnhancer from './verify-matrix/index.js';
@@ -26,10 +26,10 @@ describe('steps lifter', () => {
     const supportedNodeVersions = any.listOf(any.integer);
     const runner = any.word();
     const jobs = Object.fromEntries(zip(jobNames, jobDefinitions));
-    when(buildNodeVersionMatrix).calledWith(supportedNodeVersionRange).mockReturnValue(supportedNodeVersions);
+    when(buildNodeVersionMatrix).calledWith(supportedNodeVersionRange).thenReturn(supportedNodeVersions);
     when(insertMissingJob)
       .calledWith({versions: supportedNodeVersions, jobs: zip(jobNames, jobDefinitions), runner})
-      .mockReturnValue(zip(jobNamesWithMissingInjected, jobDefinitionsWithMissingInjected));
+      .thenReturn(zip(jobNamesWithMissingInjected, jobDefinitionsWithMissingInjected));
     zip(jobDefinitionsWithMissingInjected, liftedJobDefinitions, jobNamesWithMissingInjected).forEach(
       ([job, liftedJob, jobName]) => when(liftJob)
         .calledWith(
@@ -37,7 +37,7 @@ describe('steps lifter', () => {
           [matrixVerificationJobEnhancer, workflowResultJobEnhancer],
           {inRangeNodeVersions: supportedNodeVersions, jobs}
         )
-        .mockReturnValue([jobName, liftedJob])
+        .thenReturn([jobName, liftedJob])
     );
 
     expect(await liftJobs({jobs, engines: supportedNodeVersionRange, runner}))

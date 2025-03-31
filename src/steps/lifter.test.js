@@ -1,6 +1,6 @@
 import {afterEach, describe, expect, it, vi} from 'vitest';
 import any from '@travi/any';
-import {when} from 'jest-when';
+import {when} from 'vitest-when';
 
 import {lift as liftStep} from '../step/index.js';
 import liftSteps from './lifter.js';
@@ -20,9 +20,9 @@ describe('steps lifter', () => {
     const liftedLastStep = any.listOf(any.simpleObject);
     const liftedNvmrcReadStep = any.listOf(any.simpleObject);
     const steps = [firstStep, nvmrcReadStep, lastStep];
-    when(liftStep).calledWith(firstStep).mockReturnValue(liftedFirstStep);
-    when(liftStep).calledWith(nvmrcReadStep).mockReturnValue(liftedNvmrcReadStep);
-    when(liftStep).calledWith(lastStep).mockReturnValue(liftedLastStep);
+    when(liftStep).calledWith(firstStep).thenReturn(liftedFirstStep);
+    when(liftStep).calledWith(nvmrcReadStep).thenReturn(liftedNvmrcReadStep);
+    when(liftStep).calledWith(lastStep).thenReturn(liftedLastStep);
 
     const liftedSteps = liftSteps(steps);
 

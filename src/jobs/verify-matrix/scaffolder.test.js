@@ -6,7 +6,7 @@ import {
 
 import {expect, it, vi, describe} from 'vitest';
 import any from '@travi/any';
-import {when} from 'jest-when';
+import {when} from 'vitest-when';
 
 import {scaffold as scaffoldJob} from '../../job/index.js';
 import scaffoldMatrixVerificationJob from './scaffolder.js';
@@ -27,14 +27,14 @@ describe('verify-matrix job scaffolder', () => {
     scaffoldCheckoutStep.mockReturnValue(checkoutStep);
     scaffoldDependencyInstallationStep.mockReturnValue(installDependenciesStep);
     scaffoldVerificationStep.mockReturnValue(executeVerificationStep);
-    when(scaffoldNodeSetupStep).calledWith({versionDeterminedBy: 'matrix'}).mockReturnValue(setupNodeStep);
+    when(scaffoldNodeSetupStep).calledWith({versionDeterminedBy: 'matrix'}).thenReturn(setupNodeStep);
     when(scaffoldJob)
       .calledWith({
         strategy: {matrix: {node: nodeEnginesMatrix}},
         steps: [checkoutStep, setupNodeStep, ...installDependenciesStep, executeVerificationStep],
         runner
       })
-      .mockReturnValue(job);
+      .thenReturn(job);
 
     expect(scaffoldMatrixVerificationJob({versions: nodeEnginesMatrix, runner})).toEqual(job);
   });

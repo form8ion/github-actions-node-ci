@@ -2,7 +2,7 @@ import {workflowFileExists} from '@form8ion/github-workflows-core';
 
 import {afterEach, describe, it, vi, expect} from 'vitest';
 import any from '@travi/any';
-import {when} from 'jest-when';
+import {when} from 'vitest-when';
 
 import testThatCiWorkflowExists from './tester.js';
 
@@ -22,7 +22,7 @@ describe('predicate', () => {
   });
 
   it('should return `true` when a ci workflow file exists', async () => {
-    when(workflowFileExists).calledWith({projectRoot, name: 'node-ci'}).mockResolvedValue(true);
+    when(workflowFileExists).calledWith({projectRoot, name: 'node-ci'}).thenResolve(true);
 
     expect(await testThatCiWorkflowExists({projectRoot})).toBe(true);
   });

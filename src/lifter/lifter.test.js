@@ -3,7 +3,7 @@ import {loadWorkflowFile, writeWorkflowFile} from '@form8ion/github-workflows-co
 
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import any from '@travi/any';
-import {when} from 'jest-when';
+import {when} from 'vitest-when';
 
 import {scaffold as scaffoldBadges} from '../badges/index.js';
 import mergeBranchList from './branches/merge-branches.js';
@@ -29,9 +29,9 @@ describe('lifter', () => {
   beforeEach(() => {
     when(fs.readFile)
       .calledWith(`${projectRoot}/package.json`, 'utf-8')
-      .mockResolvedValue(JSON.stringify({engines: enginesDefinition}));
-    when(liftJobs).calledWith({jobs: existingJobs, engines: enginesDefinition, runner}).mockReturnValue(liftedJobs);
-    when(scaffoldBadges).calledWith({vcs}).mockReturnValue(badgesResults);
+      .thenResolve(JSON.stringify({engines: enginesDefinition}));
+    when(liftJobs).calledWith({jobs: existingJobs, engines: enginesDefinition, runner}).thenReturn(liftedJobs);
+    when(scaffoldBadges).calledWith({vcs}).thenReturn(badgesResults);
   });
 
   afterEach(() => {
@@ -46,7 +46,7 @@ describe('lifter', () => {
     };
     when(loadWorkflowFile)
       .calledWith({projectRoot, name: ciWorkflowName})
-      .mockResolvedValue(existingConfig);
+      .thenResolve(existingConfig);
 
     expect(await lift({projectRoot, results: any.simpleObject(), vcs, runner})).toEqual({badges: badgesResults});
     expect(writeWorkflowFile).toHaveBeenCalledWith({
@@ -67,8 +67,8 @@ describe('lifter', () => {
     const mergedBranches = any.listOf(any.word);
     when(loadWorkflowFile)
       .calledWith({projectRoot, name: ciWorkflowName})
-      .mockResolvedValue(existingConfig);
-    when(mergeBranchList).calledWith(existingBranches, branchesToVerify).mockReturnValue(mergedBranches);
+      .thenResolve(existingConfig);
+    when(mergeBranchList).calledWith(existingBranches, branchesToVerify).thenReturn(mergedBranches);
 
     expect(await lift({projectRoot, results: {...any.simpleObject(), branchesToVerify}, vcs, runner}))
       .toEqual({badges: badgesResults});

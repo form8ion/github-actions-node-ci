@@ -1,5 +1,5 @@
 import {it, expect, describe, vi} from 'vitest';
-import {when} from 'jest-when';
+import {when} from 'vitest-when';
 import any from '@travi/any';
 
 import {scaffold as scaffoldJob} from '../../job/index.js';
@@ -31,7 +31,7 @@ describe('workflow-result job scaffolder', () => {
           }
         ]
       })
-      .mockReturnValue(job);
+      .thenReturn(job);
 
     expect(scaffoldWorkflowResultJob({runner})).toEqual(job);
   });

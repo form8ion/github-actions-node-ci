@@ -1,6 +1,6 @@
 import {describe, expect, it, vi} from 'vitest';
 import any from '@travi/any';
-import {when} from 'jest-when';
+import {when} from 'vitest-when';
 
 import {lift as liftSteps} from '../steps/index.js';
 import liftJob from './lifter.js';
@@ -16,7 +16,7 @@ describe('job lifter', () => {
 
   it('should lift the steps of a job', () => {
     const jobWithoutSteps = any.simpleObject();
-    when(liftSteps).calledWith(jobSteps).mockReturnValue(liftedSteps);
+    when(liftSteps).calledWith(jobSteps).thenReturn(liftedSteps);
 
     expect(liftJob([jobName, {...jobWithoutSteps, steps: jobSteps}], any.listOf(nonApplicableEnhancerFactory)))
       .toEqual([jobName, {...jobWithoutSteps, steps: liftedSteps}]);
@@ -40,10 +40,10 @@ describe('job lifter', () => {
     ];
     const existingJobDetails = {...any.simpleObject(), steps: jobSteps};
     const liftedJobDetails = any.simpleObject();
-    when(liftSteps).calledWith(jobSteps).mockReturnValue(liftedSteps);
+    when(liftSteps).calledWith(jobSteps).thenReturn(liftedSteps);
     when(jobLifter)
       .calledWith({...existingJobDetails, steps: liftedSteps}, enhancerOptions)
-      .mockReturnValue(liftedJobDetails);
+      .thenReturn(liftedJobDetails);
 
     const [, updatedJobDefinition] = liftJob(['verify-matrix', existingJobDetails], enhancers, enhancerOptions);
 

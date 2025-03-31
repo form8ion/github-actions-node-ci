@@ -7,7 +7,7 @@ import {
 
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import any from '@travi/any';
-import {when} from 'jest-when';
+import {when} from 'vitest-when';
 
 import {scaffold as scaffoldJob} from '../job/index.js';
 import {nvmrcVerification} from './scaffolder.js';
@@ -34,10 +34,10 @@ describe('steps scaffolder', () => {
 
   it('should create an nvmrc verification job', () => {
     const runner = any.word();
-    when(scaffoldNodeSetupStep).calledWith({versionDeterminedBy: 'nvmrc'}).mockReturnValue(setupNodeStep);
+    when(scaffoldNodeSetupStep).calledWith({versionDeterminedBy: 'nvmrc'}).thenReturn(setupNodeStep);
     when(scaffoldJob)
       .calledWith({runner, steps: [checkoutStep, setupNodeStep, ...installDependenciesStep, executeVerificationStep]})
-      .mockReturnValue(job);
+      .thenReturn(job);
 
     expect(nvmrcVerification({runner})).toEqual(job);
   });

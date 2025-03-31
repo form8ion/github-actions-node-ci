@@ -1,6 +1,6 @@
 import {afterEach, describe, it, vi, expect} from 'vitest';
 import any from '@travi/any';
-import {when} from 'jest-when';
+import {when} from 'vitest-when';
 
 import {scaffold as scaffoldBadges} from '../badges/index.js';
 import {scaffold as scaffoldWorkflow} from '../workflow/index.js';
@@ -22,7 +22,7 @@ describe('scaffolder', () => {
     const vcs = any.simpleObject();
     const badgesResults = any.simpleObject();
     const runner = any.word();
-    when(scaffoldBadges).calledWith({vcs}).mockReturnValue(badgesResults);
+    when(scaffoldBadges).calledWith({vcs}).thenReturn(badgesResults);
 
     expect(await scaffold({projectRoot, projectType, vcs, tests, visibility, runner}))
       .toEqual({

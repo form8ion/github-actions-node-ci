@@ -1,6 +1,6 @@
 import {describe, it, expect, afterEach, beforeEach, vi} from 'vitest';
 import any from '@travi/any';
-import {when} from 'jest-when';
+import {when} from 'vitest-when';
 
 import {scaffold as scaffoldMatrixVerificationJob} from './verify-matrix/index.js';
 import {scaffold as scaffoldWorkflowResultJob} from './workflow-result/index.js';
@@ -19,7 +19,7 @@ describe('missing job inserter', () => {
     beforeEach(() => {
       when(scaffoldMatrixVerificationJob)
         .calledWith({versions: matrixOfNodeVersions, runner})
-        .mockReturnValue(matrixVerificationJob);
+        .thenReturn(matrixVerificationJob);
     });
 
     afterEach(() => {
@@ -69,7 +69,7 @@ describe('missing job inserter', () => {
     it('should insert a `workflow-result` job when one doesnt already exist', async () => {
       const jobs = any.listOf(() => ([any.word(), any.simpleObject()]));
       const resultJob = any.simpleObject();
-      when(scaffoldWorkflowResultJob).calledWith({runner}).mockReturnValue(resultJob);
+      when(scaffoldWorkflowResultJob).calledWith({runner}).thenReturn(resultJob);
 
       expect(insertMissingJobs({jobs, runner}))
         .toEqual([...jobs, ['workflow-result', resultJob]]);

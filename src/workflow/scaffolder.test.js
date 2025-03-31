@@ -3,7 +3,7 @@ import {writeWorkflowFile} from '@form8ion/github-workflows-core';
 
 import any from '@travi/any';
 import {afterEach, describe, expect, it, vi} from 'vitest';
-import {when} from 'jest-when';
+import {when} from 'vitest-when';
 
 import {nvmrcVerification} from '../jobs/scaffolder.js';
 import scaffoldConfig from './scaffolder.js';
@@ -22,7 +22,7 @@ describe('config scaffolder', () => {
     const projectType = any.word();
     const runner = any.word();
     const verifyJob = any.simpleObject();
-    when(nvmrcVerification).calledWith({runner}).mockReturnValue(verifyJob);
+    when(nvmrcVerification).calledWith({runner}).thenReturn(verifyJob);
 
     await scaffoldConfig({projectRoot, projectType, runner});
 
