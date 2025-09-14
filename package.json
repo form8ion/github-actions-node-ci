@@ -69,7 +69,7 @@
     "@form8ion/remark-lint-preset": "6.0.7",
     "@rollup/plugin-node-resolve": "16.0.1",
     "@travi/any": "3.1.3",
-    "ban-sensitive-files": "1.10.9",
+    "ban-sensitive-files": "1.10.10",
     "c8": "10.1.3",
     "chai": "6.0.1",
     "cross-env": "10.0.0",
