@@ -78,7 +78,7 @@
     "husky": "9.1.7",
     "lockfile-lint": "4.14.1",
     "lodash.zip": "4.2.0",
-    "ls-engines": "0.9.4",
+    "ls-engines": "0.10.0",
     "mock-fs": "5.5.0",
     "npm-run-all2": "8.0.4",
     "publint": "0.3.16",
