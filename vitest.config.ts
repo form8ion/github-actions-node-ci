@@ -1,3 +1,3 @@
 import {defineConfig} from 'vitest/config';
 
-export default defineConfig({test: {globals: true, restoreMocks: true, mockReset: true}});
+export default defineConfig({test: {restoreMocks: true, mockReset: true}});
