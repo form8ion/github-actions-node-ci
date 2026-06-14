@@ -10,10 +10,24 @@ describe('workflow-result job lifter', () => {
     expect(liftWorkflowResultJob(existingJobDetails, {jobs: any.simpleObject()})).toEqual(existingJobDetails);
   });
 
-  it('should make the job depend on the `verify-matrix` job if it exists', () => {
+  it('should include the required dependencies if no existing needs are defined', () => {
     expect(liftWorkflowResultJob(
       existingJobDetails,
-      {jobs: {...any.simpleObject(), 'verify-matrix': any.simpleObject()}}
+      {jobs: {'verify-matrix': {}}}
     )).toEqual({...existingJobDetails, needs: ['verify', 'verify-matrix']});
+  });
+
+  it('should update scaffolded needs to include verify-matrix', () => {
+    expect(liftWorkflowResultJob(
+      {...existingJobDetails, needs: ['verify']},
+      {jobs: {'verify-matrix': {}}}
+    )).toEqual({...existingJobDetails, needs: ['verify', 'verify-matrix']});
+  });
+
+  it('should keep existing needs and append missing required dependencies', () => {
+    expect(liftWorkflowResultJob(
+      {...existingJobDetails, needs: ['existing-dependency']},
+      {jobs: {'verify-matrix': {}}}
+    )).toEqual({...existingJobDetails, needs: ['existing-dependency', 'verify', 'verify-matrix']});
   });
 });

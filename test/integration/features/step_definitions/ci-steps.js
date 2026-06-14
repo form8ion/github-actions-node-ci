@@ -38,7 +38,7 @@ Given('a CI workflow exists', async function () {
 
 Given('a {string} job exists', async function (jobName) {
   const existingWorkflowContents = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
-  const job = any.simpleObject();
+  const job = {...any.simpleObject(), needs: any.listOf(any.word)};
 
   this.injectedJobs[jobName] = job;
 
@@ -113,6 +113,15 @@ Then('the {string} job is unchanged', async function (jobName) {
   const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
 
   assert.deepEqual(jobs[jobName], this.injectedJobs[jobName]);
+  assert.deepEqual(jobs[jobName].needs, this.injectedJobs[jobName].needs);
+});
+
+Then('the workflow-result job keeps its existing needs and includes required dependencies', async function () {
+  const {jobs} = await loadWorkflowFile({projectRoot: this.projectRoot, name: ciWorkflowName});
+  const resultJob = jobs['workflow-result'];
+
+  assert.includeMembers(resultJob.needs, this.injectedJobs['workflow-result'].needs);
+  assert.includeMembers(resultJob.needs, ['verify', 'verify-matrix']);
 });
 
 Then('the workflow-result job depends on {string}', async function (jobName) {

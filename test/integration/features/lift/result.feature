@@ -7,6 +7,14 @@ Feature: Overall Workflow Result
     Then the workflow-result job exists
     And the "workflow-result" job is unchanged
 
+  Scenario: Existing result job with existing matrix job
+    Given a CI workflow exists
+    And a "verify-matrix" job exists
+    And a "workflow-result" job exists
+    When the project is lifted
+    Then the workflow-result job exists
+    And the workflow-result job keeps its existing needs and includes required dependencies
+
   Scenario: No existing result job, existing verify
     Given a CI workflow exists
     And a "verify" job exists

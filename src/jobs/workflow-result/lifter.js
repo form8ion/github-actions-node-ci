@@ -1,5 +1,7 @@
-export default function (job, {jobs}) {
+export default function liftWorkflowResult(job, {jobs}) {
   if (!Object.keys(jobs).includes('verify-matrix')) return job;
 
-  return {...job, needs: ['verify', 'verify-matrix']};
+  const requiredNeeds = ['verify', 'verify-matrix'];
+
+  return {...job, needs: [...new Set([...job.needs || [], ...requiredNeeds])]};
 }
