@@ -113,7 +113,7 @@ $ npm test
 
 [renovate-link]: https://renovatebot.com
 
-[renovate-badge]: https://img.shields.io/badge/renovate-enabled-brightgreen.svg?logo=renovatebot
+[renovate-badge]: https://img.shields.io/badge/renovate-enabled-brightgreen.svg?logo=renovate
 
 [license-link]: LICENSE
 
