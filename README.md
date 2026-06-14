@@ -133,7 +133,7 @@ $ npm test
 
 [coverage-link]: https://codecov.io/github/form8ion/github-actions-node-ci
 
-[coverage-badge]: https://img.shields.io/codecov/c/github/form8ion/github-actions-node-ci?logo=codecov
+[coverage-badge]: https://img.shields.io/codecov/c/github/form8ion/github-actions-node-ci/master?logo=codecov
 
 [slsa-badge]: https://slsa.dev/images/gh-badge-level2.svg
 
