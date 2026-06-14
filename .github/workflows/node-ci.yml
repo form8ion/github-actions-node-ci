@@ -69,6 +69,7 @@ jobs:
     needs:
       - verify
       - verify-matrix
+      - release
     if: ${{ !cancelled() }}
     steps:
       - name: All matrix versions passed
