@@ -4,7 +4,7 @@ import {
   scaffoldCheckoutStep,
   scaffoldDependencyInstallationStep,
   scaffoldNodeSetupStep,
-  scaffoldVerificationStep,
+  scaffoldVerificationStep, workflowFileExists,
   writeWorkflowFile
 } from '@form8ion/github-workflows-core';
 
@@ -18,6 +18,14 @@ Before(async function () {
   this.prTriggerConfig = any.simpleObject();
 
   this.injectedJobs = [];
+});
+
+Given('the workflows directory exists', async function () {
+  await fs.mkdir(`${process.cwd()}/.github/workflows`, {recursive: true});
+});
+
+Given('the workflows directory does not exist', async function () {
+  return undefined;
 });
 
 Given('a CI workflow exists', async function () {
@@ -101,6 +109,10 @@ Then('the verification workflow is created', async function () {
       scaffoldVerificationStep()
     ]
   );
+});
+
+Then('the verification workflow is not created', async function () {
+  assert.isFalse(await workflowFileExists({projectRoot: this.projectRoot, name: ciWorkflowName}));
 });
 
 Then('the workflow-result job exists', async function () {

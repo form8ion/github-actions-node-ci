@@ -9,7 +9,7 @@ import * as td from 'testdouble';
 const __dirname = dirname(fileURLToPath(import.meta.url));        // eslint-disable-line no-underscore-dangle
 const stubbedNodeModules = stubbedFs.load(resolve(__dirname, '..', '..', '..', '..', 'node_modules'));
 
-let lift, test, scaffold;
+let lift, test, scaffold, qualify;
 
 Before(async function () {
   this.existingBranches = any.listOf(any.word);
@@ -20,7 +20,7 @@ Before(async function () {
   this.jsCore = await td.replaceEsm('@form8ion/javascript-core');
 
   // eslint-disable-next-line import/no-extraneous-dependencies,import/no-unresolved
-  ({lift, test, scaffold} = await import('@form8ion/github-actions-node-ci'));
+  ({lift, test, scaffold, qualify} = await import('@form8ion/github-actions-node-ci'));
 
   stubbedFs({
     node_modules: stubbedNodeModules,
@@ -34,11 +34,13 @@ After(function () {
 });
 
 When('the project is scaffolded', async function () {
-  this.results = await scaffold({
-    projectRoot: this.projectRoot,
-    vcs: {owner: this.vcsOwner, name: this.vcsName},
-    ...this.preferredRunner && {runner: this.preferredRunner}
-  });
+  if (await qualify({projectRoot: this.projectRoot})) {
+    this.results = await scaffold({
+      projectRoot: this.projectRoot,
+      vcs: {owner: this.vcsOwner, name: this.vcsName},
+      ...this.preferredRunner && {runner: this.preferredRunner}
+    });
+  }
 });
 
 When('the project is lifted', async function () {
