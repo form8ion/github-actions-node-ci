@@ -71,7 +71,7 @@
     "@form8ion/remark-lint-preset": "6.0.7",
     "@rollup/plugin-node-resolve": "16.0.3",
     "@travi/any": "3.3.0",
-    "@vitest/coverage-v8": "3.2.6",
+    "@vitest/coverage-v8": "3.2.7",
     "ban-sensitive-files": "1.10.11",
     "chai": "6.2.2",
     "cz-conventional-changelog": "3.3.0",
@@ -90,7 +90,7 @@
     "rollup": "4.62.2",
     "rollup-plugin-auto-external": "2.0.0",
     "testdouble": "3.20.2",
-    "vitest": "3.2.6",
+    "vitest": "3.2.7",
     "vitest-when": "0.10.0"
   }
 }
