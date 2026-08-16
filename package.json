@@ -77,7 +77,7 @@
     "cz-conventional-changelog": "3.3.0",
     "gplint": "2.5.2",
     "husky": "9.1.7",
-    "lockfile-lint": "5.0.0",
+    "lockfile-lint": "5.0.1",
     "lodash.zip": "4.2.0",
     "ls-engines": "0.9.4",
     "mock-fs": "5.5.0",
