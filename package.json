@@ -90,7 +90,7 @@
     "rollup": "4.63.1",
     "rollup-plugin-auto-external": "2.0.0",
     "testdouble": "3.20.2",
-    "vitest": "3.2.7",
+    "vitest": "4.1.11",
     "vitest-when": "1.0.0"
   }
 }
