@@ -75,7 +75,7 @@
     "ban-sensitive-files": "1.10.11",
     "chai": "6.2.2",
     "cz-conventional-changelog": "3.3.0",
-    "gplint": "2.5.2",
+    "gplint": "2.6.0",
     "husky": "9.1.7",
     "lockfile-lint": "5.0.1",
     "lodash.zip": "4.2.0",
