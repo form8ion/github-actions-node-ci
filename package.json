@@ -57,7 +57,7 @@
   "packageManager": "npm@12.2.0+sha512.66c2632a94e796649738b2d7894d710c2cc2e1696893823066687f6b0d8a52e5f2b54eeaeaa32ffdc513ecca1e49ff794a5c2ec3f9515d879f1b3182b291cf35",
   "dependencies": {
     "@form8ion/core": "^4.0.0",
-    "@form8ion/github-workflows-core": "^5.6.0",
+    "@form8ion/github-workflows-core": "^6.0.0",
     "@form8ion/javascript-core": "^13.0.0",
     "@vitest/expect": "^3.2.6",
     "semver": "^7.3.7"
